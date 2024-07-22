@@ -1,0 +1,6 @@
+{
+   ignore_all_ls_leaks
+   Memcheck:Leak
+   ...
+   obj:*/bin*
+}
