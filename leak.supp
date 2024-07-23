@@ -4,3 +4,17 @@
    ...
    obj:*/bin*
 }
+
+{
+   ignore_all_grep_leaks
+   Memcheck:Leak
+   ...
+   obj:*grep*
+}
+
+{
+   ignore_all_readline_leaks
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
+}

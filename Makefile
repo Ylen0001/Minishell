@@ -3,12 +3,13 @@ LIBFT_NAME = libft.a
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
+LDFLAGS	= -lreadline -lncurses
 LIB_DIR = libft
 SRC_DIR = src
 OBJ_DIR = obj
 INCLUDES_DIR = includes
 
-SRCS = $(addprefix $(SRC_DIR)/, main.c / exec.c)
+SRCS = $(addprefix $(SRC_DIR)/, minishell.c)
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 
@@ -17,7 +18,7 @@ HEADER = $(INCLUDES_DIR)/minishell.h
 all : $(NAME)
 
 $(NAME) : $(LIB_DIR)/$(LIBFT_NAME) $(OBJS)
-	$(CC) $(OBJS) $(LIB_DIR)/$(LIBFT_NAME) -o $(NAME) 
+	$(CC) $(OBJS) $(LIB_DIR)/$(LIBFT_NAME) $(CFLAGS) $(LDFLAGS) -o $(NAME) 
 
 $(LIB_DIR)/$(LIBFT_NAME):
 	@if [ ! -e $(LIB_DIR)/$(LIBFT_NAME) ]; then \
@@ -26,7 +27,7 @@ $(LIB_DIR)/$(LIBFT_NAME):
 		mv $(LIBFT_NAME) $(NAME); \
 	fi
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%_bonus.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -I$(INCLUDES_DIR) -c $< -o $@
 
 $(OBJ_DIR):
