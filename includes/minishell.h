@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/23 17:12:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/23 17:58:13 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_heredoc // Liste chaînée
 {
 	char *limiter; // EOF du here_doc
 	int node; // Index de la node (Important pour savoir sur quel here_doc on se situe si il y en a plusieurs)
+	struct t_heredoc *prev;
 	struct t_heredoc *next;
 }			t_heredoc;
 
@@ -49,14 +50,22 @@ typedef struct s_liste
 	char *full_string; // Str complète avec les redirections
 	char **cmd; // cmd avec options et arguments mais sans redirections
 	e_redir redirect;
+	struct t_liste *prev;
 	struct t_liste *next;
 }			t_liste;
 
 typedef struct s_data // Structure Globale
 {
 	/* Pour l'exec */
-	int	**pipefds;
-	int	**pids;
+	int		**pipefds;
+	int		**pids;
+	int		infile;
+	int		i;
+	int		j;
+	char	*tmp;
+	char	c;
+	
+	/* Pour le parsing */
 	
 	struct t_heredoc *s_here;
 	struct t_liste *s_list;
@@ -64,8 +73,14 @@ typedef struct s_data // Structure Globale
 }				t_data;
 
 
+/* Prompt display + signaux */
 
+bool	init_prompt();
+void 	sigint_handler(int sig_code);
+bool 	init_signal();
 
+/* Error Handling */
 
+void	here_doc_error(void);
 
 #endif
