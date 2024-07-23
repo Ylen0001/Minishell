@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/23 16:54:07 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/23 17:41:31 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdlib.h>
 
 bool init_prompt() {
 	// rl_on_new_line();
@@ -35,14 +36,16 @@ bool init_signal() {
 	return true;
 }
 
-int main() 
+int main(int argc, char **argv, char **env) 
 {
-	while (init_prompt() && init_signal()) {
+	(void)argv;
+	if (argc != 1 || env == NULL || *env == NULL)
+		exit(EXIT_FAILURE);
+	while (init_prompt() && init_signal())
+	{
 		char *input = readline("minishell: ");
-		if (!input) {
+		if (!input)
 			exit(1);
-		}
-		
 		add_history(input);
 
 		//parsing;
