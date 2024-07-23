@@ -1,1 +1,4 @@
-salope pute petasse:
+
+djeidjejdi
+djed
+opejdiej
