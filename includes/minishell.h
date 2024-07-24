@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/23 17:58:13 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 10:48:25 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ typedef struct s_data // Structure Globale
 	int		infile;
 	int		i;
 	int		j;
-	char	*tmp;
 	char	c;
+	char	*tmp;
+	char	*limiter;
 	
 	/* Pour le parsing */
+	char *input;
 	
 	struct t_heredoc *s_here;
 	struct t_liste *s_list;
