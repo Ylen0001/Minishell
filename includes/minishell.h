@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 12:54:43 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 15:43:15 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <sys/signal.h>
+# include <dirent.h>
 
 typedef enum
 {
@@ -46,17 +47,22 @@ typedef enum
 
 typedef struct s_data // Structure Globale
 {
+
+	/* Pour les tests */
+	
+	char **lst_cmd;
+
 	/* Pour l'exec */
-	int		**pipefds;
-	int		**pids;
-	int		infile;
+	int		**pipefds; // Tableau de pipe
+	int		**pids; // tableau de pids pour childs process
+	int		infile; // redir fd infile
 	int		i;
 	int		j;
-	char	**limiter;
-	char	*tmp;
+	char	**limiters; // Limiters here_doc
 	char	c;
 	char	*tmp;
-	char	*limiter;
+	char	*limiter; // Limiter Here_doc
+	char	*input; // Pour les signaux
 	
 	/* Pour le parsing */
 	char *full_string; // Str complète avec les redirections
@@ -65,6 +71,11 @@ typedef struct s_data // Structure Globale
 	int	errno; // à remplir avec waitpid et avec signal
 }				t_data;
 
+
+/* TEST */
+
+void	test_exec(t_data *data);
+void	init_test(t_data *data);
 
 /* Prompt display + signaux */
 
