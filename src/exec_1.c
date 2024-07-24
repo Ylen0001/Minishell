@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   exec_1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 16:47:51 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 10:57:29 by ylenoel          ###   ########.fr       */
+/*   Created: 2024/07/24 11:01:25 by ylenoel           #+#    #+#             */
+/*   Updated: 2024/07/24 12:39:34 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-bool	init_prompt()
-{
-	rl_redisplay();
-	rl_replace_line("minishell: ", 0);
-	return (true);
-}
+/* 1ère étape, ligne de cmd non valide */
 
-void	sigint_handler(int sig_code)
-{
-	(void)sig_code;
-	printf("\n");
-	rl_on_new_line();
-	rl_redisplay();
-	return;
-}
-
-bool	init_signal()
-{
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, sigint_handler);
-	return (true);
-}
