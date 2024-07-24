@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 17:22:54 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:36:13 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef struct s_data // Structure Globale
 	char	**limiter;
 	char	*tmp;
 	char	c;
+	char	*tmp;
+	char	*limiter;
 	
 	/* Pour le parsing */
 	t_vector v_path;
