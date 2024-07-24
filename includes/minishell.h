@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 16:39:51 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:55:14 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ typedef enum
 // 	size_t capacity;
 // }			t_heredoc;
 
+typedef struct s_vector {
+	char **data;
+	size_t size;
+	size_t capacity;
+}	t_vector;
+
 typedef struct s_data // Structure Globale
 {
 
@@ -65,6 +71,7 @@ typedef struct s_data // Structure Globale
 	char	*input; // Pour les signaux
 	
 	/* Pour le parsing */
+	t_vector v_path;
 	char *full_string; // Str complète avec les redirections
 	char **cmd; // cmd avec options et arguments mais sans redirections
 	e_redir redirect;

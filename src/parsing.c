@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/24 16:29:51 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:32:01 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,15 @@ void is_this_ok(t_data *s_data)
         }
         i++;
     }
-    // printf("double = %d\nsingle = %d\n", count_double, count_single);
+    if(count_double % 2 != 0 || count_single % 2 != 0)
+    {
+        printf("SyntaxError\n");
+        EXIT_FAILURE;
+    }
+}
+
+void get_path(t_data *s_data)
+{
     
 }
 
@@ -46,4 +54,5 @@ void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
     is_this_ok(s_data);
+    
 }
