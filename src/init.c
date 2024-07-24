@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/24 17:55:22 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:57:38 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,17 @@ void init(t_data *s_data)
 
 void	init_test(t_data *data)
 {
+	data->i = 0;
 	data->lst_cmd = malloc(sizeof(char *) * 3 + 1);
 	if(data->lst_cmd == NULL)
 		printf("Lst_cmd Malloc failure\n");
-	data->lst_cmd[0] = ft_strdup("ls");	
+	data->pipefds = ft_calloc(3, sizeof(int*));
+	while(data->i < 3);
+		data->pipefds[data->i++] = ft_calloc(2, sizeof(int));
+	data->lst_cmd[0] = ft_strdup("infile");	
 	printf("%s\n", data->lst_cmd[0]);
+	data->lst_cmd[1] = ft_strdup("cat");	
+	printf("%s\n", data->lst_cmd[1]);
+	data->lst_cmd[2] = ft_strdup("rev");	
+	printf("%s\n", data->lst_cmd[2]);
 }

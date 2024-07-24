@@ -6,11 +6,11 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:45:28 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/23 17:53:36 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:30:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	here_doc_error(void)
 {

@@ -6,11 +6,11 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:31:53 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 10:40:59 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:30:10 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	here_doc_case(t_data *data)
 {
