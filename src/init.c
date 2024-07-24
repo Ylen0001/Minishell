@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/24 12:36:12 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:26:25 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,23 @@
     
 // }
 
-void init_data(t_data **s_data)
+void init_data(t_data *s_data)
 {
-    
-    t_data *new_data = (t_data *)malloc(sizeof(s_data));
-    if (!new_data)
+    if (!s_data)
         EXIT_FAILURE;
-    new_data->pipefds = NULL;
-    new_data->pids = NULL;
-    new_data->infile = 0;
-    new_data->i = 0;
-    new_data->j = 0;
-    new_data->limiter = NULL;
-    new_data->tmp = NULL;
-    new_data->c = '\0';
-    // new_data->redirect = default_redirect;
-    new_data->errno = 0;
-    *s_data = new_data;
+    s_data->pipefds = NULL;
+    s_data->pids = NULL;
+    s_data->infile = 0;
+    s_data->i = 0;
+    s_data->j = 0;
+    s_data->limiter = NULL;
+    s_data->tmp = NULL;
+    s_data->c = '\0';
+    s_data->redirect = 0;
+    s_data->errno = 0;
 }
 
-void init(t_data **s_data)
+void init(t_data *s_data)
 {
     init_data(s_data);
 }

@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 12:33:40 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/24 16:24:32 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ bool 	init_signal();
 void	here_doc_error(void);
 
 
-void init_data(t_data **s_data);
+void init_data(t_data *s_data);
+void launch_parsing(char *input, t_data *s_data);
 
 #endif
