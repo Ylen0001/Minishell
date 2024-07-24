@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 10:48:25 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 12:54:43 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,12 @@ typedef enum
 	STDOUT_APPEND = 3,	
 }	e_redir;
 
-typedef struct s_heredoc // Liste chaînée
-{
-	char *limiter; // EOF du here_doc
-	int node; // Index de la node (Important pour savoir sur quel here_doc on se situe si il y en a plusieurs)
-	struct t_heredoc *prev;
-	struct t_heredoc *next;
-}			t_heredoc;
-
-typedef struct s_liste
-{
-	char *full_string; // Str complète avec les redirections
-	char **cmd; // cmd avec options et arguments mais sans redirections
-	e_redir redirect;
-	struct t_liste *prev;
-	struct t_liste *next;
-}			t_liste;
+// typedef struct s_heredoc // Liste chaînée
+// {
+// 	char **limiter; // EOF du here_doc
+// 	size_t size;
+// 	size_t capacity;
+// }			t_heredoc;
 
 typedef struct s_data // Structure Globale
 {
@@ -62,15 +52,16 @@ typedef struct s_data // Structure Globale
 	int		infile;
 	int		i;
 	int		j;
+	char	**limiter;
+	char	*tmp;
 	char	c;
 	char	*tmp;
 	char	*limiter;
 	
 	/* Pour le parsing */
-	char *input;
-	
-	struct t_heredoc *s_here;
-	struct t_liste *s_list;
+	char *full_string; // Str complète avec les redirections
+	char **cmd; // cmd avec options et arguments mais sans redirections
+	e_redir redirect;
 	int	errno; // à remplir avec waitpid et avec signal
 }				t_data;
 
@@ -84,5 +75,8 @@ bool 	init_signal();
 /* Error Handling */
 
 void	here_doc_error(void);
+
+
+void init_data(t_data **s_data);
 
 #endif
