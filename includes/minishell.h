@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 16:39:51 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:23:19 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,12 @@ typedef struct s_data // Structure Globale
 	char **lst_cmd;
 
 	/* Pour l'exec */
-	int		**pipefds; // Tableau de pipe
-	int		**pids; // tableau de pids pour childs process
-	int		infile; // redir fd infile
+	int		**pipefds; // Tableau de pipes
+	int		*pipefd; // Pipe basique
+	pid_t	*pids; // tableau de pids pour childs process
+	int		i_pids; // idx de pids
+	int		i_pipes; // idx des pipes
+	int		infile; // fd
 	int		i;
 	int		j;
 	char	**limiters; // Limiters here_doc
@@ -74,7 +77,8 @@ typedef struct s_data // Structure Globale
 
 /* TEST */
 
-void	test_exec(t_data *data);
+int		is_dir(t_data *data);
+void	infile_check(t_data *data);
 void	init_test(t_data *data);
 
 /* Prompt display + signaux */

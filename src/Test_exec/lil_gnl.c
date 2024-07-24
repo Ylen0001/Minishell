@@ -6,11 +6,11 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:55:16 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/23 17:55:48 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/24 17:30:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	lil_gnl(char **line, t_data *data)
 {
