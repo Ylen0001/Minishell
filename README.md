@@ -13,8 +13,17 @@ I - GIT
 
 - 2 git branch Yoann/Amaury + Main
 
-Si besoin de push sur la main : git checkout main + git merge Yoann où Amaury
-Si besoin de récupérer le merge sur branche annexe : git checkout Yoann + git merge main
+Dans l'ordre :
+1 - Git add / commit / push sur sa branche perso
+2 - git checkout main
+3 - git pull
+4 - git merge Amaury où Yoann
+5 - Résoudre les conflits si il y en a.
+6 - git add / commit / push sur branche main.
+7 - git checkout sur sa branche perso
+8 - git merge main
+
+AND WE GOOD.
 
 II - Display  
 
