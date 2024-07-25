@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/24 17:26:23 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/25 12:03:41 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,15 @@
     
 // }
 
+void init_vector(t_vector *vect)
+{
+    vect->size = 0;
+    vect->capacity = 10;
+    vect->node = (t_node *)malloc(10 * sizeof(t_node));
+        if(!vect->node)
+            EXIT_FAILURE;
+}
+
 void init_data(t_data *s_data)
 {
     if (!s_data)
@@ -38,9 +47,6 @@ void init_data(t_data *s_data)
     s_data->c = '\0';
     s_data->redirect = 0;
     s_data->errno = 0;
-    s_data->v_path.data = (char **)malloc(10 * sizeof(char *));
-    if (!s_data->v_path.data)
-        EXIT_FAILURE;
     s_data->v_path.size = 0;
     s_data->v_path.capacity = 10;
 }
@@ -48,4 +54,5 @@ void init_data(t_data *s_data)
 void init(t_data *s_data)
 {
     init_data(s_data);
+    init_vector(&s_data->v_path);
 }
