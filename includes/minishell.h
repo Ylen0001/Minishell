@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 17:58:24 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/25 13:15:31 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,14 @@ typedef enum
 // 	size_t capacity;
 // }			t_heredoc;
 
+typedef struct s_node {
+char **cmd;
+char **redir;
+int *redir_type;
+} t_node;
+
 typedef struct s_vector {
-	char **data;
+	t_node *node;
 	size_t size;
 	size_t capacity;
 }	t_vector;
