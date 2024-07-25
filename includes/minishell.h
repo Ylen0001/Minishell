@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/25 11:10:00 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/25 15:18:56 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,16 @@ typedef enum
 // 	size_t capacity;
 // }			t_heredoc;
 
+typedef struct s_vectstr {
+	char **data;
+	size_t size;
+	size_t capacity;
+}	t_vectstr;
+
 typedef struct s_node {
-char **cmd;
-char **redir;
-int *redir_type;
+	t_vectstr v_cmd;
+	t_vectstr v_redir;
+	int *redir_type;
 } t_node;
 
 typedef struct s_vector {
@@ -67,13 +73,12 @@ typedef struct s_data // Structure Globale
 	char	**limiter;
 	char	*tmp;
 	char	c;
-	char	*tmp;
-	char	*limiter;
 	
 	/* Pour le parsing */
 	t_vector v_path;
 	char *full_string; // Str complète avec les redirections
 	char **cmd; // cmd avec options et arguments mais sans redirections
+	char **env;
 	e_redir redirect;
 	int	errno; // à remplir avec waitpid et avec signal
 }				t_data;
@@ -90,7 +95,9 @@ bool 	init_signal();
 void	here_doc_error(void);
 
 
-void init_data(t_data *s_data);
+t_data init_data();
 void launch_parsing(char *input, t_data *s_data);
+void vectstr_happend(t_vectstr *vect, char *data);
+void vector_append(t_vector *vect, t_node new_node);
 
 #endif

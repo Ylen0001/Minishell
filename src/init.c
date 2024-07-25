@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/25 12:03:41 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/25 15:17:26 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,54 @@
     
 // }
 
-void init_vector(t_vector *vect)
+t_vectstr init_vect_str()
 {
-    vect->size = 0;
-    vect->capacity = 10;
-    vect->node = (t_node *)malloc(10 * sizeof(t_node));
-        if(!vect->node)
-            EXIT_FAILURE;
-}
-
-void init_data(t_data *s_data)
-{
-    if (!s_data)
+    t_vectstr self;
+    
+    self.size = 0;
+    self.capacity = 10;
+    self.data = (char **)malloc(10 * sizeof(char *));
+    if (!self.data)
         EXIT_FAILURE;
-    s_data->pipefds = NULL;
-    s_data->pids = NULL;
-    s_data->infile = 0;
-    s_data->i = 0;
-    s_data->j = 0;
-    s_data->limiter = NULL;
-    s_data->tmp = NULL;
-    s_data->c = '\0';
-    s_data->redirect = 0;
-    s_data->errno = 0;
-    s_data->v_path.size = 0;
-    s_data->v_path.capacity = 10;
+    return self;
 }
 
-void init(t_data *s_data)
+t_vector init_vector()
 {
-    init_data(s_data);
-    init_vector(&s_data->v_path);
+    t_vector self;
+    
+    self.size = 0;
+    self.capacity = 10;
+    self.node = (t_node *)malloc(10 * sizeof(t_node));
+    if(!self.node)
+        EXIT_FAILURE;
+    self.node->v_cmd = init_vect_str();
+    self.node->v_redir = init_vect_str();
+    return self;
+}
+
+t_data init_data()
+{
+    t_data self;
+    self.pipefds = NULL;
+    self.pids = NULL;
+    self.infile = 0;
+    self.i = 0;
+    self.j = 0;
+    self.limiter = NULL;
+    self.tmp = NULL;
+    self.c = '\0';
+    self.redirect = 0;
+    self.errno = 0;
+    self.full_string = NULL;
+    self.env = NULL;
+    self.v_path = init_vector();
+    return self;
+}
+
+t_data init()
+{
+    t_data self;
+    self = init_data();
+    return self;
 }
