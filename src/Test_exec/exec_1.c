@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:01:25 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 10:51:28 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/26 14:11:36 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 void	exec_core(t_data *data)
 {
+	char *cmd_1;
+
+	cmd_1 = malloc(sizeof(char) * ft_strlen())
 	while(redir[i++]) // On boucle dans les redir pour identifier si <<
 	{
 		i = 0;
@@ -26,33 +29,6 @@ void	exec_core(t_data *data)
 			data->i_hd_name++; // 3 - itération du nom si plusieurs here_docs
 		}	
 	}
-}
-
-int	is_here_doc(char *limiter, t_data *data, int i_hd_name)
-{
-	char	*line;
-
-	write(1, "heredoc> ", 9);
-		data->infile = open(data->hd_name[i_hd_name], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (data->infile == -1)
-		here_doc_error();
-	while (lil_gnl(&line, data) != EOF)
-	{
-		if (line && (ft_strlen(limiter) + 1 == ft_strlen(line))
-			&& ft_strncmp(line, limiter, ft_strlen(line) - 1) == 0)
-		{
-			free(line);
-			close(data->infile);
-			return ;
-		}
-		if (line)
-		{
-			write(data->infile, line, ft_strlen(line));
-			write(1, "heredoc> ", 9);
-		}
-		free(line);
-	}
-	close(data->infile);	
 }
 
 int		is_dir(t_data *data)

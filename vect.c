@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   vect.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:00:05 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 12:14:59 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/26 12:52:43 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef struct t_list {
-	char *data;
-	struct t_list *next;
-} s_list;
+// typedef struct t_list {
+// 	char *data;
+// 	struct t_list *next;
+// } s_list;
 
 typedef struct t_vector { 
 	char **data;
