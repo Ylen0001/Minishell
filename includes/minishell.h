@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/25 15:13:36 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/26 11:24:11 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ typedef enum
 // 	size_t size;
 // 	size_t capacity;
 // }			t_heredoc;
+
+typedef struct s_test
+{
+	enum e_redire;
+	char *cmd;
+		
+} t_test;
 
 typedef struct s_node {
 char **cmd;
