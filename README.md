@@ -49,13 +49,12 @@ FIN DE JOURNÉE 23/07.
 
 I - Organisation des structs de data + vecteurs + enum
 
-- 1 enum e_redir dédiée aux redirections, qui permet de rendre lisible les redirections des cmd.
+26/07
 
-Dans l'ordre --> Se référer au schéma struct/vecteurs dans /ressources.
-- 1 structure globale : Qui contient toutes les data, qu'on peut transporter tout au long du programme pour avoir accès à toutes les data.
-- 1 vecteur t_vector : Qui contient un pointeur sur la struct t_node, ainsi que size/capacity pour l'allocation dynamique de mémoire.
-- 1 structure t_node : Qui contient un pointeur sur un vecteur2 v_redir et un vecteur2 v_cmd
-- 1 "sous" vecteur t_vector2  : Qui contient un char *data (Une cmd), size/capacity.  
+I - Tentative d'exec d'here_doc dans minishell.
 
-Donc en gros, je récupère une commande dans data->t_vector->t_node->v_cmd->cmd
-Et les redir dans data->t_vector->t_node->v_redir
+a - Je récupère bien les données dans le vecteur. 	OK
+b - Je display correctement "here_doc>". 			OK
+c - Si j'utilise ft_printf pour le display, je peux ^D pour quitter. 
+---> Ne marche pas avec ft_putstr_fd.
+---> Printf tout court ne display rien et ne gère pas le ^D.
