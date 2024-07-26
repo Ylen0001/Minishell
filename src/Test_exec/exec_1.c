@@ -6,13 +6,55 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:01:25 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/24 17:36:27 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/25 15:21:42 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /* 1ère étape, ligne de cmd non valide */
+
+void	exec_core(t_data *data)
+{
+	while(redir[i++])
+	{
+		i = 0;
+		if(redir[i] == "<<")
+		{
+			name_hd(data->hd_name);
+			is_here_doc(limiter, data, nbr_hd, data->i_hd_name);
+			data->i_hd_name++;
+		}
+		
+	}
+}
+
+int	is_here_doc(char *limiter, t_data *data, int i_hd_name)
+{
+	char	*line;
+
+	write(1, "heredoc> ", 9);
+		data->infile = open(data->hd_name[i_hd_name], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	if (data->infile == -1)
+		here_doc_error();
+	while (lil_gnl(&line, data) != EOF)
+	{
+		if (line && (ft_strlen(limiter) + 1 == ft_strlen(line))
+			&& ft_strncmp(line, limiter, ft_strlen(line) - 1) == 0)
+		{
+			free(line);
+			close(data->infile);
+			return ;
+		}
+		if (line)
+		{
+			write(data->infile, line, ft_strlen(line));
+			write(1, "heredoc> ", 9);
+		}
+		free(line);
+	}
+	close(data->infile);	
+}
 
 int		is_dir(t_data *data)
 {

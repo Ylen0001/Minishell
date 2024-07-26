@@ -6,11 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/25 13:15:31 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/25 15:18:56 by aberion          ###   ########.fr       */
->>>>>>> Amaury
+/*   Updated: 2024/07/26 11:23:30 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +69,8 @@ typedef struct s_data // Structure Globale
 	/* Pour les tests */
 	
 	char **lst_cmd;
+	char **hd_names;
+	char *hd_name;
 
 	/* Pour l'exec */
 	int		**pipefds; // Tableau de pipes
