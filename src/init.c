@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/26 11:19:38 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/26 12:41:56 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,41 +33,52 @@ t_vectstr init_vect_str()
     self.data = (char **)malloc(10 * sizeof(char *));
     if (!self.data)
         EXIT_FAILURE;
+    self.redir_type = (int *)malloc(10 * sizeof(int));
+    if (!self.redir_type)
+        EXIT_FAILURE;
+    self.limiter = (char **)malloc(10 * sizeof(char *));
+    if (!self.limiter)
+        EXIT_FAILURE;
     return self;
 }
 
 t_vector init_vector()
 {
-    init_data(s_data);
-}
-
-void	init_test(t_data *data)
-{
-	data->i = 0;
-	data->lst_cmd = malloc(sizeof(char *) * 3 + 1);
-	if(data->lst_cmd == NULL)
-		printf("Lst_cmd Malloc failure\n");
-	data->pipefds = ft_calloc(3, sizeof(int*));
-	while(data->i < 3);
-		data->pipefds[data->i++] = ft_calloc(2, sizeof(int));
-	data->lst_cmd[0] = ft_strdup("infile");	
-	printf("%s\n", data->lst_cmd[0]);
-	data->lst_cmd[1] = ft_strdup("cat");	
-	printf("%s\n", data->lst_cmd[1]);
-	data->lst_cmd[2] = ft_strdup("rev");	
-	printf("%s\n", data->lst_cmd[2]);
-    init_vector(&s_data->v_path);
     t_vector self;
     
     self.size = 0;
     self.capacity = 10;
-    self.node = (t_node *)malloc(10 * sizeof(t_node));
-    if(!self.node)
-        EXIT_FAILURE;
-    self.node->v_cmd = init_vect_str();
-    self.node->v_redir = init_vect_str();
+    self.v_cmd = init_vect_str();
     return self;
 }
+
+// void	init_test(t_data *data)
+// {
+// 	data->i = 0;
+// 	data->lst_cmd = malloc(sizeof(char *) * 3 + 1);
+// 	if(data->lst_cmd == NULL)
+// 		printf("Lst_cmd Malloc failure\n");
+// 	data->pipefds = ft_calloc(3, sizeof(int*));
+// 	while(data->i < 3);
+// 		data->pipefds[data->i++] = ft_calloc(2, sizeof(int));
+// 	data->lst_cmd[0] = ft_strdup("infile");	
+// 	printf("%s\n", data->lst_cmd[0]);
+// 	data->lst_cmd[1] = ft_strdup("cat");	
+// 	printf("%s\n", data->lst_cmd[1]);
+// 	data->lst_cmd[2] = ft_strdup("rev");	
+// 	printf("%s\n", data->lst_cmd[2]);
+//     init_vector(&s_data->v_path);
+//     t_vector self;
+    
+//     self.size = 0;
+//     self.capacity = 10;
+//     self.node = (t_node *)malloc(10 * sizeof(t_node));
+//     if(!self.node)
+//         EXIT_FAILURE;
+//     self.node->v_cmd = init_vect_str();
+//     self.node->v_redir = init_vect_str();
+//     return self;
+// }
 
 t_data init_data()
 {
@@ -77,8 +88,6 @@ t_data init_data()
     self.infile = 0;
     self.i = 0;
     self.j = 0;
-    self.limiter = NULL;
-    self.tmp = NULL;
     self.c = '\0';
     self.redirect = 0;
     self.errno = 0;
