@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 12:35:26 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/26 14:37:00 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,6 @@ void	here_doc_error(void);
 t_data init_data();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
-void vector_append(t_vector *vect, t_node new_node);
+void vector_append(t_vector *vect, t_vectstr new_vect);
 
 #endif
