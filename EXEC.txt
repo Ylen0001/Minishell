@@ -1,0 +1,27 @@
+								EXEC PART :
+
+
+I - Check si un où plusieurs args.
+
+a - Si here_doc[s] dans les redirs :
+--> Executer les here_docs et stocker dans fichiers.tmp
+
+b - Si plusieurs args :
+--> Fork pour chaque arg.
+b - Sinon :
+--> Pas de fork.
+
+Ensuite 
+
+c - Check redir
+--> Si pipe --> dup2 STDOUT sur pipe[1]
+--> Si infile --> Check accès infile + dup2 STDIN.
+--> Si here_doc --> Check accès here_doc + dup2 STDIN.
+--> Si outfile --> Accès où création de l'outfile + dup2 STDOUT sur outfile.
+
+d - args
+---> arg natif --> execve
+---> arg built-in --> Fonctions crées
+
+
+

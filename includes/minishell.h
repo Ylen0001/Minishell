@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/25 13:15:31 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/25 15:13:36 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_data // Structure Globale
 	/* Pour les tests */
 	
 	char **lst_cmd;
+	char **hd_names;
+	char *hd_name;
 
 	/* Pour l'exec */
 	int		**pipefds; // Tableau de pipes
