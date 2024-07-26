@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:01:25 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/25 15:21:42 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/26 10:51:28 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@
 
 void	exec_core(t_data *data)
 {
-	while(redir[i++])
+	while(redir[i++]) // On boucle dans les redir pour identifier si <<
 	{
 		i = 0;
 		if(redir[i] == "<<")
 		{
-			name_hd(data->hd_name);
-			is_here_doc(limiter, data, nbr_hd, data->i_hd_name);
-			data->i_hd_name++;
-		}
-		
+			name_hd(data->hd_name); // 1 - Nommé le here_doc.tmp
+			is_here_doc(data->limiter, data, data->nbr_hd, data->i_hd_name); // 2 - Gestion du here_doc
+			data->i_hd_name++; // 3 - itération du nom si plusieurs here_docs
+		}	
 	}
 }
 

@@ -6,7 +6,11 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/26 11:23:30 by aberion          ###   ########.fr       */
+=======
+/*   Updated: 2024/07/26 11:24:11 by ylenoel          ###   ########.fr       */
+>>>>>>> Yoann
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +54,13 @@ typedef struct s_vectstr {
 	size_t size;
 	size_t capacity;
 }	t_vectstr;
+
+typedef struct s_test
+{
+	enum e_redire;
+	char *cmd;
+		
+} t_test;
 
 typedef struct s_node {
 	t_vectstr v_cmd;
