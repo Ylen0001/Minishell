@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 16:55:34 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/26 16:57:46 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ typedef struct s_data // Structure Globale
 
 	/* Pour les tests */
 	
-	char **lst_cmd;
-	char **hd_names;
-	char *hd_name;
+	char 	**lst_cmd;
+	char 	**hd_names;
+	char 	*hd_name;
+	int		trigger;
 
 	/* Pour l'exec */
+	char	*tmp;
 	int		**pipefds; // Tableau de pipes
 	int		*pipefd; // Pipe basique
 	pid_t	*pids; // tableau de pids pour childs process
@@ -102,9 +104,19 @@ typedef struct s_data // Structure Globale
 
 /* TEST */
 
-int		is_dir(t_data *data);
-void	infile_check(t_data *data);
-void	init_test(t_data *data);
+// int		is_dir(t_data *data);
+// void	infile_check(t_data *data);
+// void	init_test(t_data *data);
+void 		recup_data(t_data *data);
+t_vector	init_vector();
+t_vectstr 	init_vect_str();
+void		here_doc_case(t_data *data, char *limiter);
+int			lil_gnl(char **line, t_data *data);
+void		lil_gnl_finisher(int *i, char *tmp);
+char		*lil_gnl_initializer(int *i, int *j, char *tmp);
+void		here_doc_error(void);
+
+
 
 /* Prompt display + signaux */
 

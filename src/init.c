@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/26 12:41:56 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/26 14:16:07 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_data init_data()
     self.i = 0;
     self.j = 0;
     self.c = '\0';
-    self.redirect = 0;
+    // self.redirect = 0;
     self.errno = 0;
     self.full_string = NULL;
     self.env = NULL;
