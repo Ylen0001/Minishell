@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/26 11:23:30 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/26 11:24:11 by ylenoel          ###   ########.fr       */
->>>>>>> Yoann
+/*   Updated: 2024/07/26 12:54:58 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,34 +38,22 @@ typedef enum
 	STDOUT_APPEND = 3,	
 }	e_redir;
 
-// typedef struct s_heredoc // Liste chaînée
-// {
-// 	char **limiter; // EOF du here_doc
-// 	size_t size;
-// 	size_t capacity;
-// }			t_heredoc;
-
 typedef struct s_vectstr {
-	char **data;
+	char **data; // cmd + opt + arg
+	int *redir_type; // Enum
+	char **limiter; // Arg post <<
 	size_t size;
 	size_t capacity;
 }	t_vectstr;
 
-typedef struct s_test
-{
-	enum e_redire;
-	char *cmd;
-		
-} t_test;
-
-typedef struct s_node {
-	t_vectstr v_cmd;
-	t_vectstr v_redir;
-	int *redir_type;
-} t_node;
+// typedef struct s_node {
+// 	t_vectstr v_cmd;
+// 	// t_vectstr v_redir;
+// 	int *redir_type;
+// } t_node;
 
 typedef struct s_vector {
-	t_node *node;
+	t_vectstr *v_cmd;
 	size_t size;
 	size_t capacity;
 }	t_vector;
@@ -92,16 +76,13 @@ typedef struct s_data // Structure Globale
 	int		infile; // fd
 	int		i;
 	int		j;
-	char	**limiters; // Limiters here_doc
 	char	c;
+	int	errno; // à remplir avec waitpid et avec signal
 	
 	/* Pour le parsing */
 	t_vector v_path;
 	char *full_string; // Str complète avec les redirections
-	char **cmd; // cmd avec options et arguments mais sans redirections
 	char **env;
-	e_redir redirect;
-	int	errno; // à remplir avec waitpid et avec signal
 }				t_data;
 
 
