@@ -6,11 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/26 11:23:30 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/26 11:24:11 by ylenoel          ###   ########.fr       */
->>>>>>> Yoann
+/*   Updated: 2024/07/26 14:11:41 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +45,29 @@ typedef enum
 // 	size_t capacity;
 // }			t_heredoc;
 
+// typedef struct s_vectstr {
+// 	char **data;
+// 	size_t size;
+// 	size_t capacity;
+// }	t_vectstr;
+
+// typedef struct s_node {
+// 	t_vectstr v_cmd;
+// 	t_vectstr v_redir;
+// 	int *redir_type;
+// } t_node;
+
 typedef struct s_vectstr {
-	char **data;
-	size_t size;
-	size_t capacity;
-}	t_vectstr;
+    char **data; // cmd + opt + arg
+    int *redir_type; // Enum
+    char **limiter; // Arg post <<
+    size_t size;
+    size_t capacity;
+}    t_vectstr;
 
-typedef struct s_test
-{
-	enum e_redire;
-	char *cmd;
-		
-} t_test;
-
-typedef struct s_node {
-	t_vectstr v_cmd;
-	t_vectstr v_redir;
-	int *redir_type;
-} t_node;
 
 typedef struct s_vector {
-	t_node *node;
+	t_vectstr v_cmd;
 	size_t size;
 	size_t capacity;
 }	t_vector;
