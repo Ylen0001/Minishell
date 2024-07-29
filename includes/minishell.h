@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 16:57:46 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 14:33:00 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,22 @@ typedef enum
 // 	int *redir_type;
 // } t_node;
 
-typedef struct s_vectstr {
-    char **data; // cmd + opt + arg
+typedef struct s_vectint {
     int *redir_type; // Enum
-    char **limiter; // Arg post <<
+    size_t size;
+    size_t capacity;
+}    t_vectint;
+
+
+typedef struct s_vectstr {
+    char **data; // cmd + opt + arg // Arg post << = limiter
     size_t size;
     size_t capacity;
 }    t_vectstr;
 
 
 typedef struct s_vector {
-	t_vectstr v_cmd;
+	t_vectstr **v_cmd;
 	size_t size;
 	size_t capacity;
 }	t_vector;
