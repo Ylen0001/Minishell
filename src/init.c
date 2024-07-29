@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/26 12:41:56 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 14:31:43 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@ t_vectstr init_vect_str()
     self.data = (char **)malloc(10 * sizeof(char *));
     if (!self.data)
         EXIT_FAILURE;
-    self.redir_type = (int *)malloc(10 * sizeof(int));
-    if (!self.redir_type)
-        EXIT_FAILURE;
-    self.limiter = (char **)malloc(10 * sizeof(char *));
-    if (!self.limiter)
-        EXIT_FAILURE;
     return self;
 }
 
@@ -46,9 +40,11 @@ t_vector init_vector()
 {
     t_vector self;
     
+    self.v_cmd = (t_vectstr **)malloc(10 * sizeof(t_vectstr *));
+    if (!self.v_cmd)
+        EXIT_FAILURE;
     self.size = 0;
     self.capacity = 10;
-    self.v_cmd = init_vect_str();
     return self;
 }
 
@@ -83,23 +79,24 @@ t_vector init_vector()
 t_data init_data()
 {
     t_data self;
-    self.pipefds = NULL;
-    self.pids = NULL;
-    self.infile = 0;
-    self.i = 0;
-    self.j = 0;
-    self.c = '\0';
-    self.redirect = 0;
-    self.errno = 0;
     self.full_string = NULL;
     self.env = NULL;
     self.v_path = init_vector();
     return self;
 }
 
+void init_env(t_vectstr vect_env, char ** env)
+{
+    
+}
+
 t_data init()
 {
     t_data self;
+
+    self.full_string = NULL;
+    self.env = NULL;
     self = init_data();
+    
     return self;
 }

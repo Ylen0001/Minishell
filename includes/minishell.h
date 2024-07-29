@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 14:37:00 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 13:46:23 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,22 @@ typedef enum
 // 	int *redir_type;
 // } t_node;
 
-typedef struct s_vectstr {
-    char **data; // cmd + opt + arg
+typedef struct s_vectint {
     int *redir_type; // Enum
-    char **limiter; // Arg post <<
+    size_t size;
+    size_t capacity;
+}    t_vectint;
+
+
+typedef struct s_vectstr {
+    char **data; // cmd + opt + arg // Arg post << = limiter
     size_t size;
     size_t capacity;
 }    t_vectstr;
 
 
 typedef struct s_vector {
-	t_vectstr v_cmd;
+	t_vectstr **v_cmd;
 	size_t size;
 	size_t capacity;
 }	t_vector;
@@ -96,7 +101,6 @@ typedef struct s_data // Structure Globale
 	/* Pour le parsing */
 	t_vector v_path;
 	char *full_string; // Str complète avec les redirections
-	char **cmd; // cmd avec options et arguments mais sans redirections
 	char **env;
 	e_redir redirect;
 	int	errno; // à remplir avec waitpid et avec signal
