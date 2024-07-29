@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:48:46 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/29 14:31:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 15:02:49 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_data init_data()
     self.errno = 0;
     self.full_string = NULL;
     self.env = NULL;
-    self.v_path = init_vector();
+    // self.v_path = init_vector();
     return self;
 }
 
@@ -107,39 +107,37 @@ t_data init()
     return self;
 }
 
-t_vectstr init_vect_str()
-{
-    t_vectstr self;
+// t_vectstr init_vect_str()
+// {
+//     t_vectstr self;
     
-    self.size = 0;
-    self.capacity = 10;
-    self.data = (char **)malloc(10 * sizeof(char *));
-    if (!self.data)
-        EXIT_FAILURE;
-	self.data[0] = "Hello";
-	self.data[1] = "KO";
-    self.redir_type = (int *)malloc(10 * sizeof(int));
-    if (!self.redir_type)
-        EXIT_FAILURE;
-	self.redir_type[0] = 1;
-	self.redir_type[1] = 1;
-    self.limiter = (char **)malloc(10 * sizeof(char *));
-    if (!self.limiter)
-        EXIT_FAILURE;
-	self.limiter[0] = "EOF";
-	self.limiter[1] = "HIP";
-    return self;
-}
+//     self.size = 0;
+//     self.capacity = 10;
+//     self.data = (char **)malloc(10 * sizeof(char *));
+//     if (!self.data)
+//         EXIT_FAILURE;
+// 	self.data[0] = "Hello";
+// 	self.data[1] = "KO";
+//     self.redir_type = (int *)malloc(10 * sizeof(int));
+//     if (!self.redir_type)
+//         EXIT_FAILURE;
+// 	self.redir_type[0] = 1;
+// 	self.redir_type[1] = 1;
+//     self.limiter = (char **)malloc(10 * sizeof(char *));
+//     if (!self.limiter)
+//         EXIT_FAILURE;
+//     return self;
+// }
 
-t_vector init_vector()
-{
-    t_vector self;
+// t_vector init_vector()
+// {
+//     t_vector self;
     
-    self.size = 0;
-    self.capacity = 10;
-    self.v_cmd = init_vect_str();
-    return self;
-}
+//     self.size = 0;
+//     self.capacity = 10;
+//     self.v_cmd = init_vect_str();
+//     return self;
+// }
 
 // int	is_here_doc(char *limiter, t_data *data, int i_hd_name)
 // {
