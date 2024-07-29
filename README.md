@@ -55,6 +55,13 @@ I - Tentative d'exec d'here_doc dans minishell.
 
 a - Je récupère bien les données dans le vecteur. 	OK
 b - Je display correctement "here_doc>". 			OK
-c - Si j'utilise ft_printf pour le display, je peux ^D pour quitter. 
----> Ne marche pas avec ft_putstr_fd.
----> Printf tout court ne display rien et ne gère pas le ^D.
+
+27/07
+
+I - Here_doc dans Minishell fonctionne. Pourquoi? Magie noire.
+
+a - Gérer les signaux dans le here_doc
+b - Faire la fonction qui adapte en fonction du limiter.
+c - Unlink le here_doc.tmp à la fin. (Dans garbage collector?)
+d - Gérer les name.tmp si plusieurs here_doc.
+

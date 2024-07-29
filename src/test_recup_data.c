@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:48:46 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 16:29:27 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 14:31:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,28 +40,56 @@ int main(int argc, char **argv, char **env)
 void recup_data(t_data *data)
 {
 	char **cmd1;
-	char *limiter;
+	char **limiter;
 	int	*redir;
 
 	redir = &data->v_path.v_cmd.redir_type[0];
 	cmd1 = data->v_path.v_cmd.data;
-	limiter = data->v_path.v_cmd.limiter[0];
-	here_doc_case(data, limiter);
-	
+	limiter = data->v_path.v_cmd.limiter;
+	data->i = 1;
+	data->j = 0; 
+	nbr_of_here_doc(data);
+	// while(data->j < data->i)
+	// {
+	// 	here_doc_case(data, limiter[data->j]);
+	// 	data->j++;
+	// }
 	// printf("%s\n", cmd1[0]);
 	// printf("%d\n", redir[0]);
 	// printf("%s\n", limiter);
 	
 }
+
+void	nbr_of_here_doc(t_data *data)
+{
+	char *name;
+	char tmp[2];
+
+	data->hd_nbr = 0;
+	data->i = 0;
+	name = NULL;
+	
+	printf("%s\n", name); // Name ok
+	while(data->v_path.v_cmd.redir_type[data->i])
+	{
+		if(data->v_path.v_cmd.redir_type[data->i] == HERE_DOC)
+		{
+			tmp[0] = data->i + '0';
+			name = ft_strjoin(name, tmp);
+			data->hd_names[data->i] = name;
+			free(name); 
+			dprintf(2, "La\n");
+		}
+		data->hd_names[data->i] = name;
+		printf("name = %s\n", name);
+		data->i++;
+	}
+	return;
+}
+
 t_data init_data()
 {
     t_data self;
-    self.pipefds = NULL;
-    self.pids = NULL;
-    self.infile = 0;
-    self.i = 0;
-    self.j = 0;
-    self.c = '\0';
 	self.tmp = NULL;
 	self.trigger = 0;
     // self.redirect = 0;
@@ -89,14 +117,17 @@ t_vectstr init_vect_str()
     if (!self.data)
         EXIT_FAILURE;
 	self.data[0] = "Hello";
+	self.data[1] = "KO";
     self.redir_type = (int *)malloc(10 * sizeof(int));
     if (!self.redir_type)
         EXIT_FAILURE;
 	self.redir_type[0] = 1;
+	self.redir_type[1] = 1;
     self.limiter = (char **)malloc(10 * sizeof(char *));
     if (!self.limiter)
         EXIT_FAILURE;
 	self.limiter[0] = "EOF";
+	self.limiter[1] = "HIP";
     return self;
 }
 

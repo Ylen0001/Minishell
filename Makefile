@@ -11,7 +11,7 @@ INCLUDES_DIR = includes
 
 # SRCS = $(addprefix $(SRC_DIR)/, minishell.c / prompt.c / init.c / parsing.c / workinprog_vect.c)
 
-SRCS = $(addprefix $(SRC_DIR)/, prompt.c / parsing.c / test_recup_data.c / here_doc_case.c / lil_gnl.c / error_handling.c)
+SRCS = $(addprefix $(SRC_DIR)/, prompt.c / parsing.c / test_recup_data.c / here_doc_case.c / lil_gnl.c / error_handling.c / workinprog_vect.c)
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 

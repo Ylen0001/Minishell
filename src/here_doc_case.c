@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:31:53 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 16:52:04 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 10:27:42 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	 here_doc_case(t_data *data, char *limiter)
 	char *line;
 
 	write(1, "heredoc> ", 9);
-	data->infile = open("here_dodoc.tmp", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	data->infile = open("here_doc.tmp", O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (data->infile == -1)
 		here_doc_error();
 	while (lil_gnl(&line, data) != EOF)

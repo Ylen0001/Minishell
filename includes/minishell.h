@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 16:57:46 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 11:59:12 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_data // Structure Globale
 	char 	**hd_names;
 	char 	*hd_name;
 	int		trigger;
+	int		*hd_nbr;
 
 	/* Pour l'exec */
 	char	*tmp;
@@ -107,6 +108,7 @@ typedef struct s_data // Structure Globale
 // int		is_dir(t_data *data);
 // void	infile_check(t_data *data);
 // void	init_test(t_data *data);
+void		nbr_of_here_doc(t_data *data);
 void 		recup_data(t_data *data);
 t_vector	init_vector();
 t_vectstr 	init_vect_str();
