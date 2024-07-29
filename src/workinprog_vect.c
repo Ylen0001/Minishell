@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 17:30:47 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 17:38:44 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void vectstr_happend(t_vectstr *vect, char *data)
             EXIT_FAILURE;
     }
     vect->data[vect->size] = data;
-    // ft_printf("%s\n", vect->data[vect->size]);
     vect->size++;
 }
 

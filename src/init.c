@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 17:28:30 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 17:35:15 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,6 @@ t_data init_data(char **env)
         i++;
     }
     init_env(self.v_path.v_cmd[0], env);
-    
-    int j = 0;
-	while (self.v_path.v_cmd[0]->data[j])
-	{
-		printf("%s\n", self.v_path.v_cmd[0]->data[j]);
-		j++;
-	}
     return self;
 }
 
