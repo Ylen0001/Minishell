@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/29 14:34:54 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/29 17:31:44 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ bool 	init_signal();
 void	here_doc_error(void);
 
 
-t_data init_data();
+t_data init_data(char **env);
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
 void vector_append(t_vector *vect, t_vectstr new_vect);

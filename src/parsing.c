@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 14:01:29 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 14:42:09 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void launch_parsing(char *input, t_data *s_data)
     s_data->full_string = input;
     is_this_ok(s_data);
     path_to_vect(s_data);
-    printf("check : %s\n", *s_data->v_path.v_cmd[0]->data);
     // int i = 0;
     // while (s_data->env[i])
     // {
