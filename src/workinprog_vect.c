@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   workinprog_vect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 17:30:47 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/29 17:37:17 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
-
-
 
 void		*ft_realloc(void *ptr, size_t size)
 {

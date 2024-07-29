@@ -58,10 +58,13 @@ b - Je display correctement "here_doc>". 			OK
 
 27/07
 
-I - Here_doc dans Minishell fonctionne. Pourquoi? Magie noire.
+v_path[0];
+v_cmd[1]->data[0] = char *cmd = ls -lr
+v_cmd[1]->data[1] = redir = < / << / > / >>
+si redir == HERE_DOC v_cmd[0][2] == LIMITER
 
-a - Gérer les signaux dans le here_doc
-b - Faire la fonction qui adapte en fonction du limiter.
-c - Unlink le here_doc.tmp à la fin. (Dans garbage collector?)
-d - Gérer les name.tmp si plusieurs here_doc.
+data->v_path->v_cmd[0]->data = Env
+data->v_path->v_cmd[1]->data[0] = cmd + options + args;
+data->v_path->v_cmd[0]->data[1] = Redir a = < b = << c = > d = >>
+data->v_path->v_cmd[0]->data[2] = si >> = LIMITER.
 
