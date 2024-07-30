@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/30 10:22:25 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 17:03:39 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,19 @@ void search_n_append(t_data *s_data, char *var)
 {
     char to_add[1024] = {'\0'};
     int i = 0;
-    while (s_data->v_path.v_cmd[0]->data[i])
+    while (s_data->v_path.parsed[0].cmd[0].data[i])
     {
-        if (ft_strnstr(s_data->v_path.v_cmd[0]->data[i], var, strlen(var)) != 0)
+        if (ft_strnstr(s_data->v_path.parsed[0].cmd[0].data[i], var, strlen(var)) != 0)
         {
             int j = strlen(var) + 1;
             int x = 0;
-            while (s_data->v_path.v_cmd[0]->data[i][j])
+            while (s_data->v_path.parsed[0].cmd[0].data[i][j])
             {
-                to_add[x] = s_data->v_path.v_cmd[0]->data[i][j];
+                to_add[x] = s_data->v_path.parsed[0].cmd[0].data[i][j];
                 x++;
                 j++;
             }
-            vectstr_happend(s_data->v_path.v_cmd[1], to_add);
+            vectstr_happend(&s_data->v_path.parsed[0].cmd[0], to_add);
         }
         i++;
     }
@@ -86,7 +86,6 @@ void path_to_vect(t_data *s_data)
                 j++;   
             }
             search_n_append(s_data, var);
-            printf("%s\n", s_data->v_path.v_cmd[1]->data[0]);
         }
         i++;    
     }
@@ -95,12 +94,8 @@ void path_to_vect(t_data *s_data)
 void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
+    // printf("%s\n", s_data->full_string);
     is_this_ok(s_data);
     path_to_vect(s_data);
-    // int i = 0;
-    // while (s_data->env[i])
-    // {
-    //     printf("%s\n", s_data->env[i]);
-    //     i++;
-    // }
+    
 }

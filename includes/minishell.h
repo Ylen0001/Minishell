@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 11:33:29 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 16:58:40 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ typedef struct s_vectstr {
 //<	Makefile <<eof <<salope <file1 cat file2 >file3 >chat >biere;
 //execve("cat",  {"cat file2"}, ENV);
 typedef struct s_parsed {
-	t_vectstr **cmd; //cat file2
-	t_vectstr **redir; //Makefile, eof, salope, file1, file3, chat, biere; 
+	t_vectstr *cmd; //cat file2
+	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
 	t_vectint type; //< << << < > > >;
 } t_parsed;
 
@@ -136,5 +136,7 @@ t_data init_data(char **env);
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
 void vector_append(t_vector *vect, t_vectstr new_vect);
+void vectstr_print(t_vectstr *vect);
+void vectstr_free(t_vectstr *);
 
 #endif
