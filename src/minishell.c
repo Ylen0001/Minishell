@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/29 17:35:41 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 10:21:31 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **env)
 		if (!input)
 			exit(1);
 		launch_parsing(input, &s_data);
-		// data_test.full_string = input;
+		
 		add_history(input);
 
 		//parsing

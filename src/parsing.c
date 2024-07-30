@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 18:04:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 10:22:25 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void search_n_append(t_data *s_data, char *var)
 {
     char to_add[1024] = {'\0'};
     int i = 0;
-    int x = 0;
-    x++;
     while (s_data->v_path.v_cmd[0]->data[i])
     {
         if (ft_strnstr(s_data->v_path.v_cmd[0]->data[i], var, strlen(var)) != 0)
@@ -63,9 +61,7 @@ void search_n_append(t_data *s_data, char *var)
                 x++;
                 j++;
             }
-            x++;
             vectstr_happend(s_data->v_path.v_cmd[1], to_add);
-            printf("check1 = %s\n%i\n", s_data->v_path.v_cmd[1]->data[0], x);
         }
         i++;
     }
@@ -89,7 +85,8 @@ void path_to_vect(t_data *s_data)
                 x++;
                 j++;   
             }
-            search_n_append(s_data, var); 
+            search_n_append(s_data, var);
+            printf("%s\n", s_data->v_path.v_cmd[1]->data[0]);
         }
         i++;    
     }

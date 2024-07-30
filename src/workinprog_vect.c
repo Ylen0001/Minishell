@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 17:38:44 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 10:47:14 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		*ft_realloc(void *ptr, size_t size)
 		return (malloc(size));
 	if (!size)
 		return (ptr);
-	new_ptr = malloc(size);
+	new_ptr = (void *) malloc(size * sizeof(void *));
 	ft_memcpy(new_ptr, ptr, size);
     free(ptr);
 	return (new_ptr);
@@ -48,7 +48,7 @@ void vectstr_happend(t_vectstr *vect, char *data)
     if (vect->size == vect->capacity)
     {
         vect->capacity *= 2;
-        vect->data = (char **)ft_realloc(vect->data, vect->capacity * sizeof(char *));
+        vect->data = (char **)ft_realloc(vect->data, vect->capacity);
         if (!vect->data)
             EXIT_FAILURE;
     }
@@ -61,7 +61,7 @@ void vectint_happend(t_vectint *vect, int number)
     if (vect->size == vect->capacity)
     {
         vect->capacity *= 2;
-        vect->redir_type = (int *)ft_realloc(vect->redir_type, vect->capacity * sizeof(int));
+        vect->redir_type = (int *)ft_realloc(vect->redir_type, vect->capacity);
         if (!vect->redir_type)
             EXIT_FAILURE;
     }
