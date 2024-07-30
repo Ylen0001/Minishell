@@ -35,36 +35,37 @@ II - Display
 --> ^\ : Ne fait rien du tout. 				OK
 --> entrée : \n + ré-affiche le prompt.			OK
 
-III - Gestion des here_docs
+III - Architecture des structs
 
-- Création d'un fichier here_doc.c pour toutes les fonctions relatives aux here_docs.
-- Réutilisation de lil_gnl pour reproduire le comportement du here_doc. 
---> Peut-être qu'on utilisera readline à la place. À vérifier. 
-- Réutilisation de la fonction here_doc error.
+1 - Une structure globale data
+---> Un vecteur v_path
+     ----> Un tableau de vecteur v_parsed
+	 	   ----> Un char **cmd + char *redir + int type
+
+Donc si je veux accéder à la cmd[0] de l'input 1
+
+data->v_path->v_parsed[0]->cmd[0]->data[0] = Première ligne de ENV
+data->v_path->v_parsed[1]->cmd[0]->data[0] = Première cmd + options (ls -lr)
+data->v_path->v_parsed[1]->cmd[0]->data[1] = 
 
 
-FIN DE JOURNÉE 23/07.
+IV - Architecture de l'exec
 
-25/07
+1 - Si une seule cmd NON BUILT-IN
+---> On exec dans le parent.
+1b - Si une seule cmd BUILT-IN
+---> On fork pour exec dans l'enfant.
+2 - Si plusieurs cmds
+---> On fork du nombre de cmd. Même si il y a des built-in
 
-I - Organisation des structs de data + vecteurs + enum
+FORK CASE 
 
-26/07
-
-I - Tentative d'exec d'here_doc dans minishell.
-
-a - Je récupère bien les données dans le vecteur. 	OK
-b - Je display correctement "here_doc>". 			OK
-
-27/07
-
-v_path[0];
-v_cmd[1]->data[0] = char *cmd = ls -lr
-v_cmd[1]->data[1] = redir = < / << / > / >>
-si redir == HERE_DOC v_cmd[0][2] == LIMITER
-
-data->v_path->v_cmd[0]->data = Env
-data->v_path->v_cmd[1]->data[0] = cmd + options + args;
-data->v_path->v_cmd[0]->data[1] = Redir a = < b = << c = > d = >>
-data->v_path->v_cmd[0]->data[2] = si >> = LIMITER.
+On fork pour le nombre de cmd à executer, et on stock le pid dans un tableau t_pid *pids.
+a -> Pipe
+b -> dup2()
+----> Par défaut, on effectue toujours la redirection vers le pipe. Si on croise une autre redirection dans cette cmd, elle écrasera la précédente. I.e si on a une commande qui est redirigée sur un outfile avant un pipe. 
+c -> déterminer les redirs, si here_doc alors on traite les here_docs en prio.
+----> itérer à travers les redirs avec un compteur de here_doc.
+----> Nommer les différents here_docs en ajoutant un itérateur via strjoin. Here_doc1.tmp, Here_doc_2.tmp etc..
+d -> Exec la commande, si on doit récupérer le path, on ira le chercher dans cmd[0].
 

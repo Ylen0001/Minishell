@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 17:07:51 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 17:10:22 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,82 @@ int	main(int argc, char *argv[], char *env[])
 	// 	printf("%s\n", s_data.v_path.parsed[0].cmd[0].data[i]);
 	// 	i++;
 	// }
+	// s_data = init_data(env);
 	while (init_prompt() && init_signal())
 	{
 		char *input = readline("minishell: ");
 		if (!input)
 			exit(1);
-		launch_parsing(input, &s_data);
-		
+		// launch_parsing(input, &s_data);
+		minishell(&s_data, env);
 		add_history(input);
 	}
 	rl_clear_history();
-	while(s_data.cmds[s_data.i])
-		free(s_data.cmds[s_data.i]);
-	free(s_data.cmds);
-	s_data.i = 0;
 	return (0);
 }
+
+void	minishell(t_data *data, char **env)
+{
+	infile_or_heredoc(data, env);
+	return;
+}
+
+
+void	infile_or_heredoc(t_data *data, char **env)
+{
+	data->redir = 0;
+	data->cmd = malloc(sizeof(char *) * 5);
+	// data->cmd[0] = ft_strdup("ls");
+	data->cmd[0] = ft_strdup("ls -la");
+	// data->cmd[1] = ft_strdup("-lr");
+	printf("%s\n", data->cmd[0]);
+	data->file = ft_strdup("infile");
+	printf("%s\n", data->file);
+	if (data->redir == STDIN_REDIR)
+	{
+		infile_case(data, env);
+		exec_cmd(data, env);
+		return ;
+	}
+	else
+	{
+		// here_doc_case(cmd, data);
+		// printf("ICI\n");
+		return ;
+	}
+}
+
+void	infile_case(t_data *data, char **env)
+{
+	if (access(data->file, F_OK | R_OK | W_OK) == -1)
+	{
+		printf("File : Access Denied.\n");
+		// exit(EXIT_FAILURE);
+	}
+	data->infile = open(data->file, O_RDONLY, 0777);
+	if (data->infile == -1)
+	{
+		close(data->infile);
+		// exit(EXIT_FAILURE);
+	}
+	else
+		printf("File : Authorized Access\n");
+	exec_cmd(data, env);
+	// close(data->infile);
+	// garbage_collector(data);
+}
+
+void	exec_cmd(t_data *data, char **env)
+{
+	char	**cmd;
+	char 	*path;
+	
+	cmd = ft_split(data->cmd[0], ' ');
+	path = find_path(cmd[0], env);
+	printf("cmd = %s\n", cmd[0]);
+	dup2(data->infile, STDIN_FILENO);
+	close(data->infile);
+	execve(path, cmd, env);
+	// printf("LA\n");
+}
+

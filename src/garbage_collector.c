@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 11:18:18 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 14:53:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
-void	garbage_collector()
+void	garbage_collector(t_data *data)
 {
-	
+	data->i = 0;
+
+	free(data->cmd);
+	free(data->file);
+	exit(EXIT_FAILURE);
 }
