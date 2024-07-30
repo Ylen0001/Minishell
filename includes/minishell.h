@@ -6,11 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/29 17:57:37 by ylenoel          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/30 11:33:29 by aberion          ###   ########.fr       */
->>>>>>> Amaury
+/*   Updated: 2024/07/30 16:58:51 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +72,12 @@ typedef struct s_vectstr {
 
 //<	Makefile <<eof <<salope <file1 cat file2 >file3 >chat >biere;
 //execve("cat",  {"cat file2"}, ENV);
+// char **data = {"cat", "file1", "file2"};
+// execve(data[0], data, ENV);
+
 typedef struct s_parsed {
-	t_vectstr **cmd; //cat file2
-	t_vectstr **redir; //Makefile, eof, salope, file1, file3, chat, biere; 
+	t_vectstr *cmd; //cat file2
+	t_vectstr *redir; //Makefile, eof, file1, file3, chat, biere; 
 	t_vectint type; //< << << < > > >;
 } t_parsed;
 
@@ -94,12 +93,9 @@ typedef struct s_data // Structure Globale
 
 	/* Pour les tests */
 	
-	char 	**lst_cmd;
-	char 	**hd_names;
-	char	**cmds;
-	char 	*hd_name;
-	int		trigger;
-	int		*hd_nbr;
+	char 	**cmd;
+	char	*file;
+	int		redir;
 
 	/* Pour l'exec */
 	char	*tmp;
@@ -123,18 +119,27 @@ typedef struct s_data // Structure Globale
 
 /* TEST */
 
-// int		is_dir(t_data *data);
-// void	infile_check(t_data *data);
-// void	init_test(t_data *data);
-void		nbr_of_here_doc(t_data *data);
 void 		recup_data(t_data *data);
 t_vector	init_vector();
 t_vectstr 	init_vect_str();
-void		here_doc_case(t_data *data, char *limiter);
-int			lil_gnl(char **line, t_data *data);
-void		lil_gnl_finisher(int *i, char *tmp);
-char		*lil_gnl_initializer(int *i, int *j, char *tmp);
-void		here_doc_error(void);
+void		minishell(t_data *data, char  **env);
+void		infile_or_heredoc(t_data *data, char **env);
+void		infile_case(t_data *data, char **env);
+void		garbage_collector(t_data *data);
+void		exec_cmd(t_data *data, char **env);
+char		*find_path(char *cmd, char *env[]);
+char		*get_env_path(char *env[]);
+void		free_paths(char **paths);
+char		*construct_path(char *dir, char *cmd);
+// int		is_dir(t_data *data);
+// void	infile_check(t_data *data);
+// void	init_test(t_data *data);
+// void		nbr_of_here_doc(t_data *data);
+// void		here_doc_case(t_data *data, char *limiter);
+// int			lil_gnl(char **line, t_data *data);
+// void		lil_gnl_finisher(int *i, char *tmp);
+// char		*lil_gnl_initializer(int *i, int *j, char *tmp);
+// void		here_doc_error(void);
 
 
 
