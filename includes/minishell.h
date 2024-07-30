@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/30 17:06:07 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/30 16:58:51 by ylenoel          ###   ########.fr       */
->>>>>>> Yoann
+/*   Updated: 2024/07/30 17:23:43 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +70,7 @@ typedef struct s_vectstr {
 }    t_vectstr;
 
 
-//<	Makefile <<eof <<salope <file1 cat file2 >file3 >chat >biere;
+//<	Makefile <<eof <<slt <file1 cat file2 >file3 >chat >biere;
 //execve("cat",  {"cat file2"}, ENV);
 // char **data = {"cat", "file1", "file2"};
 // execve(data[0], data, ENV);
@@ -125,7 +121,7 @@ typedef struct s_data // Structure Globale
 
 void 		recup_data(t_data *data);
 t_vector	init_vector();
-t_vectstr 	init_vect_str();
+t_vectstr 	*init_vect_str();
 void		minishell(t_data *data, char  **env);
 void		infile_or_heredoc(t_data *data, char **env);
 void		infile_case(t_data *data, char **env);

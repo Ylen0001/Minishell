@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 17:10:22 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/30 17:46:19 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ int	main(int argc, char *argv[], char *env[])
 		exit(EXIT_FAILURE);
 	t_data s_data;
 	s_data = init_data(env);
+	char *s = "ls";
+	vectstr_happend(s_data.v_path.parsed[1].cmd, s);
+	printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
 	// int i = 0;
 	// while (s_data.v_path.parsed[0].cmd[0].data[i])
 	// {
@@ -86,11 +89,10 @@ void	minishell(t_data *data, char **env)
 void	infile_or_heredoc(t_data *data, char **env)
 {
 	data->redir = 0;
-	data->cmd = malloc(sizeof(char *) * 5);
+	// char ***cmd1 = data->v_path->parsed->cmd.data[0]; 
 	// data->cmd[0] = ft_strdup("ls");
-	data->cmd[0] = ft_strdup("ls -la");
 	// data->cmd[1] = ft_strdup("-lr");
-	printf("%s\n", data->cmd[0]);
+	// printf("%s\n", data->cmd[0]);
 	data->file = ft_strdup("infile");
 	printf("%s\n", data->file);
 	if (data->redir == STDIN_REDIR)
@@ -129,15 +131,21 @@ void	infile_case(t_data *data, char **env)
 
 void	exec_cmd(t_data *data, char **env)
 {
-	char	**cmd;
+	// char	**cmd;
 	char 	*path;
+	char 	**m_cmd = malloc(sizeof(char*) * 1);
 	
-	cmd = ft_split(data->cmd[0], ' ');
-	path = find_path(cmd[0], env);
-	printf("cmd = %s\n", cmd[0]);
+	m_cmd[0] = malloc(sizeof(char) * 10);	
+	// cmd = ft_split(data->cmd[0], ' ');
+	ft_strlcpy(m_cmd[0], data->v_path.parsed[1].cmd->data[0], 10);
+	printf("%s\n", m_cmd[0]);
+	path = find_path(m_cmd[0], env);
+	// printf("%s\n", data->v_path.parsed[1].cmd->data[0]);
+	// printf("cmd = %s\n", cmd[0]);
 	dup2(data->infile, STDIN_FILENO);
-	close(data->infile);
-	execve(path, cmd, env);
+	// close(data->infile);
+	execve(path, m_cmd, env);
+	// printf("LA\n");
 	// printf("LA\n");
 }
 
