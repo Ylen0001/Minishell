@@ -6,11 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/07/30 13:37:06 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/07/30 16:59:39 by aberion          ###   ########.fr       */
->>>>>>> Amaury
+/*   Updated: 2024/07/30 17:07:35 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,17 +85,8 @@ t_data init_data(char **env)
     self.full_string = NULL;
     self.env = NULL;
     self.v_path = init_vector();
-<<<<<<< HEAD
-    size_t i = 0;
-	self.cmds = malloc(sizeof(char *) * 5);
-	while(i < 5)
-		self.cmds[i++] = malloc(sizeof(char) * 10);
-	i = 0;
-    while (i < self.v_path.capacity)
-=======
     int i = 0;
     while (i < 10)
->>>>>>> Amaury
     {
         self.v_path.parsed[i] = init_parsed();
         i++;
