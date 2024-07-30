@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/29 18:04:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/30 13:37:36 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ int	main(int argc, char *argv[], char *env[])
 		exit(EXIT_FAILURE);
 	t_data s_data;
 	s_data = init_data(env);
-	s_data.cmds[0] = s_data.v_path.v_cmd[1]->data[0] = "ls";
-	s_data.cmds[1] = s_data.v_path.v_cmd[2]->data[0] = "rev";
-	// printf("%s\n", s_data.cmds[1]);
 	while (init_prompt() && init_signal())
 	{
 		char *input = readline("minishell: ");

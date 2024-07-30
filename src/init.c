@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 17:59:27 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/30 13:37:06 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ t_vectstr init_vect_str()
 t_vector init_vector()
 {
     t_vector self;
+    int i = 0;
     
-    self.v_cmd = (t_vectstr **)malloc(10 * sizeof(t_vectstr *));
-    if (!self.v_cmd)
+    self.parsed = (t_parsed *)malloc(10 * sizeof(t_parsed *));
+    if (!self.parsed)
         EXIT_FAILURE;
     self.size = 0;
     self.capacity = 10;
@@ -46,6 +47,13 @@ void init_env(t_vectstr *vect_env, char ** env)
         vectstr_happend(vect_env, env[i]);
         i++;
     }
+}
+t_parsed init_parsed()
+{
+    t_parsed self;
+    int i = 0;
+    
+    self.cmd
 }
 
 
@@ -66,13 +74,7 @@ t_data init_data(char **env)
         *self.v_path.v_cmd[i] = init_vect_str();
         i++;
     }
-    init_env(self.v_path.v_cmd[0], env);	
-    // int j = 0;
-	// while (self.v_path.v_cmd[0]->data[j])
-	// {
-	// 	printf("%s\n", self.v_path.v_cmd[0]->data[j]);
-	// 	j++;
-	// }
+    init_env(self.v_path.v_cmd[0], env);
     return self;
 }
 

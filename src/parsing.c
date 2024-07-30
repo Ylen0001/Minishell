@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/29 14:42:09 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 10:22:25 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,19 @@ void search_n_append(t_data *s_data, char *var)
 {
     char to_add[1024] = {'\0'};
     int i = 0;
-    while (s_data->env[i])
+    while (s_data->v_path.v_cmd[0]->data[i])
     {
-        if (ft_strnstr(s_data->env[i], var, strlen(s_data->env[i])) != 0)
+        if (ft_strnstr(s_data->v_path.v_cmd[0]->data[i], var, strlen(var)) != 0)
         {
             int j = strlen(var) + 1;
             int x = 0;
-            while (s_data->env[i][j])
+            while (s_data->v_path.v_cmd[0]->data[i][j])
             {
-                to_add[x] = s_data->env[i][j];
+                to_add[x] = s_data->v_path.v_cmd[0]->data[i][j];
                 x++;
                 j++;
             }
-            vectstr_happend(s_data->v_path.v_cmd[0], to_add);
+            vectstr_happend(s_data->v_path.v_cmd[1], to_add);
         }
         i++;
     }
@@ -85,7 +85,8 @@ void path_to_vect(t_data *s_data)
                 x++;
                 j++;   
             }
-            search_n_append(s_data, var); 
+            search_n_append(s_data, var);
+            printf("%s\n", s_data->v_path.v_cmd[1]->data[0]);
         }
         i++;    
     }
