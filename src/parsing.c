@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/30 17:03:39 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/30 17:13:39 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void search_n_append(t_data *s_data, char *var)
                 x++;
                 j++;
             }
-            vectstr_happend(&s_data->v_path.parsed[0].cmd[0], to_add);
+            vectstr_happend(s_data->v_path.parsed[1].cmd, to_add);
+            vectstr_print(s_data->v_path.parsed[1].cmd);
         }
         i++;
     }
