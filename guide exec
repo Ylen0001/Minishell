@@ -1,0 +1,70 @@
+void child(int i) {
+	const t_vectstr *cmd = .....;
+	const t_vectint *redir = data->vectgt.;
+	size_t i = 0;
+
+	cmd->data[0] = findPath(); //ls --> // /usr/ls
+	
+	if (i IS NOTFIRSTPIPE)
+		dup2(pipe[0], STDIN_FILENO);
+	if (i IS NOTLASTPIPE)
+		dup2(pipe[1], STDOUT_FILENO);
+	
+	while (i < redir->size) {
+		open(redir->file);
+		if (redir->type[i] == APPEND)
+			dup2(redir->file);
+	}
+
+	execve();
+}
+
+//redir
+//APPEND file1
+//HERE_DOC salope
+//APPEND file2
+
+//APPEND file1
+//STDIN_REDIR .tmp_hereodc1
+//APPEND file2
+
+
+void here_doc() {
+	while (parsed) {
+		while(redir) {
+			if (HERE_DOC) {
+				open();
+				if (fill() == -1) {
+					return false;
+				}
+				redir->filename[i] = ".tmp_heredoc1";
+				redir->type[i] = STDIN_REDIR;
+				close();
+			}
+		}
+	}
+	return true;
+}
+
+
+void exec() {
+
+	size_t i = 0;
+
+	bool status = here_doc();
+
+	while (i < parsed->size) {
+		int fd[2] = pipe();
+		pid_t pid = fork();
+		
+		if (!pid) {
+			child(i);
+		} else {
+			int i = 0;
+			while (i < NBCMD) {
+				waitpid(pid, &errornumbr, NULL);
+			}
+		}
+		i++;
+	}
+}

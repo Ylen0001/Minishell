@@ -46,7 +46,8 @@ Donc si je veux accéder à la cmd[0] de l'input 1
 
 data->v_path.v_parsed[0].cmd->data[0] = Première cmd + options + arguments (ls -lr)
 data->v_path.v_parsed[0].cmd->data[1] = Deuxième cmd etc...
-data->v_path.parsed[0].cmd->size = size du nbr d'args de l'input 1. 
+data->v_path.parsed[0].cmd->size = size du nbr d'args de l'input 1.
+data->v_path.parsed[0].type.redir_type[0] = Première redir
 
 
 IV - Architecture de l'exec
@@ -72,9 +73,16 @@ d -> Exec la commande, si on doit récupérer le path, on ira le chercher dans c
 31/07 
 
 I - L'initialisation des vecteurs est OK
---> On arrive bien à stocker des cmd dans les différentes vecteurs parsed.
---> Et on arrive bien à l'envoyer à execve, une fois splitté.
 
-1st problème : Comment savoir le nombre de fork à faire.
---> Récupérer la size de v.path?
-Dans vec_happend_str prend bien des valeurs, mais pas dans le main.
+
+--> Deux cmds (une avec options) bien initialisés dans le vecteur
+	---> Bien récupéré dans un char data->**cmds.
+--> Nbr de cmds bien initialisé dans le vecteur
+	---> Bien récupéré dans un size_t data->nbr_cmd
+--> Redir bien initialisée dans le vecteur 
+	---> Bien récupérée dans un int data->redir
+--> Initialisation du int *pipefds et de i_pipes (à vérifier.).
+--> Initialisation du int *pids et de i_pids (à vérifier.).
+							TENIR À JOUR LE GARBAGE COLLECTOR
+--> Envoi à execve de la cmd[0] (ls -lr), une fois splitté. OK
+-->

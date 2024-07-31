@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:39:28 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/31 17:18:15 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ int	main(int argc, char *argv[], char *env[])
 		exit(EXIT_FAILURE);
 	t_data s_data;
 	s_data = init_data(env);
-	char *s = "ls -lr";
+	char *s = "cat";
 	char *s2 = "rev";
-	vectstr_happend(s_data.v_path.parsed[1].cmd, s);
-	vectstr_happend(s_data.v_path.parsed[1].cmd, s2);
+	vectstr_happend(s_data.v_path.parsed[0].cmd, s);
+	vectstr_happend(s_data.v_path.parsed[0].cmd, s2);
+	init_data_2(&s_data);
+	// vectstr_print(s_data.v_path.parsed[0].cmd);
 	// printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
 	// printf("%zu\n", s_data.v_path.parsed[1].cmd->size);
-	// vectstr_print(s_data.v_path.parsed[1].cmd);
-	init_data_2(&s_data);
 	while (init_prompt() && init_signal())
 	{
 		char *input = readline("minishell: ");
@@ -81,47 +81,59 @@ void	minishell(t_data *data, char **env)
 {
 	data->i = 0;
 	
-	// while(data->i < 2)
+	infile_or_heredoc(data, env);
+	// while(data->i < data->nbr_cmd)
 	// {
 	// 	if (pipe(data->pipefds[data->i_pipes]) == -1)
 	// 		ft_putstr_fd("Error: Pipe\n", 2);
 	// 	mother_forker(data);
 	// 	if (data->pids[data->i_pids] == 0)
-	// 		child_process_a(argv[data->i_argv], env, data);
+	// 		child_process_a(data->cmds[data->nbr_cmd], env, data);
+	// 	close(data->pipefds[data->i_pipes][1]);
 	// }
-	infile_or_heredoc(data, env);
 	return;
 }
 
 void	init_data_2(t_data *data)
 {
-	int	i;
+	size_t	i;
+	const size_t NBR_CMD = data->v_path.size;
 
 	i = 0;
-	data->nbr_cmd = data->v_path.parsed[1].cmd->size;
-	printf("cmds = %zu\n", data->nbr_cmd);
-	// data->pipefds = ft_calloc(argc - 1, sizeof(int *));
-	// while (i < argc - 3)
-	// 	data->pipefds[i++] = ft_calloc(2, sizeof(int));
-	// if (!data->pipefds)
-	// {
-	// 	ft_putstr_fd("Malloc failed\n", 2);
-	// 	exit(EXIT_FAILURE);
-	// }
-	// data->pid = malloc(argc * sizeof(pid_t));
-	// if (data->pid == NULL)
-	// {
-	// 	ft_putstr_fd("Pid malloc failed\n", 2);
-	// 	free(data->pid);
-	// 	exit(EXIT_FAILURE);
-	// }
-	// data->i_pipes = 0;
-	// data->i_pids = 0;
+	data->nbr_cmd = data->v_path.parsed[0].cmd->size;
+	data->v_path.parsed[0].type.redir_type[0] = STDIN_REDIR;
+	data->redir = data->v_path.parsed[0].type.redir_type[0];
+	data->cmds = malloc(sizeof(char *) * 2);
+	while(i < data->nbr_cmd)
+	{
+		data->cmds[i] = ft_strdup(data->v_path.parsed[0].cmd->data[i]);	
+		i++;
+	}
+	// printf("%s\n", data->cmds[1]);
+	// printf("redir = %d\n", data->redir);
+	// printf("cmds = %zu\n", data->nbr_cmd);
+	data->pipefds = ft_calloc( data->nbr_cmd, sizeof(int *));
+	while (i < data->nbr_cmd)
+		data->pipefds[i++] = ft_calloc(2, sizeof(int));
+	if (!data->pipefds)
+	{
+		ft_putstr_fd("Malloc failed\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	data->pids = malloc(data->nbr_cmd * sizeof(pid_t));
+	if (data->pids == NULL)
+	{
+		ft_putstr_fd("Pid malloc failed\n", 2);
+		free(data->pids);
+		exit(EXIT_FAILURE);
+	}
+	data->i_pipes = 0;
+	data->i_pids = 0;
+	return ;
 }
 
 void	infile_or_heredoc(t_data *data, char **env)
 {
-	data->redir = 0;
 	// char ***cmd1 = data->v_path->parsed->cmd.data[0]; 
 	// data->cmd[0] = ft_strdup("ls");
 	// data->cmd[1] = ft_strdup("-lr");
@@ -169,7 +181,7 @@ void	exec_cmd(t_data *data, char **env)
 	char 	**m_cmd;
 	
 	
-	m_cmd = ft_split(data->v_path.parsed[1].cmd->data[0], ' ');
+	m_cmd = ft_split(data->v_path.parsed[0].cmd->data[0], ' ');
 	// ft_strlcpy(m_cmd[0], data->v_path.parsed[1].cmd->data[0], 10);
 	// printf("%s\n", m_cmd[1]);
 	path = find_path(m_cmd[0], env);

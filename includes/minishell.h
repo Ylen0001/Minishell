@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:54:52 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/31 17:35:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour les tests */
 	
-	char 	**cmd;
+	char 	**cmds;
 	char	*file;
 	int		redir;
 
