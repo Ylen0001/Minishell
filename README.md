@@ -44,9 +44,9 @@ III - Architecture des structs
 
 Donc si je veux accéder à la cmd[0] de l'input 1
 
-data->v_path->v_parsed[0]->cmd[0]->data[0] = Première ligne de ENV
-data->v_path->v_parsed[1]->cmd[0]->data[0] = Première cmd + options (ls -lr)
-data->v_path->v_parsed[1]->cmd[0]->data[1] = 
+data->v_path.v_parsed[0].cmd->data[0] = Première cmd + options + arguments (ls -lr)
+data->v_path.v_parsed[0].cmd->data[1] = Deuxième cmd etc...
+data->v_path.parsed[0].cmd->size = size du nbr d'args de l'input 1. 
 
 
 IV - Architecture de l'exec
@@ -69,3 +69,12 @@ c -> déterminer les redirs, si here_doc alors on traite les here_docs en prio.
 ----> Nommer les différents here_docs en ajoutant un itérateur via strjoin. Here_doc1.tmp, Here_doc_2.tmp etc..
 d -> Exec la commande, si on doit récupérer le path, on ira le chercher dans cmd[0].
 
+31/07 
+
+I - L'initialisation des vecteurs est OK
+--> On arrive bien à stocker des cmd dans les différentes vecteurs parsed.
+--> Et on arrive bien à l'envoyer à execve, une fois splitté.
+
+1st problème : Comment savoir le nombre de fork à faire.
+--> Récupérer la size de v.path?
+Dans vec_happend_str prend bien des valeurs, mais pas dans le main.
