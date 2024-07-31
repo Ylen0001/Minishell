@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 11:33:34 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/31 15:29:10 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,5 +139,19 @@ void vectstr_happend(t_vectstr *vect, char *data);
 void vector_append(t_vector *vect, t_vectstr new_vect);
 void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
+void vectint_print(t_vectint *vect);
+void vectint_happend(t_vectint *vect, int number);
+
+#define vect_print(param) _Generic((param), \
+    t_vectstr *: vectstr_print,   \
+    t_vectint *: vectint_print,   \
+    default : printf("Format not supported yet\n") \
+)(param)
+
+#define vect_happend(param, data) _Generic((param), \
+    t_vectstr *: vectstr_happend,   \
+    t_vectint *: vectint_happend,   \
+    default : printf("Format not supported yet\n") \
+)(param, data)
 
 #endif

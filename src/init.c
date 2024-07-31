@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/31 14:21:22 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/31 15:26:38 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void init_env(t_vectstr *vect_env, char **env)
 
     while(env[i])
     {
-        vectstr_happend(vect_env, env[i]);
+        vect_happend(vect_env, env[i]);
         i++;
     }
 }

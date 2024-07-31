@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/31 14:39:50 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/31 18:02:43 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,51 +45,84 @@ void is_this_ok(t_data *s_data)
     }
 }
 
-void search_n_append(t_data *s_data, char *var)
+int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
 {
-    char to_add[1024] = {'\0'};
+    int safe = x_prev;
     int i = 0;
     while (s_data->vect_env->data[i])
     {
-        if (ft_strnstr(s_data->vect_env->data[i], var, strlen(var)) != 0)
+        if (ft_strnstr(s_data->vect_env->data[i], check_var, strlen(check_var)) != 0)
         {
-            int j = strlen(var) + 1;
-            int x = 0;
+            int j = strlen(check_var) + 1;
             while (s_data->vect_env->data[i][j])
             {
-                to_add[x] = s_data->vect_env->data[i][j];
-                x++;
+                str[x_prev] = s_data->vect_env->data[i][j];
+                x_prev++;
                 j++;
             }
-            vectstr_happend(s_data->v_path.parsed[0].cmd, to_add);
+            return x_prev;
         }
         i++;
     }
+    return safe;
 }
 
 void path_to_vect(t_data *s_data)
 {
     int i = 0;
     char *s = s_data->full_string;
-    char var[500] = {'\0'};
+    char str[1024] = {'\0'};
+    // char check_var[500] = {'\0'};
     int x = 0;
     while (s[i])
     {
-        if (s[i] == '$')
+        if (s[i] == '\'')
         {
-            int j = i + 1;
-            x = 0;
-            while(s[j] && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] == '_')))
+            i++;
+            while(s[i] && s[i] != '\'')
             {
-                var[x] = s[j];
+                str[x] = s[i];
+                i++;
                 x++;
-                j++;   
             }
-            if (s[j] == ' ' || s[j] == '\t' || s[j] == '\0')
-                search_n_append(s_data, var);
         }
-        i++;    
+        else if (s[i] == '"')
+        {
+            i++;
+            while (s[i] && s[i] != '"')
+            {
+                if (s[i] == '$')
+                {
+                    int j = i + 1;
+                    int y = 0;
+                    char check_var[500] = {'\0'};
+                    while(s[j] && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] == '_') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')))
+                    {
+                        check_var[y] = s[j];
+                        y++;
+                        j++;   
+                    }
+                    if (s[j] == ' ' || s[j] == '\t' || s[j] == '"' || s[j] == '\'' || s[j] == '"')
+                    {
+                        printf("%c\n", s[j]);
+                        x = search_n_append(s_data, check_var, str, x);
+                        i+= strlen(check_var) + 1;
+                    } 
+                }
+                else
+                    str[x] = s[i]; 
+                i++;
+                x++;
+            }
+        }
+        else
+        {
+            str[x] = s[i];
+            i++;
+            x++;    
+        }
     }
+    vect_happend(s_data->v_path.parsed[0].cmd, str);
 }
 
 void launch_parsing(char *input, t_data *s_data)
@@ -97,5 +130,7 @@ void launch_parsing(char *input, t_data *s_data)
     s_data->full_string = input;
     is_this_ok(s_data);
     path_to_vect(s_data);
-    // vectstr_print(s_data->v_path.parsed[0].cmd);
+    vectstr_print(s_data->v_path.parsed[0].cmd);
 }
+
+//''"$USER"''
