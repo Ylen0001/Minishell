@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/30 17:03:39 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/31 14:39:50 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,19 @@ void search_n_append(t_data *s_data, char *var)
 {
     char to_add[1024] = {'\0'};
     int i = 0;
-    while (s_data->v_path.parsed[0].cmd[0].data[i])
+    while (s_data->vect_env->data[i])
     {
-        if (ft_strnstr(s_data->v_path.parsed[0].cmd[0].data[i], var, strlen(var)) != 0)
+        if (ft_strnstr(s_data->vect_env->data[i], var, strlen(var)) != 0)
         {
             int j = strlen(var) + 1;
             int x = 0;
-            while (s_data->v_path.parsed[0].cmd[0].data[i][j])
+            while (s_data->vect_env->data[i][j])
             {
-                to_add[x] = s_data->v_path.parsed[0].cmd[0].data[i][j];
+                to_add[x] = s_data->vect_env->data[i][j];
                 x++;
                 j++;
             }
-            vectstr_happend(&s_data->v_path.parsed[0].cmd[0], to_add);
+            vectstr_happend(s_data->v_path.parsed[0].cmd, to_add);
         }
         i++;
     }
@@ -85,7 +85,8 @@ void path_to_vect(t_data *s_data)
                 x++;
                 j++;   
             }
-            search_n_append(s_data, var);
+            if (s[j] == ' ' || s[j] == '\t' || s[j] == '\0')
+                search_n_append(s_data, var);
         }
         i++;    
     }
@@ -94,8 +95,7 @@ void path_to_vect(t_data *s_data)
 void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
-    // printf("%s\n", s_data->full_string);
     is_this_ok(s_data);
     path_to_vect(s_data);
-    
+    // vectstr_print(s_data->v_path.parsed[0].cmd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 17:23:43 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/31 14:43:22 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_data // Structure Globale
 	int	errno; // à remplir avec waitpid et avec signal
 	
 	/* Pour le parsing */
+	t_vectstr *vect_env;
 	t_vector v_path;
 	char *full_string; // Str complète avec les redirections
 	char **env;
