@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   workinprog_vect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/30 17:07:45 by aberion          ###   ########.fr       */
+/*   Updated: 2024/07/31 14:17:38 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void vectstr_happend(t_vectstr *vect, char *data)
     }
     vect->data[vect->size] = ft_strdup(data);
     vect->size++;
+	// printf("%zu\n", vect->size);
 }
 
 void vectstr_print(t_vectstr *vect) {

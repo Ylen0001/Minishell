@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 17:46:19 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/31 14:39:28 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 // 		//exec
 // 		// TEST //
 // 		// infile_check(&data_test);
-// 		// mother_forker(&data_test); // T'as la vanne? je l'ai
+		// mother_forker(&data_test); // T'as la vanne? je l'ai
 // 	}
 // 	// add_history(input);
 // 	//parsing;
@@ -56,16 +56,14 @@ int	main(int argc, char *argv[], char *env[])
 		exit(EXIT_FAILURE);
 	t_data s_data;
 	s_data = init_data(env);
-	char *s = "ls";
+	char *s = "ls -lr";
+	char *s2 = "rev";
 	vectstr_happend(s_data.v_path.parsed[1].cmd, s);
-	printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
-	// int i = 0;
-	// while (s_data.v_path.parsed[0].cmd[0].data[i])
-	// {
-	// 	printf("%s\n", s_data.v_path.parsed[0].cmd[0].data[i]);
-	// 	i++;
-	// }
-	// s_data = init_data(env);
+	vectstr_happend(s_data.v_path.parsed[1].cmd, s2);
+	// printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
+	// printf("%zu\n", s_data.v_path.parsed[1].cmd->size);
+	// vectstr_print(s_data.v_path.parsed[1].cmd);
+	init_data_2(&s_data);
 	while (init_prompt() && init_signal())
 	{
 		char *input = readline("minishell: ");
@@ -81,10 +79,45 @@ int	main(int argc, char *argv[], char *env[])
 
 void	minishell(t_data *data, char **env)
 {
+	data->i = 0;
+	
+	// while(data->i < 2)
+	// {
+	// 	if (pipe(data->pipefds[data->i_pipes]) == -1)
+	// 		ft_putstr_fd("Error: Pipe\n", 2);
+	// 	mother_forker(data);
+	// 	if (data->pids[data->i_pids] == 0)
+	// 		child_process_a(argv[data->i_argv], env, data);
+	// }
 	infile_or_heredoc(data, env);
 	return;
 }
 
+void	init_data_2(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	data->nbr_cmd = data->v_path.parsed[1].cmd->size;
+	printf("cmds = %zu\n", data->nbr_cmd);
+	// data->pipefds = ft_calloc(argc - 1, sizeof(int *));
+	// while (i < argc - 3)
+	// 	data->pipefds[i++] = ft_calloc(2, sizeof(int));
+	// if (!data->pipefds)
+	// {
+	// 	ft_putstr_fd("Malloc failed\n", 2);
+	// 	exit(EXIT_FAILURE);
+	// }
+	// data->pid = malloc(argc * sizeof(pid_t));
+	// if (data->pid == NULL)
+	// {
+	// 	ft_putstr_fd("Pid malloc failed\n", 2);
+	// 	free(data->pid);
+	// 	exit(EXIT_FAILURE);
+	// }
+	// data->i_pipes = 0;
+	// data->i_pids = 0;
+}
 
 void	infile_or_heredoc(t_data *data, char **env)
 {
@@ -94,7 +127,7 @@ void	infile_or_heredoc(t_data *data, char **env)
 	// data->cmd[1] = ft_strdup("-lr");
 	// printf("%s\n", data->cmd[0]);
 	data->file = ft_strdup("infile");
-	printf("%s\n", data->file);
+	// printf("%s\n", data->file);
 	if (data->redir == STDIN_REDIR)
 	{
 		infile_case(data, env);
@@ -133,17 +166,17 @@ void	exec_cmd(t_data *data, char **env)
 {
 	// char	**cmd;
 	char 	*path;
-	char 	**m_cmd = malloc(sizeof(char*) * 1);
+	char 	**m_cmd;
 	
-	m_cmd[0] = malloc(sizeof(char) * 10);	
-	// cmd = ft_split(data->cmd[0], ' ');
-	ft_strlcpy(m_cmd[0], data->v_path.parsed[1].cmd->data[0], 10);
-	printf("%s\n", m_cmd[0]);
+	
+	m_cmd = ft_split(data->v_path.parsed[1].cmd->data[0], ' ');
+	// ft_strlcpy(m_cmd[0], data->v_path.parsed[1].cmd->data[0], 10);
+	// printf("%s\n", m_cmd[1]);
 	path = find_path(m_cmd[0], env);
 	// printf("%s\n", data->v_path.parsed[1].cmd->data[0]);
 	// printf("cmd = %s\n", cmd[0]);
 	dup2(data->infile, STDIN_FILENO);
-	// close(data->infile);
+	close(data->infile);
 	execve(path, m_cmd, env);
 	// printf("LA\n");
 	// printf("LA\n");
