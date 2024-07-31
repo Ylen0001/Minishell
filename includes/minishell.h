@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 17:23:43 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/07/31 10:05:50 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ char		*get_env_path(char *env[]);
 void		free_paths(char **paths);
 char		*construct_path(char *dir, char *cmd);
 // int		is_dir(t_data *data);
-// void	infile_check(t_data *data);
-// void	init_test(t_data *data);
+// void		infile_check(t_data *data);
+// void		init_test(t_data *data);
 // void		nbr_of_here_doc(t_data *data);
 // void		here_doc_case(t_data *data, char *limiter);
 // int			lil_gnl(char **line, t_data *data);
