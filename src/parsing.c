@@ -51,9 +51,9 @@ int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
     int i = 0;
     while (s_data->vect_env->data[i])
     {
-        if (ft_strnstr(s_data->vect_env->data[i], check_var, strlen(check_var)) != 0)
+        if (ft_strnstr(s_data->vect_env->data[i], check_var, ft_strlen(check_var)) != 0 && s_data->vect_env->data[i][ft_strlen(check_var)] == '=')
         {
-            int j = strlen(check_var) + 1;
+            int j = ft_strlen(check_var) + 1;
             while (s_data->vect_env->data[i][j])
             {
                 str[x_prev] = s_data->vect_env->data[i][j];
@@ -78,6 +78,7 @@ void path_to_vect(t_data *s_data)
     {
         if (s[i] == '\'')
         {
+            printf("check\n");
             i++;
             while(s[i] && s[i] != '\'')
             {
@@ -85,6 +86,7 @@ void path_to_vect(t_data *s_data)
                 i++;
                 x++;
             }
+            i++;
         }
         else if (s[i] == '"')
         {
@@ -102,27 +104,46 @@ void path_to_vect(t_data *s_data)
                         y++;
                         j++;   
                     }
-                    if (s[j] == ' ' || s[j] == '\t' || s[j] == '"' || s[j] == '\'' || s[j] == '"')
+                    if (s[j] == ' ' || s[j] == '\t' || s[j] == '"' || s[j] == '\'')
                     {
-                        printf("%c\n", s[j]);
                         x = search_n_append(s_data, check_var, str, x);
-                        i+= strlen(check_var) + 1;
+                        i+= ft_strlen(check_var) + 1;
                     } 
                 }
-                else
-                    str[x] = s[i]; 
+                
                 i++;
                 x++;
             }
+            i++;
         }
         else
         {
-            str[x] = s[i];
+            if (s[i] == '$')
+                {
+                    int j = i + 1;
+                    int y = 0;
+                    char check_var[500] = {'\0'};
+                    while(s[j] && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] == '_') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')))
+                    {
+                        check_var[y] = s[j];
+                        y++;
+                        j++;   
+                    }
+                    if (s[j] == ' ' || s[j] == '\t' || s[j] == '"' || s[j] == '\'')
+                    {
+                        x = search_n_append(s_data, check_var, str, x);
+                        i+= ft_strlen(check_var) + 1;
+                    } 
+                }
+            if (s[i] != '"')
+                    str[x] = s[i];
             i++;
             x++;    
         }
+        
     }
-    vect_happend(s_data->v_path.parsed[0].cmd, str);
+    if (str[0] != '\0')
+        vect_happend(s_data->v_path.parsed[0].cmd, str);
 }
 
 void launch_parsing(char *input, t_data *s_data)
