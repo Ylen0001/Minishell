@@ -68,3 +68,8 @@ void exec() {
 		i++;
 	}
 }
+
+	// if (i IS NOTFIRSTPIPE)
+	// 	dup2(pipe[0], STDIN_FILENO);
+	// if (i IS NOTLASTPIPE)
+	// 	dup2(pipe[1], STDOUT_FILENO);

@@ -85,4 +85,29 @@ I - L'initialisation des vecteurs est OK
 --> Initialisation du int *pids et de i_pids (à vérifier.).
 							TENIR À JOUR LE GARBAGE COLLECTOR
 --> Envoi à execve de la cmd[0] (ls -lr), une fois splitté. OK
--->
+
+01/08
+-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-strong -fno-optimize-sibling-calls
+
+I - Mise en place de la structure de l'exec.
+
+1 - Pipes et fork en fonction du nbr de commandes, stockés dans des tableaux.
+2 - Petit souci sur l'argument d'erreur de waitpid. À checker plus tard, pour l'instant NULL.
+3 - Il faut itérer correctement les i_pipes/i_pids.
+
+
+Structure de la fonction child :
+
+On lui déclare un const t_vecstr *cmd = data->v_path.parsed[idx].cmd
+I.e cette constante contient la cmd à l'index correspondant.
+
+II - Gestion des pipes
+
+1 - Si pids = 0 :
+--> dup2 pipe[1], STDOUT_FILENO
+
+
+BLOQUAGE >>
+
+- Loop infini
+- Dans la première exec de child. Donc premier

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/30 14:53:01 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/01 12:53:35 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	garbage_collector(t_data *data)
 {
 	data->i = 0;
 
-	free(data->cmd);
+	free(data->cmds);
 	free(data->file);
 	exit(EXIT_FAILURE);
 }

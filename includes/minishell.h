@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 17:35:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/01 17:01:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct s_vectstr {
 
 typedef struct s_parsed {
 	t_vectstr *cmd; //cat file2
-	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
+	t_vectstr *redir; //Makefile, eof, file1, file3, chat, biere; 
 	t_vectint type; //< << << < > > >;
 } t_parsed;
 
@@ -78,19 +78,21 @@ typedef struct s_data // Structure Globale
 	int		redir;
 
 	/* Pour l'exec */
-	size_t	nbr_cmd;
-	pid_t	*pids; // tableau de pids pour childs process
-	char	*tmp;
-	int		**pipefds; // Tableau de pipes
-	int		*pipefd; // Pipe basique
-	int		i_pids; // idx de pids
-	int		i_pipes; // idx des pipes
-	int		infile; // fd
-	int		trigger;
-	int		i;
-	int		j;
-	char	c;
-	int	errno; // à remplir avec waitpid et avec signal
+	int		 	error_nbr; // Pour waitpid RAPPEL : WIFEXITED etc peuvent renvoyer des abberations.
+	size_t		nbr_cmd;
+	pid_t		*pids; // tableau de pids pour childs process
+	char		*tmp;
+	int			**pipefds; // Tableau de pipes
+	int			*pipefd; // Pipe basique
+	size_t		i_pids; // idx de pids
+	int			i_pipes; // idx des pipes
+	int			infile; // fd
+	int			trigger;
+	int			i;
+	size_t		k;
+	size_t		j;
+	char		c;
+	int			errno; // à remplir avec waitpid et avec signal
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
@@ -109,7 +111,7 @@ void		minishell(t_data *data, char  **env);
 void		infile_or_heredoc(t_data *data, char **env);
 void		infile_case(t_data *data, char **env);
 void		garbage_collector(t_data *data);
-void		exec_cmd(t_data *data, char **env);
+void		exec_cmd(t_data *data, char **env, char *cmd);
 char		*find_path(char *cmd, char *env[]);
 char		*get_env_path(char *env[]);
 void		free_paths(char **paths);
@@ -117,6 +119,8 @@ char		*construct_path(char *dir, char *cmd);
 void		init_data_2(t_data *data);
 void		mother_forker(t_data *data);
 void		child_process_a(char *env[], t_data *data);
+bool		status();
+void		child(t_data *data, size_t idx, char **env);
 // int		is_dir(t_data *data);
 // void		infile_check(t_data *data);
 // void		init_test(t_data *data);
