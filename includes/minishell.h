@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/01 17:01:01 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/02 18:28:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,13 @@ typedef struct s_data // Structure Globale
 	
 	char 	**cmds;
 	char	*file;
+	char 	*file2;
 	int		redir;
 
 	/* Pour l'exec */
+	
+	
+	int			a_file;
 	int		 	error_nbr; // Pour waitpid RAPPEL : WIFEXITED etc peuvent renvoyer des abberations.
 	size_t		nbr_cmd;
 	pid_t		*pids; // tableau de pids pour childs process
@@ -85,10 +89,15 @@ typedef struct s_data // Structure Globale
 	int			**pipefds; // Tableau de pipes
 	int			*pipefd; // Pipe basique
 	size_t		i_pids; // idx de pids
-	int			i_pipes; // idx des pipes
+	size_t			i_pipes; // idx des pipes
 	int			infile; // fd
+	int			outfile;
 	int			trigger;
 	int			i;
+	size_t		i_redir_f;
+	size_t		i_redir;
+	size_t		i_parsed;
+	size_t		i_cmd;
 	size_t		k;
 	size_t		j;
 	char		c;
@@ -109,7 +118,8 @@ t_vector	init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data, char  **env);
 void		infile_or_heredoc(t_data *data, char **env);
-void		infile_case(t_data *data, char **env);
+void		infile_case(t_data *data, char *file);
+void		outfile_case(t_data *data, int type, char *file);
 void		garbage_collector(t_data *data);
 void		exec_cmd(t_data *data, char **env, char *cmd);
 char		*find_path(char *cmd, char *env[]);
@@ -121,6 +131,7 @@ void		mother_forker(t_data *data);
 void		child_process_a(char *env[], t_data *data);
 bool		status();
 void		child(t_data *data, size_t idx, char **env);
+void		open_file_minishell(t_data *data, size_t type, char *file);
 // int		is_dir(t_data *data);
 // void		infile_check(t_data *data);
 // void		init_test(t_data *data);
@@ -150,5 +161,6 @@ void vectstr_happend(t_vectstr *vect, char *data);
 void vector_append(t_vector *vect, t_vectstr new_vect);
 void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
+void vectint_happend(t_vectint *vect, int number);
 
 #endif

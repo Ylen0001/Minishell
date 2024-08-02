@@ -107,7 +107,28 @@ II - Gestion des pipes
 --> dup2 pipe[1], STDOUT_FILENO
 
 
+
 BLOQUAGE >>
 
-- Loop infini
-- Dans la première exec de child. Donc premier
+- Le stdin->infile de process 1 OK
+- Le stdout->pipe[0][1] de P1 OK
+- Le stdin->pipe[0][0] de P2 OK
+- Le stdout->outfile de P2 OK
+
+close :
+
+- P1 close pipe[0][1]
+
+
+02/08
+
+IMPORTANT : Il me faut 2 idx. Un pour le parsed (l'idx de l'input qu'on traite) et un pour la cmd dans l'input. 
+
+
+FIN DE JOURNÉE 02/08
+
+Problème de redirection, soit à l'infile, soit à l'outfile.
+Mais si LS dans cmd2, LS s'effectue bien dans l'outfile. Donc la redirection de i_pids2 est OK. 
+
+Le problème vient soit du dup2 STDIN où STDOUT de P1, où du STDIN de P2 
+
