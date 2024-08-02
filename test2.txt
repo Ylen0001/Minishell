@@ -1,0 +1,13 @@
+EXEC.txt
+includes
+leak.supp
+libft
+Makefile
+minishell
+obj
+README.md
+ressources
+src
+test2.txt
+test.txt
+vect.c

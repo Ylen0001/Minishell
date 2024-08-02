@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 15:29:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/02 15:25:59 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,12 @@
 
 typedef enum
 {
-	STDIN_REDIR = 0,
-	HERE_DOC = 1,
-	STDOUT_REDIR = 2,
-	STDOUT_APPEND = 3,	
+	STDIN_REDIR = 0, // <
+	HERE_DOC = 1,    // <<
+	STDOUT_REDIR = 2, // >
+	STDOUT_APPEND = 3,	// >>
 }	e_redir;
 
-// typedef struct s_heredoc // Liste chaînée
-// {
-// 	char **limiter; // EOF du here_doc
-// 	size_t size;
-// 	size_t capacity;
-// }			t_heredoc;
-
-// typedef struct s_vectstr {
-// 	char **data;
-// 	size_t size;
-// 	size_t capacity;
-// }	t_vectstr;
-
-// typedef struct s_node {
-// 	t_vectstr v_cmd;
-// 	t_vectstr v_redir;
-// 	int *redir_type;
-// } t_node;
 
 typedef struct s_vectint {
     int *redir_type; // Enum
@@ -75,7 +57,7 @@ typedef struct s_vectstr {
 typedef struct s_parsed {
 	t_vectstr *cmd; //cat file2
 	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
-	t_vectint type; //< << << < > > >;
+	t_vectint *type; //< << << < > > >;
 } t_parsed;
 
 
