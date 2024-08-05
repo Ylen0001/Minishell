@@ -6,11 +6,12 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/02 19:00:55 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:37:47 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 // int main(int argc, char **argv, char **env) 
@@ -125,6 +126,10 @@ void	minishell(t_data *data, char **env)
 		data->i_redir_f++;
 		// printf("|%zu|\n", data->i_pids);
 		// printf("HEY\n");
+		// close(data->pipefds[0][0]);
+		// close(data->pipefds[0][1]);
+		// close(data->pipefds[1][0]);
+		// close(data->pipefds[1][1]);
 		while(data->k < data->i_pids - 1)	
 		{
 			waitpid(data->pids[data->k], NULL, 0);
@@ -147,15 +152,17 @@ void child(t_data *data, size_t i_parsed, char **env)
 	data->j = 0;
 	m_cmd = ft_split(cmd->data[data->i_cmd], ' '); 
 	path = find_path(m_cmd[0], env);
-	// printf("|Child : I_pids = %zu, i_parsed = %zu, i_pipes = %zu|\n", data->i_pids, i_parsed, data->i_pipes);
-	// printf("|i_pids = %zu, nbr_cmd = %zu, i_cmd = %zu|\n", data->i_pids, data->nbr_cmd, data->i_cmd);
-	if(data->i_pids != data->i_cmd && data->i_pids > 0) 				// If not last pipe
+	printf("|Child : I_pids = %zu, i_parsed = %zu, i_pipes = %zu|\n", data->i_pids, i_parsed, data->i_pipes);
+	printf("|i_pids = %zu, nbr_cmd = %zu, i_cmd = %zu|\n", data->i_pids, data->nbr_cmd, data->i_cmd);
+	if(data->i_pids == 1) 				// If not last pipe
 	{
 		dprintf(2, "HEY\n");
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDIN\n", 2);
+		close(data->pipefds[data->i_pipes - 1][0]);
+		close(data->pipefds[data->i_pipes - 1][1]);
 	}
-	if(data->i_pids != data->nbr_cmd - 1 && data->i_pids != 1)				// If not first pipe nor last pipe
+	if(data->i_pids == 0)				// If not first pipe nor last pipe
 	{
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
@@ -170,28 +177,33 @@ void child(t_data *data, size_t i_parsed, char **env)
 
 	// while(data->j < redir_t.size - 1)
 	// {
-		dprintf(2, "%s\n", redir_f->data[data->i_redir_f]);
-		if(redir_t.redir_type[data->i_redir] == STDIN_REDIR)
-		{
-			dprintf(2, "LA %zu\n", data->i_pipes);
-			open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
-			if(dup2(data->infile, STDIN_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
-		}
-		else if(redir_t.redir_type[data->i_redir] == STDOUT_REDIR)
-		{
-			dprintf(2, "ICI %zu \n", data->i_pipes);
-			open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
-			if(dup2(data->outfile, STDOUT_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
-		}
-		else if(redir_t.redir_type[data->i_redir] == STDOUT_APPEND)
-		{
-			open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
-			if(dup2(data->outfile, STDOUT_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDOUT APPEND failed.\n", 2);
-		}
+	dprintf(2, "%s\n", redir_f->data[data->i_redir_f]);
+	if(redir_t.redir_type[data->i_redir] == STDIN_REDIR)
+	{
+		dprintf(2,"pid = %zu, STDIN\n", data->i_pids);
+		open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
+		if(dup2(data->infile, STDIN_FILENO) == -1)
+			ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
+		close(data->infile);
+	}
+	else //(redir_t.redir_type[data->i_redir] == STDOUT_REDIR)
+	{
+		open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
+		dprintf(2,"pid = %zu, STDOUT file = %s, fd out = %d\n", data->i_pids, redir_f->data[data->i_redir_f], data->outfile);
+		if(dup2(data->outfile, STDOUT_FILENO) == -1)
+			ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
+		close(data->outfile);
+	}
+	printf("fdpdede\n");
+	// else if(redir_t.redir_type[data->i_redir] == STDOUT_APPEND)
+	// {
+	// 	open_file_minishell(data, redir_t.redir_type[data->i_redir], redir_f->data[data->i_redir_f]);
+	// 	if(dup2(data->outfile, STDOUT_FILENO) == -1)
+	// 		ft_putstr_fd("Error : Dup2 STDOUT APPEND failed.\n", 2);
+	// }
+	dprintf(2, "Executiiii \"%s\"\n", path);
 	execve(path, m_cmd, env);
+	dprintf(2, "ERRRORRORORORORO\n");
 }
 
 	
@@ -330,7 +342,7 @@ void	outfile_case(t_data *data, int type, char *file)
 			// exit(EXIT_FAILURE);
 		}
 		else
-			ft_putstr_fd("File : Authorized Access\n", 2);
+			ft_putstr_fd("File : Authorized AccessA\n", 2);
 	}
 	else if(type == STDOUT_APPEND)
 	{
