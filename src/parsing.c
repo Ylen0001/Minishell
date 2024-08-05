@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/05 16:18:18 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/05 17:30:48 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int manage_chevron(t_data *s_data, char *str)
 
 void path_to_vect(t_data *s_data)
 {
+    int cmd_count = 0;
     int i = 0;
     char *s = s_data->full_string;
     char str[5000] = {'\0'};
@@ -126,6 +127,11 @@ void path_to_vect(t_data *s_data)
     manage_chevron(s_data, s);
     while (s[i])
     {
+        if (s[i] == '|')
+        {
+            i++;
+            
+        }
         if (s[i] == '\'')
         {
             i++;
