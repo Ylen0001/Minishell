@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:39:28 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:45:29 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,6 @@ int	main(int argc, char *argv[], char *env[])
 		exit(EXIT_FAILURE);
 	t_data s_data;
 	s_data = init_data(env);
-	char *s = "ls -lr";
-	char *s2 = "rev";
-	vectstr_happend(s_data.v_path.parsed[1].cmd, s);
-	vectstr_happend(s_data.v_path.parsed[1].cmd, s2);
-	// printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
-	// printf("%zu\n", s_data.v_path.parsed[1].cmd->size);
-	// vectstr_print(s_data.v_path.parsed[1].cmd);
-	init_data_2(&s_data);
 	while (init_prompt() && init_signal())
 	{
 		char *input = readline("minishell: ");

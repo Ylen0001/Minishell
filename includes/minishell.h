@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:54:52 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:46:02 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@
 
 typedef enum
 {
-	STDIN_REDIR = 0,
-	HERE_DOC = 1,
-	STDOUT_REDIR = 2,
-	STDOUT_APPEND = 3,	
+	STDIN_REDIR = 0, // <
+	HERE_DOC = 1,    // <<
+	STDOUT_REDIR = 2, // >
+	STDOUT_APPEND = 3,	// >>
 }	e_redir;
 
 typedef struct s_vectint {
@@ -58,7 +58,7 @@ typedef struct s_vectstr {
 typedef struct s_parsed {
 	t_vectstr *cmd; //cat file2
 	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
-	t_vectint type; //< << << < > > >;
+	t_vectint *type; //< << << < > > >;
 } t_parsed;
 
 
@@ -146,5 +146,19 @@ void vectstr_happend(t_vectstr *vect, char *data);
 void vector_append(t_vector *vect, t_vectstr new_vect);
 void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
+void vectint_print(t_vectint *vect);
+void vectint_happend(t_vectint *vect, int number);
+
+#define vect_print(param) _Generic((param), \
+    t_vectstr *: vectstr_print,   \
+    t_vectint *: vectint_print,   \
+    default : printf("Format not supported yet\n") \
+)(param)
+
+#define vect_happend(param, data) _Generic((param), \
+    t_vectstr *: vectstr_happend,   \
+    t_vectint *: vectint_happend,   \
+    default : printf("Format not supported yet\n") \
+)(param, data)
 
 #endif
