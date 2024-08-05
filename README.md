@@ -46,7 +46,8 @@ Donc si je veux accéder à la cmd[0] de l'input 1
 
 data->v_path.v_parsed[0].cmd->data[0] = Première cmd + options + arguments (ls -lr)
 data->v_path.v_parsed[0].cmd->data[1] = Deuxième cmd etc...
-data->v_path.parsed[0].cmd->size = size du nbr d'args de l'input 1. 
+data->v_path.parsed[0].cmd->size = size du nbr d'args de l'input 1.
+data->v_path.parsed[0].type.redir_type[0] = Première redir
 
 
 IV - Architecture de l'exec
@@ -72,9 +73,62 @@ d -> Exec la commande, si on doit récupérer le path, on ira le chercher dans c
 31/07 
 
 I - L'initialisation des vecteurs est OK
---> On arrive bien à stocker des cmd dans les différentes vecteurs parsed.
---> Et on arrive bien à l'envoyer à execve, une fois splitté.
 
-1st problème : Comment savoir le nombre de fork à faire.
---> Récupérer la size de v.path?
-Dans vec_happend_str prend bien des valeurs, mais pas dans le main.
+
+--> Deux cmds (une avec options) bien initialisés dans le vecteur
+	---> Bien récupéré dans un char data->**cmds.
+--> Nbr de cmds bien initialisé dans le vecteur
+	---> Bien récupéré dans un size_t data->nbr_cmd
+--> Redir bien initialisée dans le vecteur 
+	---> Bien récupérée dans un int data->redir
+--> Initialisation du int *pipefds et de i_pipes (à vérifier.).
+--> Initialisation du int *pids et de i_pids (à vérifier.).
+							TENIR À JOUR LE GARBAGE COLLECTOR
+--> Envoi à execve de la cmd[0] (ls -lr), une fois splitté. OK
+
+01/08
+-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-strong -fno-optimize-sibling-calls
+
+I - Mise en place de la structure de l'exec.
+
+1 - Pipes et fork en fonction du nbr de commandes, stockés dans des tableaux.
+2 - Petit souci sur l'argument d'erreur de waitpid. À checker plus tard, pour l'instant NULL.
+3 - Il faut itérer correctement les i_pipes/i_pids.
+
+
+Structure de la fonction child :
+
+On lui déclare un const t_vecstr *cmd = data->v_path.parsed[idx].cmd
+I.e cette constante contient la cmd à l'index correspondant.
+
+II - Gestion des pipes
+
+1 - Si pids = 0 :
+--> dup2 pipe[1], STDOUT_FILENO
+
+
+
+BLOQUAGE >>
+
+- Le stdin->infile de process 1 OK
+- Le stdout->pipe[0][1] de P1 OK
+- Le stdin->pipe[0][0] de P2 OK
+- Le stdout->outfile de P2 OK
+
+close :
+
+- P1 close pipe[0][1]
+
+
+02/08
+
+IMPORTANT : Il me faut 2 idx. Un pour le parsed (l'idx de l'input qu'on traite) et un pour la cmd dans l'input. 
+
+
+FIN DE JOURNÉE 02/08
+
+Problème de redirection, soit à l'infile, soit à l'outfile.
+Mais si LS dans cmd2, LS s'effectue bien dans l'outfile. Donc la redirection de i_pids2 est OK. 
+
+Le problème vient soit du dup2 STDIN où STDOUT de P1, où du STDIN de P2 
+

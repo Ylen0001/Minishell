@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 14:46:22 by ylenoel           #+#    #+#             */
-/*   Updated: 2023/11/14 17:19:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:54:10 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back(t_list **lst, t_list *newt)
 {
 	t_list	*last;
 
-	if (!lst || !new)
+	if (!lst || !newt)
 		return ;
 	if (!*lst)
-			*lst = new;
+			*lst = newt;
 	else
 	{
 		last = ft_lstlast(*lst);
-		last->next = new;
+		last->next = newt;
 	}
 }

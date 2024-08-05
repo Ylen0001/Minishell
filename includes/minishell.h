@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/05 16:46:02 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:53:05 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,24 +73,35 @@ typedef struct s_data // Structure Globale
 
 	/* Pour les tests */
 	
-	char 	**cmd;
+	char 	**cmds;
 	char	*file;
+	char 	*file2;
 	int		redir;
 
 	/* Pour l'exec */
-	size_t	nbr_cmd;
-	pid_t	*pids; // tableau de pids pour childs process
-	char	*tmp;
-	int		**pipefds; // Tableau de pipes
-	int		*pipefd; // Pipe basique
-	int		i_pids; // idx de pids
-	int		i_pipes; // idx des pipes
-	int		infile; // fd
-	int		trigger;
-	int		i;
-	int		j;
-	char	c;
-	int	errno; // à remplir avec waitpid et avec signal
+	
+	
+	int			a_file;
+	int		 	error_nbr; // Pour waitpid RAPPEL : WIFEXITED etc peuvent renvoyer des abberations.
+	size_t		nbr_cmd;
+	pid_t		*pids; // tableau de pids pour childs process
+	char		*tmp;
+	int			**pipefds; // Tableau de pipes
+	int			*pipefd; // Pipe basique
+	size_t		i_pids; // idx de pids
+	size_t			i_pipes; // idx des pipes
+	int			infile; // fd
+	int			outfile;
+	int			trigger;
+	int			i;
+	size_t		i_redir_f;
+	size_t		i_redir;
+	size_t		i_parsed;
+	size_t		i_cmd;
+	size_t		k;
+	size_t		j;
+	char		c;
+	int			errno; // à remplir avec waitpid et avec signal
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
@@ -107,9 +118,10 @@ t_vector	init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data, char  **env);
 void		infile_or_heredoc(t_data *data, char **env);
-void		infile_case(t_data *data, char **env);
+void		infile_case(t_data *data, char *file);
+void		outfile_case(t_data *data, int type, char *file);
 void		garbage_collector(t_data *data);
-void		exec_cmd(t_data *data, char **env);
+void		exec_cmd(t_data *data, char **env, char *cmd);
 char		*find_path(char *cmd, char *env[]);
 char		*get_env_path(char *env[]);
 void		free_paths(char **paths);
@@ -117,6 +129,9 @@ char		*construct_path(char *dir, char *cmd);
 void		init_data_2(t_data *data);
 void		mother_forker(t_data *data);
 void		child_process_a(char *env[], t_data *data);
+bool		status();
+void		child(t_data *data, size_t idx, char **env);
+void		open_file_minishell(t_data *data, size_t type, char *file);
 // int		is_dir(t_data *data);
 // void		infile_check(t_data *data);
 // void		init_test(t_data *data);
