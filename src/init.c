@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/31 15:26:38 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/05 15:24:35 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,15 @@ t_vectstr *init_vect_str()
     return self;
 }
 
-t_vectint init_vect_int()
+t_vectint *init_vect_int()
 {
-    t_vectint self;
+    t_vectint *self;
     
-    self.size = 0;
-    self.capacity = 10;
-    self.redir_type = (int *)ft_calloc(10, sizeof(int));
-    if (!self.redir_type)
+    self = ft_calloc(1, sizeof(t_vectint));
+    self->size = 0;
+    self->capacity = 10;
+    self->redir_type = (int *)ft_calloc(10, sizeof(int));
+    if (!self->redir_type)
         EXIT_FAILURE;
     return self;
 }

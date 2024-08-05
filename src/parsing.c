@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/02 16:25:17 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/05 16:18:18 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,22 +184,22 @@ void path_to_vect(t_data *s_data)
                 x = search_n_append(s_data, check_var, str, x);
                 i = j; 
             }
+            else if (s[i] == '<' || s[i] == '>')
+            {
+                i++;
+                if (s[i] == '<' || s[i] == '>')
+                    i++;
+                while(s[i] != ' ' && s[i] != '<' && s[i] != '>')
+                    i++;
+                while(s[i] == ' ')
+                    i++;
+            }
             else
             {
-                if (s[i] == '<' || s[i] == '>')
-                {
-                    i++;
-                    if (s[i] == '<' || s[i] == '>')
-                        i++;
-                    while(s[i] != ' ' && s[i] != '<' && s[i] != '>')
-                        i++;
-                    while(s[i] == ' ')
-                        i++;
-                }
                 str[x] = s[i];
                 i++;
-                x++;    
-            }
+                x++;
+            }    
         }
         
     }
