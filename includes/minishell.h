@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:18:32 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/07 12:23:46 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ typedef struct s_data // Structure Globale
 void 		recup_data(t_data *data);
 t_vector	init_vector();
 t_vectstr 	*init_vect_str();
-void		minishell(t_data *data, char  **env);
+void		minishell(t_data *data);
 void		infile_or_heredoc(t_data *data, char **env);
 void		infile_case(t_data *data, char *file);
 void		outfile_case(t_data *data, int type, char *file);
@@ -130,7 +130,7 @@ void		init_data_2(t_data *data);
 void		mother_forker(t_data *data);
 void		child_process_a(char *env[], t_data *data);
 bool		status();
-void		child(t_data *data, size_t idx, char **env);
+void		child(t_data *data, size_t idx);
 void		open_file_minishell(t_data *data, size_t type, char *file);
 // int		is_dir(t_data *data);
 // void		infile_check(t_data *data);
