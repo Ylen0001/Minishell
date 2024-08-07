@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:14:56 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/07 12:19:17 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,23 @@ void	minishell(t_data *data)
 		data->i_cmd++;
 		data->i_redir++;
 		data->i_redir_f++;
+		while(data->k < data->i_pids - 1)	
+		{
+			waitpid(data->pids[data->k], NULL, 0);
+			data->k++;
+		}
 	}
+}
+
+void child(t_data *data, size_t i_parsed) 
+{
+	const 	t_vectstr *cmd = data->v_path.parsed[i_parsed].cmd;
+	const 	t_vectint *redir_t = data->v_path.parsed[i_parsed].type;
+	const	t_vectstr *redir_f = data->v_path.parsed[i_parsed].redir;
+	char 	*path;
+	char 	**m_cmd;
+
+	data->j = 0;
+	
+
 }

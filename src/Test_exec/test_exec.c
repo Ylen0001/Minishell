@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 09:53:38 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:11:54 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/07 12:16:05 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ void	init_data_2(t_data *data)
 	// const size_t NBR_CMD = data->v_path.size;
 
 	i = 0;
+	data->k = 0;
 	data->i_redir_f = 0;
 	data->i_parsed = 0;
 	data->i_cmd = 0;
