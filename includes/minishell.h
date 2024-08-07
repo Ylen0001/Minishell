@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/05 16:53:05 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/07 12:18:32 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
 void vectint_print(t_vectint *vect);
 void vectint_happend(t_vectint *vect, int number);
+void free_t_data(t_data *data);
 
 #define vect_print(param) _Generic((param), \
     t_vectstr *: vectstr_print,   \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/05 16:48:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/07 12:16:49 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,32 +56,22 @@ int	main(int argc, char *argv[], char *env[])
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
-	s_data = init_data(env);
-	char *s = "ls";
-	char *s2 = "rev";
-	char *s3 = "infile";
-	char *s6 = "outfile";
-	int	 s4 = 0;
-	int	 s5 = 2;
-	vectstr_happend(s_data.v_path.parsed[0].cmd, s);
-	vectstr_happend(s_data.v_path.parsed[0].cmd, s2);
-	vectstr_happend(s_data.v_path.parsed[0].redir, s3);
-	vectstr_happend(s_data.v_path.parsed[0].redir, s6);
-	vectint_happend(&s_data.v_path.parsed[0].type, s4);
-	vectint_happend(&s_data.v_path.parsed[0].type, s5);
-	init_data_2(&s_data);
-	// vectstr_print(s_data.v_path.parsed[0].cmd);
-	// printf("%s\n", s_data.v_path.parsed[1].cmd->data[0]);
-	// printf("%zu\n", s_data.v_path.parsed[1].cmd->size);
+	// s_data = init_data(env);
 	while (init_prompt() && init_signal())
 	{
+		s_data = init_data(env);
 		char *input = readline("minishell: ");
 		if (!input)
 			exit(1);
-		// launch_parsing(input, &s_data);
-		minishell(&s_data, env);
-		s_data.i_parsed++;
 		add_history(input);
+		launch_parsing(input, &s_data);
+		free_t_data(&s_data);
+
+		//parsing
+		//exec
+		// TEST //
+		// infile_check(&data_test);
+		// mother_forker(&data_test); // T'as la vanne? je l'ai
 	}
 	rl_clear_history();
 	return (0);
