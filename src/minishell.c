@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/02 11:37:41 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/07 11:54:34 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,16 @@ int main(int argc, char **argv, char **env)
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
-	s_data = init_data(env);
+	// s_data = init_data(env);
 	while (init_prompt() && init_signal())
 	{
+		s_data = init_data(env);
 		char *input = readline("minishell: ");
 		if (!input)
 			exit(1);
-		launch_parsing(input, &s_data);
-		
 		add_history(input);
+		launch_parsing(input, &s_data);
+		free_t_data(&s_data);
 
 		//parsing
 		//exec

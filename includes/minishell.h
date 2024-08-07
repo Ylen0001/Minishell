@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/02 15:25:59 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/07 11:53:55 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
 void vectint_print(t_vectint *vect);
 void vectint_happend(t_vectint *vect, int number);
+void free_t_data(t_data *data);
 
 #define vect_print(param) _Generic((param), \
     t_vectstr *: vectstr_print,   \
