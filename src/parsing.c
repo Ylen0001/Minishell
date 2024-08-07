@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/07 11:54:56 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/07 15:31:21 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void append_redir(t_data *s_data, char *str, int i)
 int manage_chevron(t_data *s_data, char *str)
 {
     int i = 0;
-    while (str[i])
+    while (str[i] && str[i] != '"')
     {
         if (str[i] == '>' && str[i + 1] != '>')
         {
@@ -118,7 +118,7 @@ int manage_chevron(t_data *s_data, char *str)
 
 void path_to_vect(t_data *s_data)
 {
-    // int cmd_count = 0;
+    int cmd_count = 0;
     int i = 0;
     char *s = s_data->full_string;
     char str[5000] = {'\0'};
@@ -127,11 +127,11 @@ void path_to_vect(t_data *s_data)
     manage_chevron(s_data, s);
     while (s[i])
     {
-        // if (s[i] == '|')
-        // {
-        //     i++;
-            
-        // }
+        if (s[i] == '|')
+        {
+            cmd_count++;
+            i++;
+        }
         if (s[i] == '\'')
         {
             i++;
@@ -195,9 +195,11 @@ void path_to_vect(t_data *s_data)
                 i++;
                 if (s[i] == '<' || s[i] == '>')
                     i++;
-                while(s[i] != ' ' && s[i] != '<' && s[i] != '>')
+                while(s[i] && s[i] == ' ')
                     i++;
-                while(s[i] == ' ')
+                while(s[i] && s[i] != ' ' && s[i] != '<' && s[i] != '>')
+                    i++;
+                while(s[i] && s[i] == ' ')
                     i++;
             }
             else
@@ -210,7 +212,7 @@ void path_to_vect(t_data *s_data)
         
     }
     if (str[0] != '\0')
-        vect_happend(s_data->v_path.parsed[0].cmd, str);
+        vect_happend(s_data->v_path.parsed[cmd_count].cmd, str);
 }
 
 void launch_parsing(char *input, t_data *s_data)
