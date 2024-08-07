@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/05 16:45:09 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/07 18:16:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,46 +97,55 @@ t_data init_data(char **env)
     return self;
 }
 
+void	init_data_2(t_data *data)
+{
+	size_t	i;
+	// const size_t NBR_CMD = data->v_path.size;
 
-
-// t_data init()
-// {
-//     t_data self;
-
-//     self.full_string = NULL;
-//     self.env = NULL;
-//     self = init_data();
-    
-//     return self;
-// }
-
-// void	init_test(t_data *data)
-// {
-// 	data->i = 0;
-// 	data->lst_cmd = malloc(sizeof(char *) * 3 + 1);
-// 	if(data->lst_cmd == NULL)
-// 		printf("Lst_cmd Malloc failure\n");
-// 	data->pipefds = ft_calloc(3, sizeof(int*));
-// 	while(data->i < 3);
-// 		data->pipefds[data->i++] = ft_calloc(2, sizeof(int));
-// 	data->lst_cmd[0] = ft_strdup("infile");	
-// 	printf("%s\n", data->lst_cmd[0]);
-// 	data->lst_cmd[1] = ft_strdup("cat");	
-// 	printf("%s\n", data->lst_cmd[1]);
-// 	data->lst_cmd[2] = ft_strdup("rev");	
-// 	printf("%s\n", data->lst_cmd[2]);
-//     init_vector(&s_data->v_path);
-//     t_vector self;
-    
-//     self.size = 0;
-//     self.capacity = 10;
-//     self.node = (t_node *)malloc(10 * sizeof(t_node));
-//     if(!self.node)
-//         EXIT_FAILURE;
-//     self.node->v_cmd = init_vect_str();
-//     self.node->v_redir = init_vect_str();
-//     return self;
-// }
+	i = 0;
+	data->infile = 0;
+	data->outfile = 0;
+	data->k = 0;
+	data->i_redir_f = 0;
+	data->i_parsed = 0;
+	data->i_cmd = 0;
+	data->j = 0;
+	data->i_redir = 0;
+	data->error_nbr = 0;
+	data->nbr_cmd = data->v_path.parsed[0].cmd->size;
+	data->i_cmd = 0;
+	data->built_in = 0;
+	data->i_redir_t = 0;
+	data->cmds = malloc(sizeof(char *) * 2);
+	while(i < data->nbr_cmd)
+	{
+		data->cmds[i] = ft_strdup(data->v_path.parsed[0].cmd->data[i]);	
+		i++;
+	}
+	// printf("%s\n", data->cmds[1]);
+	// printf("redir = %d\n", data->redir);
+	// printf("cmds = %zu\n", data->nbr_cmd);
+	i = 0;
+	data->pipefds = ft_calloc( data->nbr_cmd, sizeof(int *));
+	while (i < data->nbr_cmd)
+		data->pipefds[i++] = ft_calloc(2, sizeof(int));
+	if (!data->pipefds)
+	{
+		ft_putstr_fd("Malloc failed\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	// printf("%zu\n", data->nbr_cmd);
+	data->pids = malloc(data->nbr_cmd * sizeof(pid_t) + 1);
+	if (data->pids == NULL)
+	{
+		ft_putstr_fd("Pid malloc failed\n", 2);
+		free(data->pids);
+		exit(EXIT_FAILURE);
+	}
+	data->i_pipes = 0;
+	data->i_pids = 0;
+	return ;
+}
 
 // void init_heredoc(t_data **s_data)
 // {

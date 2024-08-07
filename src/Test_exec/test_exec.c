@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 09:53:38 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:16:05 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/07 14:56:44 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ void	init_data_2(t_data *data)
 	data->nbr_cmd = data->v_path.parsed[0].cmd->size;
 	data->i_cmd = 0;
 	data->cmds = malloc(sizeof(char *) * 2);
+	data->env = data->vect_env->data;
 	while(i < data->nbr_cmd)
 	{
 		data->cmds[i] = ft_strdup(data->v_path.parsed[0].cmd->data[i]);	
@@ -243,7 +244,7 @@ void	init_data_2(t_data *data)
 	// printf("redir = %d\n", data->redir);
 	// printf("cmds = %zu\n", data->nbr_cmd);
 	i = 0;
-	data->pipefds = ft_calloc( data->nbr_cmd, sizeof(int *));
+	data->pipefds = ft_calloc(data->nbr_cmd, sizeof(int *));
 	while (i < data->nbr_cmd)
 		data->pipefds[i++] = ft_calloc(2, sizeof(int));
 	if (!data->pipefds)
