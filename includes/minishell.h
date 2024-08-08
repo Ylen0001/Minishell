@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 12:11:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 14:18:11 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_data // Structure Globale
 	int			a_file;
 	int		 	error_nbr; // Pour waitpid RAPPEL : WIFEXITED etc peuvent renvoyer des abberations.
 	size_t		nbr_cmd;
+	size_t		nbr_cmd_total;
 	pid_t		*pids; // tableau de pids pour childs process
 	char		*tmp;
 	int			**pipefds; // Tableau de pipes

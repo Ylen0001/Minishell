@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 12:13:57 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 14:22:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ void	minishell(t_data *data)
 	// printf("cmd = %zu\n", data->nbr_cmd);
 	while (data->i_cmd < data->nbr_cmd)
 	{
-		dprintf(2, "while enfant num: %zu\n", data->i_cmd);
-		if(data->nbr_cmd > 1 || (data->nbr_cmd == 1 && data->built_in == 0)) // Si + d'une cmd OÙ 1 seule cmd NON BUILT-IN
+		if(data->nbr_cmd > 1) // Si + d'une cmd OÙ 1 seule cmd NON BUILT-IN
 		{
 			if (pipe(data->pipefds[data->i_cmd]) == -1)
 			{
@@ -104,6 +103,14 @@ void	minishell(t_data *data)
 				close(data->pipefds[data->i_cmd - 2][0]);
 				close(data->pipefds[data->i_cmd - 2][0]);
 			}
+			data->pids[data->i_cmd] = fork(); // Création process enfant
+			if (data->pids[data->i_cmd] == -1) 
+				ft_putstr_fd("Error : Fork Failed\n", 2);
+			if (data->pids[data->i_cmd] == 0)
+				child(data, data->i_cmd);
+		}
+		else if(data->nbr_cmd == 1 && data->built_in == 0)
+		{
 			data->pids[data->i_cmd] = fork(); // Création process enfant
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
@@ -148,17 +155,17 @@ void child(t_data *data, size_t i_cmd)
 	}
 	if (data->i_cmd != data->nbr_cmd)			   // If not last pipe [ENTRE LES DEUX]
 	{
-		dprintf(2, "ICI\n");
 		if(dup2(data->pipefds[data->i_cmd][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
+		close(data->pipefds[data->i_cmd][1]);
 	}
-	redirections(data, redir_t, redir_f->data);
+	if(redir_f->size > 0)
+		redirections(data, redir_t, redir_f->data);
 	// dprintf(2, "HI\n");
-	// close(data->pipefds[data->i_pipes][1]);
-	// close(data->pipefds[data->i_pipes][0]);
+	// close(data->pipefds[data->i_cmd][1]);
 	
 	execve(path, m_cmd, data->vect_env->data);
-	perror("Fatal error: ");
+	// perror("Fatal error: ");
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
@@ -174,18 +181,18 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			// dprintf(2,"STDIN file = %s, fd out = %d\n", redir_f[it], data->outfile);
 			// dprintf(2, "infile = %d\n", data->outfile);
-			if(dup2(data->infile, STDIN_FILENO) == -1)
+			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
-			close(data->infile);
+			close(data->a_file);
 		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			// dprintf(2,"|||pid = %zu, STDOUT file = %s, fd out = %d,\n", data->i_cmd, redir_f[it], data->outfile);
 			// dprintf(2, "outfile = %d\n", data->outfile);
-			if(dup2(data->outfile, STDOUT_FILENO) == -1)
+			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
-			close(data->outfile);
+			close(data->a_file);
 		}
 	}
 	return ;

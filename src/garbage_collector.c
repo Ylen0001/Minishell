@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:15:23 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 14:04:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,16 @@
 
 void	garbage_collector(t_data *data)
 {
-	data->i = 0;
+	size_t i;
 
+	i = 0;
+	free(data->pids);
+	while(data->pipefds[i] && i < data->nbr_cmd)
+		free(data->pipefds[i++]);
+	free(data->pipefds);
+	i = 0;
+	while(data->cmds[i] && i < data->nbr_cmd)
+		free(data->cmds[i++]);	
 	free(data->cmds);
 	free(data->file);
 	exit(EXIT_FAILURE);
