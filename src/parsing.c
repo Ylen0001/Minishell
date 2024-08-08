@@ -6,11 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/08 11:55:38 by aberion          ###   ########.fr       */
-=======
-/*   Updated: 2024/08/07 15:17:55 by ylenoel          ###   ########.fr       */
->>>>>>> Yoann
+/*   Updated: 2024/08/08 12:16:48 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +36,8 @@ void is_this_ok(t_data *s_data)
             count_double++;
             check_double++;
         }
-        i++;
-    }
+    	i++;
+	}
     if(count_double % 2 != 0 || count_single % 2 != 0)
     {
         printf("SyntaxError\n");
@@ -113,7 +109,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i, int cmd_count)
         {
             vectint_happend(s_data->v_path.parsed[cmd_count].type, HERE_DOC);
             append_redir(s_data, str, i, cmd_count);
-            i++;
+        	i++;
         }
         i++;
     }
@@ -225,35 +221,13 @@ void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
     is_this_ok(s_data);
-<<<<<<< HEAD
     path_to_vect(s_data, 0, 0);
-    printf("cmd 1\n");
-    vectstr_print(s_data->v_path.parsed[0].cmd);
-    printf("cmd 2\n");
-    vectstr_print(s_data->v_path.parsed[1].cmd);
-    printf("cmd 3\n");
-    vectstr_print(s_data->v_path.parsed[2].cmd);
-    printf("redir cmd 1\n");
-    vect_print(s_data->v_path.parsed[0].redir);
-    printf("redir cmd 2\n");
-    vect_print(s_data->v_path.parsed[1].redir);
-    printf("redir cmd 3\n");
-    vect_print(s_data->v_path.parsed[2].redir);
-    printf("type cmd 1\n");
-    vect_print(s_data->v_path.parsed[0].type);
-    printf("type cmd 2\n");
-    vect_print(s_data->v_path.parsed[1].type);
-    printf("type cmd 3\n");
-    vect_print(s_data->v_path.parsed[2].type);
-=======
-    path_to_vect(s_data);
     // printf("cmd\n");
     // vectstr_print(s_data->v_path.parsed[0].cmd);
     // printf("redir\n");
     // vect_print(s_data->v_path.parsed[0].redir);
     // printf("type\n");
     // vect_print(s_data->v_path.parsed[0].type);
->>>>>>> Yoann
 }
 
 //"$"USER
