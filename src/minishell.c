@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 14:22:01 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 17:08:21 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void	minishell(t_data *data)
 	it = -1;
 	init_data_2(data);
 	data->nbr_cmd = data->v_path.parsed[data->i_cmd].cmd->size;
-	// printf("cmd size = %zu\n", data->v_path.parsed[data->i_cmd].cmd->size);
-	
-
+	data->nbr_input = data->v_path.size;
+	// printf("cmd size = %zu, nbr_input = %zu\n", data->v_path.parsed[data->i_cmd].cmd->size, data->nbr_input);
 	// printf("cmd = %zu\n", data->nbr_cmd);
+	here_doc_detector(data);
 	while (data->i_cmd < data->nbr_cmd)
 	{
 		if(data->nbr_cmd > 1) // Si + d'une cmd OÙ 1 seule cmd NON BUILT-IN
@@ -120,6 +120,8 @@ void	minishell(t_data *data)
 		else												// IF une seule cmd ET c'est un BUILT-IN
 			child(data, data->i_cmd);
 		data->i_cmd++;
+		// dprintf(2, "Main : data->nbr_cmd = %zu, i_cmd = %zu\n", data->nbr_cmd, data->i_cmd);
+
 	}
 		while(++it < data->nbr_cmd)
 			waitpid(data->pids[it], NULL, 0);
@@ -135,19 +137,14 @@ void child(t_data *data, size_t i_cmd)
 	char 	**m_cmd;
 
 	data->j = 0;
-	data->nbr_cmd = cmd->size;
+	// data->nbr_cmd = cmd->size;
 	m_cmd = ft_split(cmd->data[data->i_cmd], ' '); 
 	path = find_path(m_cmd[0], data->vect_env->data);
 	// printf("cmd = %s\n", m_cmd[0]);
-	// dprintf(2, "data->nbr_cmd = %zu\n", data->nbr_cmd);
-	// dprintf(2, "redir_type[0] = %d\n", redir_t->redir_type[data->i_redir]);
-	// dprintf(2, "redir_size = %zu\n", redir_t->size);
-	// dprintf(2, "redir_f[0] = %s\n", redir_f->data[it]);
-	// printf("|Child : I_pids = %zu, i_cmd = %zu, i_pipes = %zu|\n", data->i_pids, i_cmd, data->i_pipes);
-	// printf("|i_pids = %zu, nbr_cmd = %zu, i_cmd = %zu|\n", data->i_pids, data->nbr_cmd, data->i_cmd);
+	// dprintf(2, "Child : data->nbr_cmd = %zu, i_cmd = %zu\n", data->nbr_cmd, data->i_cmd);
 	if (data->i_cmd > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
-		dprintf(2, "HELLO\n");
+		// dprintf(2, "HELLO\n");
 		if(dup2(data->pipefds[data->i_cmd - 1][0], STDIN_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDIN\n", 2);
 		close(data->pipefds[data->i_cmd - 1][0]);
@@ -171,8 +168,10 @@ void child(t_data *data, size_t i_cmd)
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 {
 	size_t it;
+	size_t hd_it;
 
 	it = -1;
+	hd_it = 0;
 	while(++it < redir_t->size)
 	{
 	// dprintf(2, "redir_type = %d, i_redir_t = %zu, redir_t size = %zu\n", redir_t->redir_type[it], it, redir_t->size);
@@ -185,6 +184,11 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
 			close(data->a_file);
 		}
+		else if(redir_t->redir_type[it] == HERE_DOC)
+		{
+			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
+			hd_it++;
+		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
@@ -195,15 +199,14 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			close(data->a_file);
 		}
 	}
-	return ;
 }
-	// printf("path = %s\n", path);
-
+		// }
 void	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_TRUNC | O_CREAT);
 	openFlags += (type == STDOUT_APPEND) * (O_WRONLY | O_CREAT | O_APPEND);
 	openFlags += (type == STDIN_REDIR) * (O_RDONLY);
+	openFlags += (type == HERE_DOC) * (O_RDONLY);
 	if (access(file, F_OK | W_OK) != -1)
 	{
 		data->a_file = open(file, openFlags, 0644);

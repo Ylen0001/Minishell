@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/08 11:31:57 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:40:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	init_data_2(t_data *data)
 	data->i_cmd = 0;
 	data->built_in = 0;
 	data->cmds = malloc(sizeof(char *) * 2);
+	data->k = 0;
 	while(i < data->nbr_cmd)
 	{
 		data->cmds[i] = ft_strdup(data->v_path.parsed[0].cmd->data[i]);	
