@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 11:53:55 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:46:10 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_vectstr {
     size_t capacity;
 }    t_vectstr;
 
-
 //<	Makefile <<eof <<salope <file1 cat file2 >file3 >chat >biere;
 //execve("cat",  {"cat file2"}, ENV);
 typedef struct s_parsed {
@@ -90,7 +89,7 @@ typedef struct s_data // Structure Globale
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
-	t_vector v_path;
+	t_vector 	*v_path;
 	char *full_string; // Str complète avec les redirections
 	char **env;
 	e_redir redirect;
@@ -116,14 +115,18 @@ void	here_doc_error(void);
 
 
 t_data init_data(char **env);
+t_parsed init_parsed();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
-void vector_append(t_vector *vect, t_vectstr new_vect);
 void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
 void vectint_print(t_vectint *vect);
 void vectint_happend(t_vectint *vect, int number);
 void free_t_data(t_data *data);
+void v_path_double(t_vector *vector);
+void vector_happend(t_vector *vect, void *n);
+
+
 
 #define vect_print(param) _Generic((param), \
     t_vectstr *: vectstr_print,   \
@@ -132,6 +135,7 @@ void free_t_data(t_data *data);
 )(param)
 
 #define vect_happend(param, data) _Generic((param), \
+	t_vector *: vector_happend,		\
     t_vectstr *: vectstr_happend,   \
     t_vectint *: vectint_happend,   \
     default : printf("Format not supported yet\n") \

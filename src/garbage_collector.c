@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:12:37 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:26:56 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void free_t_parsed(t_parsed *parsed)
             free_t_vectstr(parsed->redir);
         if (parsed->type)
             free_t_vectint(parsed->type);
-        free(parsed);
+        // free(parsed);
     }
 }
 
@@ -74,7 +74,7 @@ void free_t_vector(t_vector *vector)
                 free_t_parsed(&vector->parsed[i]);
                 i++;
             }
-            free(vector->parsed);
+            free(vector);
         }
     }
 }
@@ -87,9 +87,9 @@ void free_t_data(t_data *data)
             free_t_vectstr(data->vect_env);
         }
 
-        if (data->v_path.parsed) {
-            free_t_vector(&data->v_path);
-        }
+        // if (data->v_path->parsed) {
+        //     free_t_vector(data->v_path);
+        // }
 
         if (data->full_string) {
             free(data->full_string);

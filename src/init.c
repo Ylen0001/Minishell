@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/05 15:24:35 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:46:13 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,16 @@ t_parsed init_parsed()
     return self;
 }
 
-t_vector init_vector()
+t_vector *init_vector()
 {
-    t_vector self;
+    t_vector *self;
     
-    self.parsed = (t_parsed *)ft_calloc(10, sizeof(t_parsed));
-    if (!self.parsed)
+    self = ft_calloc(1, sizeof(t_vector));
+    self->parsed = (t_parsed *)ft_calloc(10, sizeof(t_parsed));
+    if (!self->parsed)
         EXIT_FAILURE;
-    self.size = 0;
-    self.capacity = 10;
+    self->size = -1;
+    self->capacity = 10;
     return self;
 }
 
@@ -86,12 +87,6 @@ t_data init_data(char **env)
     self.full_string = NULL;
     self.env = NULL;
     self.v_path = init_vector();
-    int i = 0;
-    while (i < 10)
-    {
-        self.v_path.parsed[i] = init_parsed();
-        i++;
-    }
     self.vect_env = init_vect_str();
     init_env(self.vect_env, env);
     return self;

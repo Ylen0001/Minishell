@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/07/31 15:10:21 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:44:58 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,17 @@ void vectint_happend(t_vectint *vect, int number)
     }
     vect->redir_type[vect->size] = number;
     vect->size++;
+}
+
+void vector_happend(t_vector *vect, void *n) {
+    (void) n;
+	if (vect->size == vect->capacity - 1)
+    {
+        vect->capacity *= 2;
+        vect->parsed = (t_parsed *)ft_realloc(vect->parsed, vect->capacity, vect->size);
+        if (!vect->parsed)
+            EXIT_FAILURE;
+    }
+    vect->size++;
+    vect->parsed[vect->size] = init_parsed();
 }

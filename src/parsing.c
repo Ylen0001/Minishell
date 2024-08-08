@@ -6,14 +6,45 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/08 11:55:38 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 17:13:48 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
 
-void is_this_ok(t_data *s_data)
+int check_chevron(t_data *s_data)
+{
+    int check_double = 0;
+    int check_single = 0;
+    char *s =s_data->full_string;
+    int i = 0;
+    
+    while(s[i])
+    {
+        if(s[i] == '"')
+            check_double++;
+        if(s[i] == '\'')
+            check_single++;
+        if(s[i] == '>' && check_double % 2 == 0 && check_single % 2 == 0)
+        {
+            if(s[i + 1] == '<')
+                return -1;
+            if (s[i + 1] == '>' && s[i + 2] == '>')
+                return -1;
+        }
+        if(s[i] == '<' && check_double % 2 == 0 && check_single % 2 == 0)
+        {
+            if(s[i + 1] == '>')
+                return -1;
+            if (s[i + 1] == '<' && s[i + 2] == '<')
+                return -1;
+        }
+        i++;
+    }
+    return 0;
+}
+int is_this_ok(t_data *s_data)
 {
     if (!s_data->full_string || s_data->full_string == NULL)
         EXIT_FAILURE;
@@ -39,10 +70,8 @@ void is_this_ok(t_data *s_data)
         i++;
     }
     if(count_double % 2 != 0 || count_single % 2 != 0)
-    {
-        printf("SyntaxError\n");
-        EXIT_FAILURE;
-    }
+        return -1;
+    return 0;
 }
 
 int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
@@ -66,7 +95,7 @@ int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
     }
     return safe;
 }
-void append_redir(t_data *s_data, char *str, int i, int cmd_count)
+void append_redir(t_data *s_data, char *str, int i)
 {
     char to_add[500] = {'\0'};
     int j = 0;
@@ -76,47 +105,51 @@ void append_redir(t_data *s_data, char *str, int i, int cmd_count)
         i++;
     while(str[i] && (str[i] == ' ' || str[i] == '\t'))
         i++;
-    while(str[i] && (str[i] != ' ' && str[i] != '\t'))
+    while(str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '<' && str[i] != '>'))
     {
+        if(str[i] == '"' || str[i] == '\'')
+            i++;
         to_add[j] = str[i];
         i++;
         j++;
     }
-    vect_happend(s_data->v_path.parsed[cmd_count].redir, to_add);
+    vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
 }
-int manage_chevron(t_data *s_data, char *str, int prev_i, int cmd_count)
+int manage_chevron(t_data *s_data, char *str, int prev_i)
 {
     int i = prev_i;
-    while (str[i] && str[i] != '"' && str[i] != '\'' && str[i] != '|')
+    while (str[i] == ' ')
+        i++;
+    while (str[i] && str[i] != '"' && str[i] != '\'' && str[i] != '|' && str[i] != ' ')
     {
         if (str[i] == '>' && str[i + 1] != '>')
         {
-            vectint_happend(s_data->v_path.parsed[cmd_count].type, STDOUT_REDIR);
-            append_redir(s_data, str, i, cmd_count);
+            vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_REDIR);
+            append_redir(s_data, str, i);
         }
         if (str[i] == '>' && str[i + 1] == '>')
         {
-            vectint_happend(s_data->v_path.parsed[cmd_count].type, STDOUT_APPEND);
-            append_redir(s_data, str, i, cmd_count);
+            vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_APPEND);
+            append_redir(s_data, str, i);
             i++;
         }
         if (str[i] == '<' && str[i + 1] != '<')
         {
-            vectint_happend(s_data->v_path.parsed[cmd_count].type, STDIN_REDIR);
-            append_redir(s_data, str, i, cmd_count);
+            vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDIN_REDIR);
+            append_redir(s_data, str, i);
         }
         if (str[i] == '<' && str[i + 1] == '<')
         {
-            vectint_happend(s_data->v_path.parsed[cmd_count].type, HERE_DOC);
-            append_redir(s_data, str, i, cmd_count);
+            vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, HERE_DOC);
+            append_redir(s_data, str, i);
             i++;
         }
         i++;
     }
-    return 0;
+    return i;
 }
 
-void path_to_vect(t_data *s_data, int i, int cmd_count)
+void path_to_vect(t_data *s_data, int i)
 {
     char *s = s_data->full_string;
     char str[5000] = {'\0'};
@@ -126,12 +159,13 @@ void path_to_vect(t_data *s_data, int i, int cmd_count)
     {
         if (s[i] == '|')
         {
-            vect_happend(s_data->v_path.parsed[cmd_count].cmd, str);
-            cmd_count++;
+            vect_happend(s_data->v_path, NULL);
+            vect_happend(s_data->v_path->parsed[s_data->v_path->size].cmd, str);
+            // printf("%zu\n", s_data->v_path->size);
             i++;
             while(s[i] && s[i] == ' ')
                 i++;
-            path_to_vect(s_data, i, cmd_count);
+            path_to_vect(s_data, i);
             return;
         }
         if (s[i] == '\'')
@@ -151,7 +185,7 @@ void path_to_vect(t_data *s_data, int i, int cmd_count)
             i++;
             while (s[i] && s[i] != '"')
             {
-                if (s[i] == '$')
+                if (s[i] == '$' && s[i + 1] != ' ' && s[i + 1] != '"')
                 {
                     int j = i + 1;
                     int y = 0;
@@ -194,14 +228,14 @@ void path_to_vect(t_data *s_data, int i, int cmd_count)
             }
             else if (s[i] == '<' || s[i] == '>')
             {
-                manage_chevron(s_data, s, i, cmd_count);
-                i++;
-                if (s[i] == '<' || s[i] == '>')
-                    i++;
-                while(s[i] && s[i] == ' ')
-                    i++;
-                while(s[i] && s[i] != ' ' && s[i] != '<' && s[i] != '>')
-                    i++;
+                i = manage_chevron(s_data, s, i);
+                // i++;
+                // if (s[i] == '<' || s[i] == '>')
+                //     i++;
+                // while(s[i] && s[i] == ' ')
+                //     i++;
+                // while(s[i] && s[i] != ' ' && s[i] != '<' && s[i] != '>')
+                //     i++;
                 while(s[i] && s[i] == ' ')
                     i++;
             }
@@ -214,54 +248,37 @@ void path_to_vect(t_data *s_data, int i, int cmd_count)
         }
         
     }
-    vect_happend(s_data->v_path.parsed[cmd_count].cmd, str);
+    vect_happend(s_data->v_path->parsed[s_data->v_path->size].cmd, str);
 }
 
 void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
-    is_this_ok(s_data);
-    path_to_vect(s_data, 0, 0);
+    if (is_this_ok(s_data) != 0 || check_chevron(s_data) != 0)
+    {
+        printf("SyntaxError\n");
+        return;
+    }
+    path_to_vect(s_data, 0);
     printf("cmd 1\n");
-    vectstr_print(s_data->v_path.parsed[0].cmd);
-    printf("cmd 2\n");
-    vectstr_print(s_data->v_path.parsed[1].cmd);
-    printf("cmd 3\n");
-    vectstr_print(s_data->v_path.parsed[2].cmd);
+    vectstr_print(s_data->v_path->parsed[0].cmd);
+    // printf("cmd 2\n");
+    // vectstr_print(s_data->v_path->parsed[1].cmd);
+    // printf("cmd 3\n");
+    // vectstr_print(s_data->v_path->parsed[2].cmd);
     printf("redir cmd 1\n");
-    vect_print(s_data->v_path.parsed[0].redir);
-    printf("redir cmd 2\n");
-    vect_print(s_data->v_path.parsed[1].redir);
-    printf("redir cmd 3\n");
-    vect_print(s_data->v_path.parsed[2].redir);
+    vect_print(s_data->v_path->parsed[0].redir);
+    // printf("redir cmd 2\n");
+    // vect_print(s_data->v_path->parsed[1].redir);
+    // printf("redir cmd 3\n");
+    // vect_print(s_data->v_path->parsed[2].redir);
     printf("type cmd 1\n");
-    vect_print(s_data->v_path.parsed[0].type);
-    printf("type cmd 2\n");
-    vect_print(s_data->v_path.parsed[1].type);
-    printf("type cmd 3\n");
-    vect_print(s_data->v_path.parsed[2].type);
+    vect_print(s_data->v_path->parsed[0].type);
+    // printf("type cmd 2\n");
+    // vect_print(s_data->v_path->parsed[1].type);
+    // printf("type cmd 3\n");
+    // vect_print(s_data->v_path->parsed[2].type);
 }
 
-//"$"USER
-// >>> syntax error
-/*echo pd >< lol
-bash: syntax error near unexpected token `<'
-*/
-// ||
+
 // <pre> echo salut >> file1 > file0 duplique file 0
-/*minishell: echo salut | cat file1 >> file2 | haha
-cmd 1
-vect[0] = |echo salut |
-cmd 2
-vect[0] = |cat file1 |
-cmd 3
-vect[0] = |haha|
-redir cmd 1
-vect[0] = |file2|
-redir cmd 2
-redir cmd 3
-type cmd 1
-type cmd 2
-vect[0] =  3
-type cmd 3
-*/
