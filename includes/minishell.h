@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 12:09:17 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 12:11:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ t_vector	init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data);
 void		infile_or_heredoc(t_data *data, char **env);
-void		infile_case(t_data *data, char *file);
-void		outfile_case(t_data *data, int type, char *file);
 void		garbage_collector(t_data *data);
 void		exec_cmd(t_data *data, char **env, char *cmd);
 char		*find_path(char *cmd, char *env[]);
