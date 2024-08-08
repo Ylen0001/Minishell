@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/07 17:42:55 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/08 11:55:38 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
     }
     return safe;
 }
-void append_redir(t_data *s_data, char *str, int i)
+void append_redir(t_data *s_data, char *str, int i, int cmd_count)
 {
     char to_add[500] = {'\0'};
     int j = 0;
@@ -82,7 +82,7 @@ void append_redir(t_data *s_data, char *str, int i)
         i++;
         j++;
     }
-    vect_happend(s_data->v_path.parsed[0].redir, to_add);
+    vect_happend(s_data->v_path.parsed[cmd_count].redir, to_add);
 }
 int manage_chevron(t_data *s_data, char *str, int prev_i, int cmd_count)
 {
@@ -92,23 +92,23 @@ int manage_chevron(t_data *s_data, char *str, int prev_i, int cmd_count)
         if (str[i] == '>' && str[i + 1] != '>')
         {
             vectint_happend(s_data->v_path.parsed[cmd_count].type, STDOUT_REDIR);
-            append_redir(s_data, str, i);
+            append_redir(s_data, str, i, cmd_count);
         }
         if (str[i] == '>' && str[i + 1] == '>')
         {
             vectint_happend(s_data->v_path.parsed[cmd_count].type, STDOUT_APPEND);
-            append_redir(s_data, str, i);
+            append_redir(s_data, str, i, cmd_count);
             i++;
         }
         if (str[i] == '<' && str[i + 1] != '<')
         {
             vectint_happend(s_data->v_path.parsed[cmd_count].type, STDIN_REDIR);
-            append_redir(s_data, str, i);
+            append_redir(s_data, str, i, cmd_count);
         }
         if (str[i] == '<' && str[i + 1] == '<')
         {
             vectint_happend(s_data->v_path.parsed[cmd_count].type, HERE_DOC);
-            append_redir(s_data, str, i);
+            append_redir(s_data, str, i, cmd_count);
             i++;
         }
         i++;
@@ -228,10 +228,40 @@ void launch_parsing(char *input, t_data *s_data)
     vectstr_print(s_data->v_path.parsed[1].cmd);
     printf("cmd 3\n");
     vectstr_print(s_data->v_path.parsed[2].cmd);
-    printf("redir\n");
+    printf("redir cmd 1\n");
     vect_print(s_data->v_path.parsed[0].redir);
-    printf("type\n");
+    printf("redir cmd 2\n");
+    vect_print(s_data->v_path.parsed[1].redir);
+    printf("redir cmd 3\n");
+    vect_print(s_data->v_path.parsed[2].redir);
+    printf("type cmd 1\n");
     vect_print(s_data->v_path.parsed[0].type);
+    printf("type cmd 2\n");
+    vect_print(s_data->v_path.parsed[1].type);
+    printf("type cmd 3\n");
+    vect_print(s_data->v_path.parsed[2].type);
 }
 
-//''"$USER"''
+//"$"USER
+// >>> syntax error
+/*echo pd >< lol
+bash: syntax error near unexpected token `<'
+*/
+// ||
+// <pre> echo salut >> file1 > file0 duplique file 0
+/*minishell: echo salut | cat file1 >> file2 | haha
+cmd 1
+vect[0] = |echo salut |
+cmd 2
+vect[0] = |cat file1 |
+cmd 3
+vect[0] = |haha|
+redir cmd 1
+vect[0] = |file2|
+redir cmd 2
+redir cmd 3
+type cmd 1
+type cmd 2
+vect[0] =  3
+type cmd 3
+*/
