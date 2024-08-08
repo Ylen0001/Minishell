@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 12:23:46 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 12:11:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,16 @@ typedef struct s_data // Structure Globale
 	char		*tmp;
 	int			**pipefds; // Tableau de pipes
 	int			*pipefd; // Pipe basique
-	size_t		i_pids; // idx de pids
-	size_t			i_pipes; // idx des pipes
 	int			infile; // fd
 	int			outfile;
 	int			trigger;
 	int			i;
-	size_t		i_redir_f;
 	size_t		i_redir;
-	size_t		i_parsed;
 	size_t		i_cmd;
-	size_t		k;
 	size_t		j;
 	char		c;
 	int			errno; // à remplir avec waitpid et avec signal
+	size_t		built_in;
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
@@ -118,8 +114,6 @@ t_vector	init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data);
 void		infile_or_heredoc(t_data *data, char **env);
-void		infile_case(t_data *data, char *file);
-void		outfile_case(t_data *data, int type, char *file);
 void		garbage_collector(t_data *data);
 void		exec_cmd(t_data *data, char **env, char *cmd);
 char		*find_path(char *cmd, char *env[]);
@@ -127,11 +121,10 @@ char		*get_env_path(char *env[]);
 void		free_paths(char **paths);
 char		*construct_path(char *dir, char *cmd);
 void		init_data_2(t_data *data);
-void		mother_forker(t_data *data);
-void		child_process_a(char *env[], t_data *data);
 bool		status();
 void		child(t_data *data, size_t idx);
-void		open_file_minishell(t_data *data, size_t type, char *file);
+void		open_file_minishell(t_data *data, int type, char *file);
+void		redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f);
 // int		is_dir(t_data *data);
 // void		infile_check(t_data *data);
 // void		init_test(t_data *data);

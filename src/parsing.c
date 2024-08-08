@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/08 11:55:38 by aberion          ###   ########.fr       */
+=======
+/*   Updated: 2024/08/07 15:17:55 by ylenoel          ###   ########.fr       */
+>>>>>>> Yoann
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +202,7 @@ void path_to_vect(t_data *s_data, int i, int cmd_count)
                 i++;
                 if (s[i] == '<' || s[i] == '>')
                     i++;
-                while(s[i] && s[i] == ' ')
+				while(s[i] && s[i] == ' ')
                     i++;
                 while(s[i] && s[i] != ' ' && s[i] != '<' && s[i] != '>')
                     i++;
@@ -221,6 +225,7 @@ void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
     is_this_ok(s_data);
+<<<<<<< HEAD
     path_to_vect(s_data, 0, 0);
     printf("cmd 1\n");
     vectstr_print(s_data->v_path.parsed[0].cmd);
@@ -240,6 +245,15 @@ void launch_parsing(char *input, t_data *s_data)
     vect_print(s_data->v_path.parsed[1].type);
     printf("type cmd 3\n");
     vect_print(s_data->v_path.parsed[2].type);
+=======
+    path_to_vect(s_data);
+    // printf("cmd\n");
+    // vectstr_print(s_data->v_path.parsed[0].cmd);
+    // printf("redir\n");
+    // vect_print(s_data->v_path.parsed[0].redir);
+    // printf("type\n");
+    // vect_print(s_data->v_path.parsed[0].type);
+>>>>>>> Yoann
 }
 
 //"$"USER

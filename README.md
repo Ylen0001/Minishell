@@ -92,3 +92,14 @@ EXEC
 1 - Boucle principale : Tant que i_cmd < au nbr de cmd de l'input.
 2 - Pipe si nbr_cmd >= 1.
 3 - 
+
+
+PIPES
+
+1 - Si premier pipe   
+--> STDIN / pipe[1]    		 OK
+2 - Si entre deux 
+--> pipe[0][0] / pipe[1][1]  OK
+3 - Si dernier pipe
+---> pipe[i - 1][0] / STDOUT OK
+
