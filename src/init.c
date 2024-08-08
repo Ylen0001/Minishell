@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/07 18:16:31 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 11:31:57 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,6 @@ void	init_data_2(t_data *data)
 	i = 0;
 	data->infile = 0;
 	data->outfile = 0;
-	data->k = 0;
-	data->i_redir_f = 0;
-	data->i_parsed = 0;
 	data->i_cmd = 0;
 	data->j = 0;
 	data->i_redir = 0;
@@ -115,7 +112,6 @@ void	init_data_2(t_data *data)
 	data->nbr_cmd = data->v_path.parsed[0].cmd->size;
 	data->i_cmd = 0;
 	data->built_in = 0;
-	data->i_redir_t = 0;
 	data->cmds = malloc(sizeof(char *) * 2);
 	while(i < data->nbr_cmd)
 	{
@@ -142,8 +138,6 @@ void	init_data_2(t_data *data)
 		free(data->pids);
 		exit(EXIT_FAILURE);
 	}
-	data->i_pipes = 0;
-	data->i_pids = 0;
 	return ;
 }
 
