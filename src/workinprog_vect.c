@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/08 16:44:58 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/09 17:32:00 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 
 
 
-void		*ft_realloc(void *ptr, size_t capacity, size_t size)
+void		*ft_realloc(void *ptr, size_t capacity, size_t size, size_t elemSize)
 {
-	char **new_ptr;
+	void *new_ptr;
 
 	if (ptr == NULL)
 		return (malloc(capacity));
 	if (!capacity)
 		return (ptr);
-	new_ptr = (char **) ft_calloc(capacity, sizeof(char *));
-	ft_memcpy(new_ptr, ptr, size * sizeof(char *));
+	new_ptr = ft_calloc(capacity, elemSize);
+	ft_memcpy(new_ptr, ptr, size * elemSize);
     free(ptr);
-	return ((void *)new_ptr);
+	return (new_ptr);
 }
 
 void vectstr_free(t_vectstr *vect) {
@@ -47,7 +47,7 @@ void vectstr_happend(t_vectstr *vect, char *data)
     if (vect->size == vect->capacity)
     {
         vect->capacity *= 2;
-        vect->data = (char **)ft_realloc(vect->data, vect->capacity, vect->size);
+        vect->data = (char **)ft_realloc(vect->data, vect->capacity, vect->size, sizeof(char *));
         if (!vect->data)
             EXIT_FAILURE;
     }
@@ -75,7 +75,7 @@ void vectint_happend(t_vectint *vect, int number)
     if (vect->size == vect->capacity)
     {
         vect->capacity *= 2;
-        vect->redir_type = (int *)ft_realloc(vect->redir_type, vect->capacity, vect->size);
+        vect->redir_type = (int *)ft_realloc(vect->redir_type, vect->capacity, vect->size, sizeof(int));
         if (!vect->redir_type)
             EXIT_FAILURE;
     }
@@ -83,15 +83,23 @@ void vectint_happend(t_vectint *vect, int number)
     vect->size++;
 }
 
-void vector_happend(t_vector *vect, void *n) {
-    (void) n;
-	if (vect->size == vect->capacity - 1)
+void vector_happend(t_vector *vect, char *str)
+{
+	if (vect->size == vect->capacity)
     {
         vect->capacity *= 2;
-        vect->parsed = (t_parsed *)ft_realloc(vect->parsed, vect->capacity, vect->size);
+        vect->parsed = (t_parsed *)ft_realloc(vect->parsed, vect->capacity, vect->size, sizeof(t_parsed));
         if (!vect->parsed)
             EXIT_FAILURE;
     }
+    // vect->parsed[vect->size] = init_parsed();
+    vect_happend(vect->parsed[vect->size].cmd, str);
     vect->size++;
-    vect->parsed[vect->size] = init_parsed();
+}
+
+void vector_print(t_vector *vect) {
+	for (size_t i = 0; i < vect->size; i++) {
+        dprintf(2, "CMD %zu ===>\n", i);
+		vect_print(vect->parsed[i].cmd);
+	}
 }

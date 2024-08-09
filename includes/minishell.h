@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 16:46:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/09 17:20:09 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_vectstr {
 //execve("cat",  {"cat file2"}, ENV);
 typedef struct s_parsed {
 	t_vectstr *cmd; //cat file2
-	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
+	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere;
 	t_vectint *type; //< << << < > > >;
 } t_parsed;
 
@@ -124,11 +124,15 @@ void vectint_print(t_vectint *vect);
 void vectint_happend(t_vectint *vect, int number);
 void free_t_data(t_data *data);
 void v_path_double(t_vector *vector);
-void vector_happend(t_vector *vect, void *n);
+void vector_happend(t_vector *vect, char *n);
+void vector_print(t_vector *vect);
+t_vectint *init_vect_int();
+
 
 
 
 #define vect_print(param) _Generic((param), \
+	t_vector *: vector_print,	\
     t_vectstr *: vectstr_print,   \
     t_vectint *: vectint_print,   \
     default : printf("Format not supported yet\n") \

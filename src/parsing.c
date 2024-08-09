@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/08 17:13:48 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/09 17:39:15 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,13 +155,13 @@ void path_to_vect(t_data *s_data, int i)
     char str[5000] = {'\0'};
     // char check_var[500] = {'\0'};
     int x = 0;
+
+    s_data->v_path->parsed[s_data->v_path->size] = init_parsed();
     while (s[i])
     {
         if (s[i] == '|')
         {
-            vect_happend(s_data->v_path, NULL);
-            vect_happend(s_data->v_path->parsed[s_data->v_path->size].cmd, str);
-            // printf("%zu\n", s_data->v_path->size);
+            vect_happend(s_data->v_path, str);
             i++;
             while(s[i] && s[i] == ' ')
                 i++;
@@ -229,13 +229,6 @@ void path_to_vect(t_data *s_data, int i)
             else if (s[i] == '<' || s[i] == '>')
             {
                 i = manage_chevron(s_data, s, i);
-                // i++;
-                // if (s[i] == '<' || s[i] == '>')
-                //     i++;
-                // while(s[i] && s[i] == ' ')
-                //     i++;
-                // while(s[i] && s[i] != ' ' && s[i] != '<' && s[i] != '>')
-                //     i++;
                 while(s[i] && s[i] == ' ')
                     i++;
             }
@@ -248,7 +241,7 @@ void path_to_vect(t_data *s_data, int i)
         }
         
     }
-    vect_happend(s_data->v_path->parsed[s_data->v_path->size].cmd, str);
+    vect_happend(s_data->v_path, str);
 }
 
 void launch_parsing(char *input, t_data *s_data)
@@ -260,25 +253,8 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    printf("cmd 1\n");
-    vectstr_print(s_data->v_path->parsed[0].cmd);
-    // printf("cmd 2\n");
-    // vectstr_print(s_data->v_path->parsed[1].cmd);
-    // printf("cmd 3\n");
-    // vectstr_print(s_data->v_path->parsed[2].cmd);
-    printf("redir cmd 1\n");
-    vect_print(s_data->v_path->parsed[0].redir);
-    // printf("redir cmd 2\n");
-    // vect_print(s_data->v_path->parsed[1].redir);
-    // printf("redir cmd 3\n");
-    // vect_print(s_data->v_path->parsed[2].redir);
-    printf("type cmd 1\n");
-    vect_print(s_data->v_path->parsed[0].type);
-    // printf("type cmd 2\n");
-    // vect_print(s_data->v_path->parsed[1].type);
-    // printf("type cmd 3\n");
-    // vect_print(s_data->v_path->parsed[2].type);
+    vect_print(s_data->v_path);
 }
-
+//dleodl| dloele| ldoed| loldoeld |loele| ldoed| loldoeld |loele| ldoed| loldoeld |loele| ldoed| loldoeld |
 
 // <pre> echo salut >> file1 > file0 duplique file 0
