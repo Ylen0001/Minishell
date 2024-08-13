@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:55:16 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/26 15:09:22 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/08 16:43:08 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,26 @@
 int	lil_gnl(char **line, t_data *data)
 {
 	data->tmp = NULL;
-	data->tmp = lil_gnl_initializer(&data->i, &data->j, data->tmp);
-	data->j = read(0, &data->c, 1);
-	while (data->j && data->c != '\n' && data->c != '\0')
+	data->tmp = lil_gnl_initializer(&data->i, &data->k, data->tmp);
+	data->k = read(0, &data->c, 1);
+	while (data->k && data->c != '\n' && data->c != '\0')
 	{
 		if (data->c != '\n' && data->c != '\0')
 			data->tmp[data->i] = data->c;
 		data->i++;
-		data->j = read((0), &data->c, 1);
+		data->k = read((0), &data->c, 1);
 	}
 	if (data->c == -1)
 		return (1);
-	else if (data->j != 0)
+	else if (data->k != 0)
 		lil_gnl_finisher(&data->i, data->tmp);
 	*line = data->tmp;
-	if (data->j == 0)
+	if (data->k == 0)
 	{
 		free(*line);
 		*line = NULL;
 	}
-	if (data->j == -1)
+	if (data->k == -1)
 		return (-1);
 	else
 		return (1);

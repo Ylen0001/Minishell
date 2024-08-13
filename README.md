@@ -103,3 +103,17 @@ PIPES
 3 - Si dernier pipe
 ---> pipe[i - 1][0] / STDOUT OK
 
+08/08
+
+Infos nécessaires
+
+Index de la cmd à gérer dans child : i_cmd++ à chaque appel de child.
+Mais en même temps il ne peut pas y avoir + d'une cmd dans un appel à child. 
+
+Nombre de cmds total de l'input : nbr_cmd = data->v_path.size
+
+Pour le 09/08
+
+- Plusieurs here_doc dans la meme commande : Boucle 
+- La size de redir_type est de 6 quand on lui donne 3 redir "<< << >". 
+Je me demande si c'est bien que ce soit un tableau d'int dans ce vecteur, plutot qu'un simple int. 

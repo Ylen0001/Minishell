@@ -6,7 +6,11 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/13 12:26:06 by aberion          ###   ########.fr       */
+=======
+/*   Updated: 2024/08/08 12:16:48 by ylenoel          ###   ########.fr       */
+>>>>>>> Yoann
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +71,8 @@ int is_this_ok(t_data *s_data)
             count_double++;
             check_double++;
         }
-        i++;
-    }
+    	i++;
+	}
     if(count_double % 2 != 0 || count_single % 2 != 0)
         return -1;
     return 0;
@@ -138,9 +142,9 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         }
         if (str[i] == '<' && str[i + 1] == '<')
         {
-            vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, HERE_DOC);
-            append_redir(s_data, str, i);
-            i++;
+            vectint_happend(s_data->v_path.parsed[cmd_count].type, HERE_DOC);
+            append_redir(s_data, str, i, cmd_count);
+        	i++;
         }
             i++;
     }
@@ -245,6 +249,7 @@ void path_to_vect(t_data *s_data, int i)
 void launch_parsing(char *input, t_data *s_data)
 {
     s_data->full_string = input;
+<<<<<<< HEAD
     if (is_this_ok(s_data) != 0 || check_chevron(s_data) != 0)
     {
         printf("SyntaxError\n");
@@ -257,6 +262,17 @@ void launch_parsing(char *input, t_data *s_data)
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
     // printf("%zu \n", s_data->v_path->size);
+=======
+    is_this_ok(s_data);
+    path_to_vect(s_data, 0, 0);
+    // printf("cmd\n");
+    // vectstr_print(s_data->v_path.parsed[0].cmd);
+    // printf("redir\n");
+    // vect_print(s_data->v_path.parsed[0].redir);
+    // printf("type\n");
+    // vect_print(s_data->v_path.parsed[0].type);
+}
+>>>>>>> Yoann
 
 
 }
