@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/09 17:39:15 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/13 12:22:57 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ void append_redir(t_data *s_data, char *str, int i)
 int manage_chevron(t_data *s_data, char *str, int prev_i)
 {
     int i = prev_i;
-    while (str[i] == ' ')
-        i++;
     while (str[i] && str[i] != '"' && str[i] != '\'' && str[i] != '|' && str[i] != ' ')
     {
         if (str[i] == '>' && str[i + 1] != '>')
@@ -144,7 +142,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
             append_redir(s_data, str, i);
             i++;
         }
-        i++;
+            i++;
     }
     return i;
 }
@@ -253,7 +251,14 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    vect_print(s_data->v_path);
+    // vect_print(s_data->v_path);
+    // printf("redir :\n");
+    // vect_print(s_data->v_path->parsed->redir);
+    // printf("type :\n");
+    // vect_print(s_data->v_path->parsed->type);
+    // printf("%zu \n", s_data->v_path->size);
+
+
 }
 //dleodl| dloele| ldoed| loldoeld |loele| ldoed| loldoeld |loele| ldoed| loldoeld |loele| ldoed| loldoeld |
 
