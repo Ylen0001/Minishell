@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/08 11:31:57 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/13 12:26:37 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_vectstr *init_vect_str()
     self->capacity = 10;
     self->data = (char **)ft_calloc(10, sizeof(char *));
     if (!self->data)
-        EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     return self;
 }
 
@@ -35,7 +35,7 @@ t_vectint *init_vect_int()
     self->capacity = 10;
     self->redir_type = (int *)ft_calloc(10, sizeof(int));
     if (!self->redir_type)
-        EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     return self;
 }
 
@@ -45,26 +45,27 @@ t_parsed init_parsed()
     
     self.cmd = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
     if (!self.cmd)
-        EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     self.cmd = init_vect_str();
     self.redir = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
     if (!self.redir)
-        EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     self.redir = init_vect_str();
     self.type = init_vect_int();
 
     return self;
 }
 
-t_vector init_vector()
+t_vector *init_vector()
 {
-    t_vector self;
+    t_vector *self;
     
-    self.parsed = (t_parsed *)ft_calloc(10, sizeof(t_parsed));
-    if (!self.parsed)
-        EXIT_FAILURE;
-    self.size = 0;
-    self.capacity = 10;
+    self = ft_calloc(1, sizeof(t_vector));
+    self->parsed = (t_parsed *)ft_calloc(10, sizeof(t_parsed));
+    if (!self->parsed)
+        exit(EXIT_FAILURE);
+    self->size = 0;
+    self->capacity = 10;
     return self;
 }
 
@@ -86,13 +87,13 @@ t_data init_data(char **env)
     self.full_string = NULL;
     self.env = NULL;
     self.v_path = init_vector();
-    int i = 0;
-    while (i < 10)
-    {
-        self.v_path.parsed[i] = init_parsed();
-        i++;
-    }
     self.vect_env = init_vect_str();
+    // size_t i = 0;
+    // while (i < 10)
+    // {
+    //     self.v_path->parsed[i] = init_parsed();
+    //     i++;
+    // }
     init_env(self.vect_env, env);
     return self;
 }

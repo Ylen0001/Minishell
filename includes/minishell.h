@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/08 12:11:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/13 12:27:40 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ typedef struct s_vectstr {
     size_t capacity;
 }    t_vectstr;
 
+//<	Makefile <<eof <<salope <file1 cat file2 >file3 >chat >biere;
+//execve("cat",  {"cat file2"}, ENV);
 typedef struct s_parsed {
 	t_vectstr *cmd; //cat file2
-	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere; 
+	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere;
 	t_vectint *type; //< << << < > > >;
 } t_parsed;
 
@@ -101,7 +103,7 @@ typedef struct s_data // Structure Globale
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
-	t_vector v_path;
+	t_vector 	*v_path;
 	char *full_string; // Str complète avec les redirections
 	char **env;
 }				t_data;
@@ -149,22 +151,31 @@ void	here_doc_error(void);
 
 
 t_data init_data(char **env);
+t_parsed init_parsed();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
-void vector_append(t_vector *vect, t_vectstr new_vect);
 void vectstr_print(t_vectstr *vect);
 void vectstr_free(t_vectstr *);
 void vectint_print(t_vectint *vect);
 void vectint_happend(t_vectint *vect, int number);
 void free_t_data(t_data *data);
+void v_path_double(t_vector *vector);
+void vector_happend(t_vector *vect, char *n);
+void vector_print(t_vector *vect);
+t_vectint *init_vect_int();
+
+
+
 
 #define vect_print(param) _Generic((param), \
+	t_vector *: vector_print,	\
     t_vectstr *: vectstr_print,   \
     t_vectint *: vectint_print,   \
     default : printf("Format not supported yet\n") \
 )(param)
 
 #define vect_happend(param, data) _Generic((param), \
+	t_vector *: vector_happend,		\
     t_vectstr *: vectstr_happend,   \
     t_vectint *: vectint_happend,   \
     default : printf("Format not supported yet\n") \
