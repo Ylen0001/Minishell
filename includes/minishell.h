@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/09 17:20:09 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/15 16:02:54 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # include <stdbool.h>
 # include <sys/signal.h>
 # include <dirent.h>
+# include <signal.h>
+
+extern volatile sig_atomic_t g_signal_received;
 
 typedef enum
 {
@@ -127,6 +130,7 @@ void v_path_double(t_vector *vector);
 void vector_happend(t_vector *vect, char *n);
 void vector_print(t_vector *vect);
 t_vectint *init_vect_int();
+void setup_signal_handlers(void);
 
 
 

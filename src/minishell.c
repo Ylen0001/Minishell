@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 11:54:34 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/15 16:02:20 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int main(int argc, char **argv, char **env)
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
-	// s_data = init_data(env);
+	setup_signal_handlers();
 	while (init_prompt() && init_signal())
 	{
 		s_data = init_data(env);
@@ -27,6 +27,18 @@ int main(int argc, char **argv, char **env)
 		if (!input)
 			exit(1);
 		add_history(input);
+		if (g_signal_received)
+        {
+        	if (g_signal_received == SIGINT)
+            {
+				g_signal_received = 0;
+				write(1, "\n", 1);
+			}
+			else if (g_signal_received == SIGQUIT)
+			{
+				g_signal_received = 0;
+			}
+		}
 		launch_parsing(input, &s_data);
 		free_t_data(&s_data);
 
