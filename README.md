@@ -117,3 +117,38 @@ Pour le 09/08
 - Plusieurs here_doc dans la meme commande : Boucle 
 - La size de redir_type est de 6 quand on lui donne 3 redir "<< << >". 
 Je me demande si c'est bien que ce soit un tableau d'int dans ce vecteur, plutot qu'un simple int. 
+
+14/08
+
+Trajet : 
+
+- Here doc detector : 
+--> Compte les here_docs et appelle here_doc_case du nbr d'HD.
+
+- Here doc case : 
+-->  Malloc un tableau de noms de here_doc
+-->  Créer et ouvre le Here_doc, en le nommant (0, 1, 2 etc...);
+-->  Ferme le fd.
+
+Souci : problème de redir lorsqu'il y a plus d'un here_doc.
+
+15/08
+
+I - Refaire les pipes
+
+Si + d'une cmd :
+
+- On rentre bien deux fois dans la première condition du while de minishell
+- On crée donc bien deux pipes.
+- On fork bien et on rentre bien dans child 2 fois.
+
+Dans Child :
+
+i_cmd : 0
+
+--> On rentre bien dans la 2nde condition. On dup stdout sur pipe[0][1]
+--> On rentre dans redir, et on dup stdin sur here_doc.
+
+i_cmd : 1
+
+---> à partir de find_path, plus aucun print ne s'affiche. 

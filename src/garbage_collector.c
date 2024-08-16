@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/13 12:34:03 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/16 14:46:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	garbage_collector(t_data *data)
 
 	i = 0;
 	free(data->pids);
-	while(data->pipefds[i] && i < data->nbr_cmd)
+	while(data->pipefds[i] && i < data->v_path->size)
 		free(data->pipefds[i++]);
 	free(data->pipefds);
 	i = 0;
-	while(data->cmds[i] && i < data->nbr_cmd)
+	while(data->cmds[i] && i < data->v_path->size)
 		free(data->cmds[i++]);	
 	free(data->cmds);
 	free(data->file);

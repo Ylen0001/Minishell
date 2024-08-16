@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/13 12:33:37 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/15 15:18:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			sleep_i;
+	size_t		i_pipes;
 	char		**hd_names;
 	size_t		hd_count;
 	size_t		suffix;
@@ -117,7 +119,7 @@ typedef struct s_data // Structure Globale
 /* TEST */
 
 void 		recup_data(t_data *data);
-t_vector	init_vector();
+t_vector	*init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data);
 void		infile_or_heredoc(t_data *data, char **env);

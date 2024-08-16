@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 09:53:38 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/07 14:56:44 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/13 15:01:02 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,7 @@ void	infile_case(t_data *data, char *file)
 	// data->file = ft_strdup("infile");
 	if (access(file, F_OK | R_OK | W_OK) == -1)
 	{
-		ft_putstr_fd("File : Access Denied.\n", 2);
+		ft_putstr_fd("File 0: Access Denied.\n", 2);
 		// exit(EXIT_FAILURE);
 	}
 	data->infile = open(file, O_RDONLY, 0777);

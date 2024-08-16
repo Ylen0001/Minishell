@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/13 12:34:12 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/16 13:47:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,29 +104,32 @@ void	init_data_2(t_data *data)
 	// const size_t NBR_CMD = data->v_path.size;
 
 	i = 0;
+	data->sleep_i = 5;
+	data->i_pipes = 0;
 	data->infile = 0;
+	data->suffix = 0;
 	data->outfile = 0;
 	data->i_cmd = 0;
 	data->j = 0;
 	data->i_redir = 0;
 	data->error_nbr = 0;
-	data->nbr_cmd = data->v_path.parsed[0].cmd->size;
+	data->nbr_cmd = data->v_path->size;
 	data->i_cmd = 0;
 	data->built_in = 0;
 	data->cmds = malloc(sizeof(char *) * 2);
 	data->k = 0;
-	while(i < data->nbr_cmd)
-	{
-		data->cmds[i] = ft_strdup(data->v_path.parsed[0].cmd->data[i]);	
-		i++;
-	}
+	// while(i < data->nbr_cmd)
+	// {
+	// 	data->cmds[i] = ft_strdup(data->v_path->parsed[0].cmd->data[i]);	
+	// 	i++;
+	// }
 	// printf("%s\n", data->cmds[1]);
 	// printf("redir = %d\n", data->redir);
 	// printf("cmds = %zu\n", data->nbr_cmd);
 	i = 0;
-	data->pipefds = ft_calloc( data->nbr_cmd, sizeof(int *));
-	while (i < data->nbr_cmd)
-		data->pipefds[i++] = ft_calloc(2, sizeof(int));
+	data->pipefds = ft_calloc( data->v_path->size, sizeof(int *));
+	while (i < data->v_path->size)
+		data->pipefds[i++] = ft_calloc(2, sizeof(int) + 1);
 	if (!data->pipefds)
 	{
 		ft_putstr_fd("Malloc failed\n", 2);
