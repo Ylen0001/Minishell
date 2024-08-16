@@ -6,12 +6,15 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/15 16:02:20 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/16 15:30:16 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
+
+volatile int	g_signal_received = 0;
+
 
 int main(int argc, char **argv, char **env) 
 {
@@ -25,7 +28,10 @@ int main(int argc, char **argv, char **env)
 		s_data = init_data(env);
 		char *input = readline("minishell: ");
 		if (!input)
+		{
+			free_t_data(&s_data);
 			exit(1);
+		}
 		add_history(input);
 		if (g_signal_received)
         {

@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/15 16:02:54 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/16 14:45:49 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 # include <sys/signal.h>
 # include <dirent.h>
 # include <signal.h>
-
-extern volatile sig_atomic_t g_signal_received;
 
 typedef enum
 {
