@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/16 14:50:42 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/16 15:28:45 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ int	main(int argc, char *argv[], char *env[])
 		add_history(input);
 		launch_parsing(input, &s_data);
 		minishell(&s_data);
-		free_t_data(&s_data);
 		// garbage_collector(&s_data);
+		free_t_data(&s_data);
 	}
 	rl_clear_history();
 	return (0);
@@ -87,7 +87,7 @@ void	minishell(t_data *data)
 			{
 				perror("");
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
-				exit(EXIT_FAILURE);
+				// exit(EXIT_FAILURE);
 			}
 			if(data->v_path->size >= 3 && data->i_cmd >= 3)  // Fermeture des pipes qui ne sont plus utilisés
 			{
@@ -104,14 +104,17 @@ void	minishell(t_data *data)
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
 		{
 
+			dprintf(2, "ICI\n");										// IF une seule cmd ET c'est un BUILT-IN
 			data->pids[data->i_cmd] = fork(); // Création process enfant
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
 				child(data, data->i_cmd);
 		}
-		else											// IF une seule cmd ET c'est un BUILT-IN
+		else
+		{
 			child(data, data->i_cmd);
+		}
 		// close(data->pipefds[data->i_pipes][0]);
 		close(data->pipefds[data->i_pipes][1]); // Celui là est important.
 		data->i_cmd++;
@@ -133,8 +136,8 @@ void child(t_data *data, size_t it_cmd)
 	char 	*path;
 	char 	**m_cmd;
 
-	m_cmd = ft_split(cmd->data[0], ' ');
-	path = find_path(m_cmd[0], data->vect_env->data);
+
+	
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -153,8 +156,15 @@ void child(t_data *data, size_t it_cmd)
 		redirections(data, redir_t, redir_f->data);
 	close(data->pipefds[data->i_pipes][1]);
 	close(data->pipefds[data->i_pipes][0]);
+	m_cmd = ft_split(cmd->data[0], ' ');
+	// if (cmd->data[0] && (access(cmd->data[0], X_OK) == 0 && access(cmd->data[0], F_OK) == 0))
+	// 	execve(m_cmd[0], m_cmd, data->vect_env->data);
+	path = find_path(m_cmd[0], data->vect_env->data);
+	// else
+	// {
 	execve(path, m_cmd, data->vect_env->data);
 	perror("");
+	// }
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
