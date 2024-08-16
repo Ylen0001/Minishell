@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/15 15:18:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/16 15:32:57 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdbool.h>
 # include <sys/signal.h>
 # include <dirent.h>
+# include <signal.h>
 
 //<	Makefile <<eof <<slt <file1 cat file2 >file3 >chat >biere;
 //execve("cat",  {"cat file2"}, ENV);
@@ -168,6 +169,7 @@ void v_path_double(t_vector *vector);
 void vector_happend(t_vector *vect, char *n);
 void vector_print(t_vector *vect);
 t_vectint *init_vect_int();
+void setup_signal_handlers(void);
 
 
 
