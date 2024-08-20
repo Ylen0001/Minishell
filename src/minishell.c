@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 13:27:36 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 14:23:37 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int main(int argc, char **argv, char **env)
 			g_signal_received = 0;
 		add_history(input);
 		launch_parsing(input, &s_data);
-		minishell(&s_data);
+		// minishell(&s_data);
+		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
 	garbage_collector(&s_data);

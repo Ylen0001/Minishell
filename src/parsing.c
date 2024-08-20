@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/16 17:04:47 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 14:24:00 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,6 +337,13 @@ int check_after_chev(char *line)
         }    
             i++;
     }
+    i = 0;
+    while(splited[i])
+    {
+        free(splited[i]);
+        i++;
+    }
+    free(splited);
     return 0;
 }
 

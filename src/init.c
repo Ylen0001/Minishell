@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/20 13:13:05 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 14:23:05 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ t_parsed init_parsed()
 {
     t_parsed self;
     
-    self.cmd = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
-    if (!self.cmd)
-        exit(EXIT_FAILURE);
+    // self.cmd = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
+    // if (!self.cmd)
+    //     exit(EXIT_FAILURE);
     self.cmd = init_vect_str();
-    self.redir = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
-    if (!self.redir)
-        exit(EXIT_FAILURE);
+    // self.redir = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
+    // if (!self.redir)
+    //     exit(EXIT_FAILURE);
     self.redir = init_vect_str();
     self.type = init_vect_int();
 
@@ -88,12 +88,6 @@ t_data init_data(char **env)
     self.env = NULL;
     self.v_path = init_vector();
     self.vect_env = init_vect_str();
-    // size_t i = 0;
-    // while (i < 10)
-    // {
-    //     self.v_path->parsed[i] = init_parsed();
-    //     i++;
-    // }
     init_env(self.vect_env, env);
     return self;
 }
