@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/16 14:46:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/16 17:11:07 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void free_t_parsed(t_parsed *parsed)
             free_t_vectstr(parsed->redir);
         if (parsed->type)
             free_t_vectint(parsed->type);
-        // free(parsed);
     }
 }
 
@@ -90,34 +89,33 @@ void free_t_vector(t_vector *vector)
                 free_t_parsed(&vector->parsed[i]);
                 i++;
             }
-            free(vector);
+            free(vector->parsed);
         }
+        free(vector);
     }
 }
 
 void free_t_data(t_data *data)
 {
+    size_t i;
+
+    i = 0;
     if (data) 
     {
-        if (data->vect_env) {
+        if (data->vect_env)
             free_t_vectstr(data->vect_env);
-        }
-
-        // if (data->v_path->parsed) {
-        //     free_t_vector(data->v_path);
-        // }
-
-        if (data->full_string) {
+        if (data->v_path->parsed)
+            free_t_vector(data->v_path);
+        if (data->full_string)
             free(data->full_string);
-        }
-
-        if (data->env) {
-            for (int i = 0; data->env[i]; ++i) {
+        if (data->env)
+        {
+            while (data->env[i])
+            {
                 free(data->env[i]);
+                i++;
             }
             free(data->env);
         }
-
-        // free(data);
     }
 }

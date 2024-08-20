@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/16 15:34:28 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/16 18:00:20 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,8 @@ int main(int argc, char **argv, char **env)
 			exit(1);
 		}
 		add_history(input);
-		if (g_signal_received)
-        {
-        	if (g_signal_received == SIGINT)
-            {
-				g_signal_received = 0;
-				write(1, "\n", 1);
-			}
-			else if (g_signal_received == SIGQUIT)
-			{
-				g_signal_received = 0;
-			}
-		}
 		launch_parsing(input, &s_data);
-		minishell(&s_data);
+		// minishell(&s_data);
 		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
