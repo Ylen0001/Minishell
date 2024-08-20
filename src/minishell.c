@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 12:56:33 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 13:27:36 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ int main(int argc, char **argv, char **env)
 		add_history(input);
 		launch_parsing(input, &s_data);
 		minishell(&s_data);
-		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
+	garbage_collector(&s_data);
 	rl_clear_history();
 	return (0);
 }
@@ -64,7 +64,6 @@ void	minishell(t_data *data)
 			data->pipe_trig = 1;
 			if(data->v_path->size >= 3 && data->i_pipes >= 2)  // Fermeture des pipes qui ne sont plus utilisés
 			{
-				dprintf(2, "PAS OK\n");
 				close(data->pipefds[data->i_pipes - 2][0]);
 				close(data->pipefds[data->i_pipes - 2][1]);
 			}
@@ -88,24 +87,13 @@ void	minishell(t_data *data)
 			child(data, data->i_cmd);
 		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
 		{
-			// dprintf(2, "OK\n");
 			close(data->pipefds[data->i_pipes - 1][0]);
 			close(data->pipefds[data->i_pipes - 1][1]);
 			close(data->pipefds[data->i_pipes - 2][0]);
 			close(data->pipefds[data->i_pipes - 2][1]);
 		}
-		// if(data->i_pipes == 2)
-		// {	
-			// close(data->pipefds[data->i_pipes - 2][1]); // Celui là est important.
-			// close(data->pipefds[data->i_pipes - 2][0]); // Le problème vient d'ici.
-		// }
 		data->i_cmd++;
 	}
-	// while(data->i_pipes-- >= 0)
-	// {
-	// 	close(data->pipefds[data->i_pipes][0]);
-	// 	close(data->pipefds[data->i_pipes][0]);
-	// }
 	it = -1;
 	while(++it < data->i_cmd)
 		waitpid(data->pids[it], NULL, 0);
@@ -131,23 +119,18 @@ void child(t_data *data, size_t it_cmd)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
 	{
-		dprintf(2, "ici\n");
+		// dprintf(2, "ici\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
 	}
 	if(data->pipe_trig)
 	{
-		dprintf(2, "OK, pid = %d\n", getpid());
+		// dprintf(2, "OK, pid = %d\n", getpid());
 		close(data->pipefds[data->i_pipes][1]);
 		close(data->pipefds[data->i_pipes][0]);
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	// if(it_cmd == data->v_path->size - 1)
-	// {
-	// }
-	// close(data->pipefds[data->i_pipes][1]); // Manque sans doute une condition pour que ca se ferme a la bonne cmd.
-	// close(data->pipefds[data->i_pipes][0]);
 	m_cmd = ft_split(cmd->data[0], ' ');
 	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 		execve(m_cmd[0], m_cmd, data->vect_env->data);

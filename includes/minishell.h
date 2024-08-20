@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 11:22:27 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 13:03:56 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_vectstr {		// 1 cmd = 1 cmd + args / 1 redir = 1 où plusieurs 
 
 typedef struct s_parsed { 		// 1 parsed = Entre deux pipe
 	t_vectstr *cmd; //cat file2
-	t_vectstr *redir; //Makefile, eof, salope, file1, file3, chat, biere;
+	t_vectstr *redir; //Makefile, eof, file1, file3, chat, biere;
 	t_vectint *type; //< << << < > > >;
 } t_parsed;
 
