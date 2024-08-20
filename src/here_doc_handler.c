@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 15:27:36 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 16:06:55 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 16:30:19 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	here_doc_detector(t_data *data)
 		it_2++;
 	}
 	it = 0;
-	printf("hd_count = %zu\n", data->hd_count);
+	// printf("hd_count = %zu\n", data->hd_count);
 }
 
 void	 here_doc_case(t_data *data, char *limiter)

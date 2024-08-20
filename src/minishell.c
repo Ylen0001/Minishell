@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 16:07:54 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 17:02:57 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,19 @@ int main(int argc, char **argv, char **env)
 		s_data = init_data(env);
 		s_data.hd_it = 0;
 		char *input = readline("minishell: ");
+		if (g_signal_received == 2) {
+			g_signal_received = 0;
+			continue;
+		} 
 		if (!input)
 		{
 			free_t_data(&s_data);
 			exit(1);
 		}
-		if (g_signal_received == 2) 
-			g_signal_received = 0;
 		add_history(input);
 		launch_parsing(input, &s_data);
 		minishell(&s_data);
-		garbage_collector(&s_data);
+		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
 	garbage_collector(&s_data);
@@ -141,10 +143,18 @@ void child(t_data *data, size_t it_cmd)
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
 	m_cmd = ft_split(cmd->data[0], ' ');
+	if(m_cmd[0] == NULL)
+		exit(EXIT_FAILURE);
 	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 		execve(m_cmd[0], m_cmd, data->vect_env->data);
 	path = find_path(m_cmd[0], data->vect_env->data);
-	dprintf(2, "cmd = %s\n", m_cmd[0]);
+	if(!path)
+	{
+		ft_putstr_fd("Error : Invalid cmd\n", 2);
+		// garbage_collector(data);
+		exit(EXIT_FAILURE);
+	}
+	// dprintf(2, "cmd = %s\n", m_cmd[0]);
 	execve(path, m_cmd, data->vect_env->data);
 	// perror("");
 	// dprintf(2, "cmd = %s", cmd->data[0]);
