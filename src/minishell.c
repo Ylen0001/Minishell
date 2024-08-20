@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 14:26:18 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 16:59:53 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,20 @@ int main(int argc, char **argv, char **env)
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env);
 		char *input = readline("minishell: ");
+		if (g_signal_received == 2 || check_spaces(input) != 0)
+		{
+			g_signal_received = 0;
+			free_t_data(&s_data);
+			continue;
+		}
 		if (!input)
 		{
 			free_t_data(&s_data);
 			exit(1);
 		}
-		if (g_signal_received == 2) 
-			g_signal_received = 0;
 		add_history(input);
 		launch_parsing(input, &s_data);
-		// minishell(&s_data);
+		minishell(&s_data);
 		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}

@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/20 14:24:00 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/20 17:02:54 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,4 +361,24 @@ void launch_parsing(char *input, t_data *s_data)
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
+}
+
+int check_spaces(char *input)
+{
+    if(!input)
+        return 0;
+    int i;
+    size_t check;
+
+    check = 0;
+    i = 0;
+    while (input[i])
+    {
+        if(input[i] == ' ' || input[i] == '\t')
+            check++;
+        i++;
+    }
+    if (check == ft_strlen(input))
+        return -1;
+    return 0;
 }

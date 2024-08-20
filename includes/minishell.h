@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 14:22:32 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/20 16:58:26 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void v_path_double(t_vector *vector);
 void vector_happend(t_vector *vect, char *n);
 void vector_print(t_vector *vect);
 t_vectint *init_vect_int();
+int check_spaces(char *input);
 void setup_signal_handlers(void);
 
 
