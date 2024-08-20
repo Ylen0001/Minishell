@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 13:27:36 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 14:19:07 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void	open_file_minishell(t_data *data, int type, char *file)
 		if (data->a_file == -1)
 			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);
 		if(data->a_file == 0)
-			ft_putstr_fd("Open a foiré!\n", 2);
+			ft_putstr_fd("Error : Open failed\n", 2);
 	}
 	else
 		ft_putstr_fd("File : Access Denied.\n", 2);
