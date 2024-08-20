@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/19 13:29:37 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 11:22:27 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			pipe_trig;
 	int			sleep_i;
 	size_t		i_pipes;
 	char		**hd_names;

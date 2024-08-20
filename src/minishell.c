@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/19 17:29:41 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 12:56:33 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ void	minishell(t_data *data)
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
 				// exit(EXIT_FAILURE);
 			}
-			if(data->v_path->size >= 3 && data->i_cmd >= 3)  // Fermeture des pipes qui ne sont plus utilisés
+			data->pipe_trig = 1;
+			if(data->v_path->size >= 3 && data->i_pipes >= 2)  // Fermeture des pipes qui ne sont plus utilisés
 			{
-				// dprintf(2, "PAS OK\n");
+				dprintf(2, "PAS OK\n");
 				close(data->pipefds[data->i_pipes - 2][0]);
 				close(data->pipefds[data->i_pipes - 2][1]);
 			}
@@ -72,8 +73,6 @@ void	minishell(t_data *data)
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
 				child(data, data->i_cmd);
-			close(data->pipefds[data->i_pipes][1]); // Celui là est important.
-			// close(data->pipefds[data->i_pipes][0]); // Le problème vient d'ici.
 			data->i_pipes++;
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
@@ -87,8 +86,18 @@ void	minishell(t_data *data)
 		}
 		else
 			child(data, data->i_cmd);
+		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
+		{
+			// dprintf(2, "OK\n");
+			close(data->pipefds[data->i_pipes - 1][0]);
+			close(data->pipefds[data->i_pipes - 1][1]);
+			close(data->pipefds[data->i_pipes - 2][0]);
+			close(data->pipefds[data->i_pipes - 2][1]);
+		}
 		// if(data->i_pipes == 2)
 		// {	
+			// close(data->pipefds[data->i_pipes - 2][1]); // Celui là est important.
+			// close(data->pipefds[data->i_pipes - 2][0]); // Le problème vient d'ici.
 		// }
 		data->i_cmd++;
 	}
@@ -125,6 +134,10 @@ void child(t_data *data, size_t it_cmd)
 		dprintf(2, "ici\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
+	}
+	if(data->pipe_trig)
+	{
+		dprintf(2, "OK, pid = %d\n", getpid());
 		close(data->pipefds[data->i_pipes][1]);
 		close(data->pipefds[data->i_pipes][0]);
 	}

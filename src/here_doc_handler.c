@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 15:27:36 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/19 13:38:09 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 12:59:12 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void	here_doc_detector(t_data *data)
 	data->hd_count = 0;
 	while(it < data->v_path->parsed->type->size) // Compte le nbr d'here_doc
 	{
-		// printf("size = %zu\n", data->v_path->parsed->type->size);
+		printf("size = %zu\n", data->v_path->parsed->type->size);
 		// printf("redir type = %d\n", data->v_path->parsed->type->redir_type[it]);
 		if(data->v_path->parsed->type->redir_type[it] == HERE_DOC)
 			data->hd_count++;
 		it++;
 	}
 	it = 0;
-	// printf("hd_count = %zu\n", data->hd_count);
+	printf("hd_count = %zu\n", data->hd_count);
 	if(data->hd_count > 0)
 		while(it < data->hd_count)
 		{

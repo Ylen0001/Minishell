@@ -158,44 +158,4 @@ i_cmd : 1
 
 IMPORTANT À TRAITER : Si l'input est full whitespace, on ne rentre pas dans la fonction minishell.
 
-Problèmes à régler 
-
-Si 2 pipes (3cmds), avec un infile, le résultat s'affiche dans STDIN. 
-
-Chemin :
-
-
-
-Première cmd -> Pipe -> Fork -> Child -> STDOUT devient pipe[0][1] -> Redirection -> STDIN devient Infile -> execve de cmd1
-On close pipe[0][1] / pipe[0][0].
-
-Main post fork 1 : Après le 1st appel à fork, on ne peut pas close pipe[0][1] / [0][0]. Sinon le deuxième enfant ne pourra pas lire pipe -1. 
-
-Seconde cmd -> Pipe -> fork -> Child -> STDIN devient pipe[0][0] -> close pipe[0][0] / [0][1] -> STDOUT devient pipe[1][1] -> close pipe[1][0] / [1][1] -> execve failure
-On close pipe[1][1] / pipe[1][0] et pipe[0][0] / pipe [0][1].
-
-Main post fork 2 : close pipe[0][0] / [0][1]
-
-Condition = Si i_pipes == 2 (close pipe - 2)
-
-
-
-
-
-
-
-
-
-
-
-On ne peut pas close pipe[-1][] et pipe[0][] dans le main puisque les enfants les utilisent. 
-Pourtant dans le cas où on a soit une commande seul non built-in soit deux commandes
-
-
-Si 3 cmd -> 3 pipes, (seulement 2 d'utilisés), i_pipes = nbr_pipes - 1.
-Donc pipe[0], pipe[1] et pipe[2].
-
-la cmd 3 utilise pipe[1] et pipe[2]. Donc on ferme pipe[0] dans main.
-
-
-Si 1 cmd ->
+- Size des here_doc pas ok en data->v_path->parsed->type->size
