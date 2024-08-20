@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/16 13:47:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/19 13:49:10 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void	init_data_2(t_data *data)
 	// const size_t NBR_CMD = data->v_path.size;
 
 	i = 0;
-	data->sleep_i = 5;
 	data->i_pipes = 0;
 	data->infile = 0;
 	data->suffix = 0;
@@ -112,7 +111,7 @@ void	init_data_2(t_data *data)
 	data->i_cmd = 0;
 	data->j = 0;
 	data->i_redir = 0;
-	data->error_nbr = 0;
+	data->errno = 0;
 	data->nbr_cmd = data->v_path->size;
 	data->i_cmd = 0;
 	data->built_in = 0;

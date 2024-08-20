@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/16 15:34:59 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/16 17:04:47 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -354,8 +354,4 @@ void launch_parsing(char *input, t_data *s_data)
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-<<<<<<< HEAD
-    // printf("%zu \n", s_data->v_path->size);
-=======
->>>>>>> Amaury
 }

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/16 17:03:26 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/19 17:29:41 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@
 
 volatile int	g_signal_received = 0;
 
-
 int main(int argc, char **argv, char **env) 
 {
 	(void)argv;
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
-	setup_signal_handlers();
-	while (init_prompt() && init_signal())
+	while (init_prompt() && init_signal(S_PROMPT))
 	{
+		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env);
 		char *input = readline("minishell: ");
 		if (!input)
@@ -33,19 +32,9 @@ int main(int argc, char **argv, char **env)
 			free_t_data(&s_data);
 			exit(1);
 		}
+		if (g_signal_received == 2) 
+			g_signal_received = 0;
 		add_history(input);
-		if (g_signal_received)
-        {
-        	if (g_signal_received == SIGINT)
-            {
-				g_signal_received = 0;
-				write(1, "\n", 1);
-			}
-			else if (g_signal_received == SIGQUIT)
-			{
-				g_signal_received = 0;
-			}
-		}
 		launch_parsing(input, &s_data);
 		minishell(&s_data);
 		// garbage_collector(&s_data);
@@ -61,6 +50,7 @@ void	minishell(t_data *data)
 	
 	init_data_2(data);
 	here_doc_detector(data);
+	init_signal(S_EXEC);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
 	{
 		if(data->v_path->size > 1) // Si + d'une cmd
@@ -83,6 +73,8 @@ void	minishell(t_data *data)
 			if (data->pids[data->i_cmd] == 0)
 				child(data, data->i_cmd);
 			close(data->pipefds[data->i_pipes][1]); // Celui là est important.
+			// close(data->pipefds[data->i_pipes][0]); // Le problème vient d'ici.
+			data->i_pipes++;
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
 		{
@@ -95,10 +87,16 @@ void	minishell(t_data *data)
 		}
 		else
 			child(data, data->i_cmd);
-		// close(data->pipefds[data->i_pipes][0]);
+		// if(data->i_pipes == 2)
+		// {	
+		// }
 		data->i_cmd++;
-		data->i_pipes++;
 	}
+	// while(data->i_pipes-- >= 0)
+	// {
+	// 	close(data->pipefds[data->i_pipes][0]);
+	// 	close(data->pipefds[data->i_pipes][0]);
+	// }
 	it = -1;
 	while(++it < data->i_cmd)
 		waitpid(data->pids[it], NULL, 0);
@@ -115,8 +113,6 @@ void child(t_data *data, size_t it_cmd)
 	char 	*path;
 	char 	**m_cmd;
 
-
-	
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -126,6 +122,7 @@ void child(t_data *data, size_t it_cmd)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
 	{
+		dprintf(2, "ici\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
 		close(data->pipefds[data->i_pipes][1]);
@@ -133,21 +130,19 @@ void child(t_data *data, size_t it_cmd)
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	close(data->pipefds[data->i_pipes][1]);
-	close(data->pipefds[data->i_pipes][0]);
+	// if(it_cmd == data->v_path->size - 1)
+	// {
+	// }
+	// close(data->pipefds[data->i_pipes][1]); // Manque sans doute une condition pour que ca se ferme a la bonne cmd.
+	// close(data->pipefds[data->i_pipes][0]);
 	m_cmd = ft_split(cmd->data[0], ' ');
 	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
-	{
-		// dprintf(2, "Bonjour\n");
 		execve(m_cmd[0], m_cmd, data->vect_env->data);
-	}
-	// dprintf(2, "cmd = %s", cmd->data[0]);
 	path = find_path(m_cmd[0], data->vect_env->data);
-	// else
-	// {
+	dprintf(2, "cmd = %s\n", m_cmd[0]);
 	execve(path, m_cmd, data->vect_env->data);
-	perror("");
-	// }
+	// perror("");
+	// dprintf(2, "cmd = %s", cmd->data[0]);
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
@@ -161,6 +156,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
+			dprintf(2, "STDIN_REDIR redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
@@ -168,6 +164,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
+			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
@@ -176,6 +173,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
+			dprintf(2, "STDOUT redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/16 15:32:57 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/19 13:29:37 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ typedef struct s_data // Structure Globale
 
 
 /* TEST */
-
 void 		recup_data(t_data *data);
 t_vector	*init_vector();
 t_vectstr 	*init_vect_str();
@@ -143,14 +142,20 @@ char		*lil_gnl_initializer(int *i, int *j, char *tmp);
 // int		is_dir(t_data *data);
 // void		here_doc_error(void);
 
+typedef enum {
+	S_HERE_DOC,
+	S_EXEC,
+	S_PROMPT,
+} type_of_signals;
 
 
 /* Prompt display + signaux */
 
 bool	init_prompt();
 void 	sigint_handler(int sig_code);
-bool 	init_signal();
-
+bool 	init_signal(type_of_signals);
+int		rl_event_dummy();
+	
 /* Error Handling */
 
 void	here_doc_error(void);
