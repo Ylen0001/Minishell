@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 14:26:18 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/20 16:07:54 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int main(int argc, char **argv, char **env)
 	{
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env);
+		s_data.hd_it = 0;
 		char *input = readline("minishell: ");
 		if (!input)
 		{
@@ -36,8 +37,8 @@ int main(int argc, char **argv, char **env)
 			g_signal_received = 0;
 		add_history(input);
 		launch_parsing(input, &s_data);
-		// minishell(&s_data);
-		// garbage_collector(&s_data);
+		minishell(&s_data);
+		garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
 	garbage_collector(&s_data);
@@ -48,6 +49,7 @@ int main(int argc, char **argv, char **env)
 void	minishell(t_data *data)
 {
 	size_t it;
+	size_t it_hd = 0;
 	
 	init_data_2(data);
 	here_doc_detector(data);
@@ -58,7 +60,6 @@ void	minishell(t_data *data)
 		{
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
-				perror("");
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
 				// exit(EXIT_FAILURE);
 			}
@@ -93,6 +94,13 @@ void	minishell(t_data *data)
 			close(data->pipefds[data->i_pipes - 2][0]);
 			close(data->pipefds[data->i_pipes - 2][1]);
 		}
+		while(it_hd < data->v_path->parsed[data->i_cmd].type->size)
+		{
+			if(data->v_path->parsed[data->i_cmd].type->redir_type[it_hd] == HERE_DOC)
+				data->hd_it++;
+			it_hd++;
+		}
+		it_hd = 0;
 		data->i_cmd++;
 	}
 	it = -1;
@@ -145,10 +153,8 @@ void child(t_data *data, size_t it_cmd)
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 {
 	size_t it;
-	size_t hd_it;
 
 	it = -1;
-	hd_it = 0;
 	while(++it < redir_t->size)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
@@ -161,12 +167,13 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
-			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
+			// dprintf(2, "hd_it = %zu\n", data->hd_it);
+			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[data->hd_it]);
+			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[data->hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
 			close(data->a_file);
-			hd_it++;
+			data->hd_it++;
 		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
@@ -178,7 +185,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 	}
 }
-		// }
+
 void	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_CREAT | O_TRUNC);
