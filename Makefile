@@ -9,7 +9,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 INCLUDES_DIR = includes
 
-SRCS = $(addprefix $(SRC_DIR)/, minishell.c / built_in.c / path_exec.c / lil_gnl.c / here_doc_handler.c / signal.c / prompt.c / init.c / parsing.c / workinprog_vect.c / garbage_collector.c)
+SRCS = $(addprefix $(SRC_DIR)/, minishell.c / built_in.c / pwd.c / echo.c / path_exec.c / lil_gnl.c / here_doc_handler.c / signal.c / prompt.c / init.c / parsing.c / workinprog_vect.c / garbage_collector.c)
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 

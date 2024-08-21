@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 15:48:01 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:59:26 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,10 @@ char		*lil_gnl_initializer(int *i, int *j, char *tmp);
 
 /* ABOUT BUILT_IN */
 
-void	built_in_manager(char **cmd);
+void	built_in_manager(t_data *data, char **cmd);
 void	b_i_echo(char **cmd);
 int		flag_is_ok(char *flag);
+void	pwd(t_data *data);
 
 /* Prompt display + signaux */
 

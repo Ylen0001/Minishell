@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in.c                                         :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:59:17 by ylenoel          ###   ########.fr       */
+/*   Created: 2024/08/21 16:26:22 by ylenoel           #+#    #+#             */
+/*   Updated: 2024/08/21 17:04:27 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	built_in_manager(t_data *data, char **cmd)
+void	pwd(t_data *data)
 {
-	if(ft_strcmp(cmd[0], "echo") == 0)
-		b_i_echo(cmd);
-	if(ft_strcmp(cmd[0], "pwd") == 0)
-		pwd(data);
+	char *buffer;
+
+	buffer = NULL;
+	buffer = getcwd(buffer, 0);
+	if(buffer == NULL)
+	{
+		data->exit_status = 1;
+		perror("getcwd");
+		exit(EXIT_FAILURE);
+	}
+	ft_putstr_fd(buffer, STDOUT_FILENO);
+	data->exit_status = 0;
 	return;
 }

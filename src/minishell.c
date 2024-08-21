@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:22:15 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:15:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void child(t_data *data, size_t it_cmd)
 		redirections(data, redir_t, redir_f->data);
 	if(data->built_in == 1)
 	{
-		built_in_manager(cmd->data);
+		built_in_manager(data, cmd->data);
 		exit(EXIT_SUCCESS);
 	}
 	else if(data->built_in == 0)
