@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 13:59:20 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:19:56 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,24 +126,32 @@ void child(t_data *data, size_t it_cmd)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
 	{
-		// dprintf(2, "ici\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
 	}
 	if(data->pipe_trig)
 	{
-		// dprintf(2, "OK, pid = %d\n", getpid());
 		close(data->pipefds[data->i_pipes][1]);
 		close(data->pipefds[data->i_pipes][0]);
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	m_cmd = ft_split(cmd->data[0], ' ');
-	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
-		execve(m_cmd[0], m_cmd, data->vect_env->data);
-	path = find_path(m_cmd[0], data->vect_env->data);
-	dprintf(2, "cmd = %s\n", m_cmd[0]);
-	execve(path, m_cmd, data->vect_env->data);
+	if(data->built_in == 1)
+	{
+		built_in_manager(cmd->data);
+		exit(EXIT_SUCCESS);
+	}
+	else if(data->built_in == 0)
+	{
+		m_cmd = ft_split(cmd->data[0], ' ');
+		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
+			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
+				exit(EXIT_FAILURE);
+		path = find_path(m_cmd[0], data->vect_env->data);
+		// dprintf(2, "cmd = %s\n", m_cmd[0]);
+		if(execve(path, m_cmd, data->vect_env->data) == -1)
+			exit(EXIT_FAILURE);
+	}
 	// perror("");
 	// dprintf(2, "cmd = %s", cmd->data[0]);
 }
