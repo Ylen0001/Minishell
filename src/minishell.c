@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 10:36:31 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 14:03:24 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,13 @@ void	minishell(t_data *data)
 	}
 	it = -1;
 	while(++it < data->i_cmd)
-		waitpid(data->pids[it], NULL, 0);
+	{
+		waitpid(data->pids[it], &data->status, 0);
+		if(WIFEXITED(data->status))
+			data->exit_status = WEXITSTATUS(data->status);
+		else
+			data->exit_status = 1;
+	}
 	it = -1;
 	while(++it < data->hd_count)
 		unlink(data->hd_names[it]);

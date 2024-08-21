@@ -28,7 +28,10 @@ CYAN			:= \033[0;96m
 WHITE			:= \033[0;97m
 RESET			:= \033[0m
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Yoann
 $(NAME) : $(LIB_DIR)/$(LIBFT_NAME) $(OBJS)
 	$(CC) $(OBJS) $(LIB_DIR)/$(LIBFT_NAME) $(CFLAGS) $(LDFLAGS) -o $(NAME) 
 
