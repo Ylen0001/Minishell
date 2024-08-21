@@ -17,6 +17,18 @@ HEADER = $(INCLUDES_DIR)/minishell.h
 
 all : $(NAME)
 
+DEF_COLOR		:= \033[0;39m
+GRAY			:= \033[0;90m
+RED				:= \033[0;91m
+GREEN			:= \033[0;92m
+YELLOW			:= \033[0;93m
+BLUE			:= \033[0;94m
+MAGENTA			:= \033[0;95m
+CYAN			:= \033[0;96m
+WHITE			:= \033[0;97m
+RESET			:= \033[0m
+
+
 $(NAME) : $(LIB_DIR)/$(LIBFT_NAME) $(OBJS)
 	$(CC) $(OBJS) $(LIB_DIR)/$(LIBFT_NAME) $(CFLAGS) $(LDFLAGS) -o $(NAME) 
 
@@ -44,3 +56,11 @@ fclean: clean
 re: fclean all
 
 .PHONY: clean fclean re all bonus
+
+all : ascii_art
+	@echo "$(MAGENTA)Compilation en cours...$(RESET)"
+
+ascii_art:
+	@echo "$(CYAN)"
+	@cat logo.txt
+	@echo "$(RESET)"
