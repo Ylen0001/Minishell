@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 12:22:02 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 15:48:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ typedef enum
 	STDOUT_REDIR = 2, // >
 	STDOUT_APPEND = 3,	// >>
 }	e_redir;
+
+typedef enum {
+	S_HERE_DOC,
+	S_EXEC,
+	S_PROMPT,
+} type_of_signals;
 
 typedef struct s_vectint {		// 1 type = un où plusieurs type de redir 
     int *redir_type; // Enum
@@ -146,12 +152,11 @@ char		*lil_gnl_initializer(int *i, int *j, char *tmp);
 // int		is_dir(t_data *data);
 // void		here_doc_error(void);
 
-typedef enum {
-	S_HERE_DOC,
-	S_EXEC,
-	S_PROMPT,
-} type_of_signals;
+/* ABOUT BUILT_IN */
 
+void	built_in_manager(char **cmd);
+void	b_i_echo(char **cmd);
+int		flag_is_ok(char *flag);
 
 /* Prompt display + signaux */
 
