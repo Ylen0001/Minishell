@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 16:59:53 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/21 11:38:55 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **env)
 		}
 		add_history(input);
 		launch_parsing(input, &s_data);
-		minishell(&s_data);
+		// minishell(&s_data);
 		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
