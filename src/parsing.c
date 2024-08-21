@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/21 14:09:44 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:14:36 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,23 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
     return i;
 }
 
+int handle_exit_code(t_data *s_data, char *str, int x)
+{
+    char *to_add;
+    int i;
+
+    i = 0;
+    to_add = ft_itoa(s_data->exit_status);
+    while(to_add[i])
+    {
+        str[x] = to_add[i];
+        i++;
+        x++;
+    }
+    free(to_add);
+    return x;
+}
+
 int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, int *x)
 {
     int j;
@@ -206,7 +223,12 @@ int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, i
     check_var = ft_calloc(500, sizeof(char));
     j = i + 1;
     y = 0;
-    if (s[i] == '$' && ((s[i + 1] >= 'A' && s[i + 1] <= 'Z') || (s[i + 1] == '_') || 
+    if (s[i+ 1] && s[i] == '$' && s[i + 1] == '?')
+    {   
+        *x = handle_exit_code(s_data, str, *x);
+        i+=2;
+    }
+    if (s[i] && s[i] == '$' && ((s[i + 1] >= 'A' && s[i + 1] <= 'Z') || (s[i + 1] == '_') || 
         (s[i + 1] >= 'a' && s[i + 1] <= 'z') || (s[i + 1] >= '0' && s[i + 1] <= '9')))
     {
         while (s[j] && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] == '_') || 
@@ -283,9 +305,7 @@ void path_to_vect(t_data *s_data, int i)
                 i++;
         }
         else if (s[i] == '"')
-        {
             i = handle_double_quotes(s_data, s, str, i, &x);
-        }
         else
         {
             i = handle_variable_expansion(s_data, s, str, i, &x);
@@ -371,11 +391,11 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    // vect_print(s_data->v_path);
-    // printf("redir :\n");
-    // vect_print(s_data->v_path->parsed->redir);
-    // printf("type :\n");
-    // vect_print(s_data->v_path->parsed->type);
+    vect_print(s_data->v_path);
+    printf("redir :\n");
+    vect_print(s_data->v_path->parsed->redir);
+    printf("type :\n");
+    vect_print(s_data->v_path->parsed->type);
 }
 
 int check_spaces(char *input)

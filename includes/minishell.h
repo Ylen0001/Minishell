@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 16:58:26 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:14:17 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			status;
+	int			exit_status;
+	size_t 		hd_it;
 	int			pipe_trig;
 	int			sleep_i;
 	size_t		i_pipes;
@@ -162,7 +165,7 @@ int		rl_event_dummy();
 void	here_doc_error(void);
 
 
-t_data init_data(char **env);
+t_data init_data(char **env, int ex_data_buff);
 t_parsed init_parsed();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);

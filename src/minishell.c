@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 11:38:55 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:13:08 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ int main(int argc, char **argv, char **env)
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
+	int ex_st_buff;
+	ex_st_buff = 0;
 	while (init_prompt() && init_signal(S_PROMPT))
 	{
 		rl_event_hook = rl_event_dummy;
-		s_data = init_data(env);
+		s_data = init_data(env, ex_st_buff);
 		char *input = readline("minishell: ");
 		if (g_signal_received == 2 || check_spaces(input) != 0)
 		{
@@ -101,7 +103,13 @@ void	minishell(t_data *data)
 	}
 	it = -1;
 	while(++it < data->i_cmd)
-		waitpid(data->pids[it], NULL, 0);
+	{
+		waitpid(data->pids[it], &data->status, 0);
+		if(WIFEXITED(data->status))
+			data->exit_status = WEXITSTATUS(data->status);
+		else
+			data->exit_status = 1;
+	}
 	it = -1;
 	while(++it < data->hd_count)
 		unlink(data->hd_names[it]);
