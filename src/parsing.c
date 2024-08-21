@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/20 17:02:54 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/21 11:35:21 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
     }
     return i;
 }
+
 
 void path_to_vect(t_data *s_data, int i)
 {
