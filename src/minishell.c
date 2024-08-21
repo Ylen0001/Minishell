@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/20 17:02:57 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 13:59:20 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,14 @@ int main(int argc, char **argv, char **env)
 	{
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env);
-		s_data.hd_it = 0;
 		char *input = readline("minishell: ");
-		if (g_signal_received == 2) {
-			g_signal_received = 0;
-			continue;
-		} 
 		if (!input)
 		{
 			free_t_data(&s_data);
 			exit(1);
 		}
+		if (g_signal_received == 2) 
+			g_signal_received = 0;
 		add_history(input);
 		launch_parsing(input, &s_data);
 		minishell(&s_data);
@@ -51,7 +48,6 @@ int main(int argc, char **argv, char **env)
 void	minishell(t_data *data)
 {
 	size_t it;
-	size_t it_hd = 0;
 	
 	init_data_2(data);
 	here_doc_detector(data);
@@ -62,6 +58,7 @@ void	minishell(t_data *data)
 		{
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
+				perror("");
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
 				// exit(EXIT_FAILURE);
 			}
@@ -96,18 +93,17 @@ void	minishell(t_data *data)
 			close(data->pipefds[data->i_pipes - 2][0]);
 			close(data->pipefds[data->i_pipes - 2][1]);
 		}
-		while(it_hd < data->v_path->parsed[data->i_cmd].type->size)
-		{
-			if(data->v_path->parsed[data->i_cmd].type->redir_type[it_hd] == HERE_DOC)
-				data->hd_it++;
-			it_hd++;
-		}
-		it_hd = 0;
 		data->i_cmd++;
 	}
 	it = -1;
 	while(++it < data->i_cmd)
-		waitpid(data->pids[it], NULL, 0);
+	{
+		waitpid(data->pids[it], &data->status, 0);
+		if(WIFEXITED(data->status))
+			data->exit_status = WEXITSTATUS(data->status);
+		else
+			data->exit_status = 1;
+	}
 	it = -1;
 	while(++it < data->hd_count)
 		unlink(data->hd_names[it]);
@@ -143,18 +139,10 @@ void child(t_data *data, size_t it_cmd)
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
 	m_cmd = ft_split(cmd->data[0], ' ');
-	if(m_cmd[0] == NULL)
-		exit(EXIT_FAILURE);
 	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 		execve(m_cmd[0], m_cmd, data->vect_env->data);
 	path = find_path(m_cmd[0], data->vect_env->data);
-	if(!path)
-	{
-		ft_putstr_fd("Error : Invalid cmd\n", 2);
-		// garbage_collector(data);
-		exit(EXIT_FAILURE);
-	}
-	// dprintf(2, "cmd = %s\n", m_cmd[0]);
+	dprintf(2, "cmd = %s\n", m_cmd[0]);
 	execve(path, m_cmd, data->vect_env->data);
 	// perror("");
 	// dprintf(2, "cmd = %s", cmd->data[0]);
@@ -163,8 +151,10 @@ void child(t_data *data, size_t it_cmd)
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 {
 	size_t it;
+	size_t hd_it;
 
 	it = -1;
+	hd_it = 0;
 	while(++it < redir_t->size)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
@@ -177,13 +167,12 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			// dprintf(2, "hd_it = %zu\n", data->hd_it);
-			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[data->hd_it]);
-			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[data->hd_it]);
+			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
+			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
 			close(data->a_file);
-			data->hd_it++;
+			hd_it++;
 		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
@@ -195,7 +184,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 	}
 }
-
+		// }
 void	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_CREAT | O_TRUNC);

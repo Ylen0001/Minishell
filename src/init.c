@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/20 15:13:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 13:44:04 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	init_data_2(t_data *data)
 	size_t	i;
 
 	i = 0;
+	data->hd_names = NULL;
 	data->i_pipes = 0;
 	data->infile = 0;
 	data->suffix = 0;
