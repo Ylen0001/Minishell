@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:59:26 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:14:17 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int		rl_event_dummy();
 void	here_doc_error(void);
 
 
-t_data init_data(char **env);
+t_data init_data(char **env, int ex_data_buff);
 t_parsed init_parsed();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
@@ -184,6 +184,7 @@ void v_path_double(t_vector *vector);
 void vector_happend(t_vector *vect, char *n);
 void vector_print(t_vector *vect);
 t_vectint *init_vect_int();
+int check_spaces(char *input);
 void setup_signal_handlers(void);
 
 
