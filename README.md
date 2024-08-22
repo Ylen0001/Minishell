@@ -154,8 +154,22 @@ i_cmd : 1
 ---> à partir de find_path, plus aucun print ne s'affiche. 
 
 
-19/08
+22/08
 
-IMPORTANT À TRAITER : Si l'input est full whitespace, on ne rentre pas dans la fonction minishell.
+CD built_in
 
-- Size des here_doc pas ok en data->v_path->parsed->type->size
+- Gérer cd sans options
+- Gérer cd - : Retourne au directory précédent. Si le précédent est le même, on effectue tout de même le remplacement.
+- Gérer cd ~ : Retourne à la racine. En l'occurence "/home/user" (Attention à user, il faut récupérer la data dans vect_env).
+- Gérer chemin absolu et relatif.
+
+Fonctions nécéssaires :
+
+- CHDIR int chdir(const char *path) : Change le répertoire courant du processus.
+- GETCWD char *getcwd(char *buf, size_t size) : Remplit un buffer avec le chemin absolu du répertoire courant du processus. La size doit être assez grande pour récupérer le chemin absolu.
+
+Structure :
+
+1 - Vérifier si présence de '-' | '~'.
+2 - Vérifier si le path est relatif | absolu. 
+3 - Vérifier si le path est valide avec access. 
