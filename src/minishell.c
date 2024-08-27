@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:13:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/27 10:50:36 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,16 @@ int main(int argc, char **argv, char **env)
 	if (argc != 1 || env == NULL || *env == NULL)
 		exit(EXIT_FAILURE);
 	t_data s_data;
+	t_vectstr *env_buff;
 	int ex_st_buff;
+
+	env_buff = init_vect_str();
+	init_env(env_buff, env);
 	ex_st_buff = 0;
 	while (init_prompt() && init_signal(S_PROMPT))
 	{
 		rl_event_hook = rl_event_dummy;
-		s_data = init_data(env, ex_st_buff);
+		s_data = init_data(env, ex_st_buff, *env_buff);
 		char *input = readline("minishell: ");
 		if (g_signal_received == 2 || check_spaces(input) != 0)
 		{
@@ -38,12 +42,15 @@ int main(int argc, char **argv, char **env)
 		if (!input)
 		{
 			free_t_data(&s_data);
+			free_t_vectstr(env_buff);
 			exit(1);
 		}
 		add_history(input);
 		launch_parsing(input, &s_data);
 		// minishell(&s_data);
 		// garbage_collector(&s_data);
+		env_buff = vectstr_dup(s_data.vect_env);
+		ex_st_buff = s_data.exit_status; 
 		free_t_data(&s_data);
 	}
 	garbage_collector(&s_data);

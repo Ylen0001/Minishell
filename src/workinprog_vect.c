@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/13 12:26:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/27 10:42:27 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,40 @@ void vector_print(t_vector *vect) {
         dprintf(2, "CMD %zu ===>\n", i);
 		vect_print(vect->parsed[i].cmd);
 	}
+}
+
+
+t_vectstr *vectstr_dup(t_vectstr *vect)
+{
+    t_vectstr *new_vect = malloc(sizeof(t_vectstr));
+    if (!new_vect)
+        return NULL;
+
+    new_vect->size = vect->size;
+    new_vect->capacity = vect->capacity;
+    new_vect->data = ft_calloc(new_vect->capacity, sizeof(char *));
+    if (!new_vect->data)
+    {
+        free(new_vect);
+        return NULL; 
+    }
+    size_t i = 0;
+    while (i < vect->size)
+    {
+        new_vect->data[i] = ft_strdup(vect->data[i]);
+        if (!new_vect->data[i])
+        {
+            while (i > 0)
+            {
+                free(new_vect->data[i]);
+                i--;
+            }
+            free(new_vect->data);
+            free(new_vect);
+            return NULL;
+        }
+        i++;
+    }
+
+    return new_vect;
 }
