@@ -6,26 +6,18 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/27 15:52:30 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 13:34:08 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int check_format(char *s)
+void replace_variable(t_vectstr *env, char *to_add, int i)
 {
-    int i = 0;
-    while(s[i] != ' ')
-        i++;
-    while (s[i] == ' ')
-        i++;
-    while(s[i] && (ft_isalnum(s[i])!= 0 || s[i] == '_'))
-        i++;
-    if(s[i] != '=')
-        return -1;
-    return 0;
+    free(env->data[i]);
+    env->data[i] = (char *)ft_calloc(ft_strlen(to_add), sizeof(char));
+    env->data[i] = (char *)ft_strdup(to_add);
 }
-
 void print_export(t_data *s_data)
 {
     int i = 0;
@@ -56,25 +48,45 @@ void print_export(t_data *s_data)
         i++;
     }
 }
+
+int check_presence(t_vectstr *env, char *to_check)
+{
+    int i = 0;
+    char clean[500] = {'\0'};
+
+    while (to_check[i] && to_check[i] != '=')
+    {
+        clean[i] = to_check[i];
+        i++;
+    }
+    i = 0;
+    while(env->data[i])
+    {
+        if (ft_strnstr(env->data[i], clean, ft_strlen(clean)) != 0)
+        {
+            replace_variable(env, to_check, i);
+            return 1;
+        }
+        i++;
+    }
+    return 0;
+}
 void builtin_export(t_data *s_data)
 {
     int i = 0;
     int j = 0;
     char *s = s_data->full_string;
-    // if (check_format(s) != 0)
-    // {
-    //     printf("export expected format :\nexport var=value\n");
-    //     return;
-    // }
-    while(s[i] && s[i] != ' ')
-        i++;
     while (s[i] && s[i] == ' ')
+        i++;
+    while(s[i] && s[i] != ' ')
         i++;
     if (s[i] == '\0')
     {
         print_export(s_data);
         return;
     }
+    while (s[i] && s[i] == ' ')
+        i++;
     while(s[i])
     {
         char to_add[500] = {'\0'};
@@ -86,15 +98,18 @@ void builtin_export(t_data *s_data)
             j++;
         }
         if (to_add[0])
-            vect_happend(s_data->vect_env, to_add);
+        {
+            if (check_presence(s_data->vect_env, to_add) == 0)
+               vect_happend(s_data->vect_env, to_add);
+        }
         i++;
     }
 }
 
 void send_builtin(t_data *s_data)
 {
-    if(ft_strnstr(s_data->full_string, "export", 6) != 0)
+    char *checker = ft_strnstr(s_data->full_string, "export", ft_strlen(s_data->full_string));
+    if(checker[6] == '\0' || checker[6] == ' ' || checker[6] == '\n')
         builtin_export(s_data);
-    
 }
 
