@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:25:16 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/27 16:53:34 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,30 @@ int		flag_is_ok(char *flag)
 	return (1);
 }
 
-void	b_i_echo(char **cmd)
+void	b_i_echo(char *cmd)
 {
+	char **splited;
 	size_t	i;
+
+	splited = ft_split(cmd, ' ');	
+	i = 1;
 	
-	i = 0;
-	
-	if(flag_is_ok(cmd[1]) == 1)
+	if(flag_is_ok(splited[i]) == 1)
 	{
-		i = 1;
-		while(cmd[i++])
-			printf("%s", cmd[i]);
+		i++;
+		while(splited[i] && splited[i] != NULL)
+		{
+			printf("%s", splited[i]);
+			i++;
+		}
 	}
 	else
-		while(cmd[i++])
-			printf("%s\n", cmd[i]);
+	{
+		while(splited[i] && splited[i] != NULL)
+		{	
+			printf("%s\n", splited[i]);
+			i++;
+		}
+	}
 	return;
 }

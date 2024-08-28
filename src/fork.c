@@ -6,22 +6,22 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 13:43:50 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:20:42 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/26 11:54:41 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+// #include "../includes/minishell.h"
 
-void	mother_forker(t_data *data)
-{
-	data->pids[data->i_pids] = fork();
-	if (data->pids[data->i_pids] == -1)
-	{
-		free(data->pipefds);
-		ft_putstr_fd("Error: Pipefds mother_forker.\n", 2);
-	}
-	return ;
-}
+// void	mother_forker(t_data *data)
+// {
+// 	data->pids[data->i_pids] = fork();
+// 	if (data->pids[data->i_pids] == -1)
+// 	{
+// 		free(data->pipefds);
+// 		ft_putstr_fd("Error: Pipefds mother_forker.\n", 2);
+// 	}
+// 	return ;
+// }
 
 // void	child_process_a(char *env[], t_data *data)
 // {
