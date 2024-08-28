@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 16:05:41 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:33:26 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ void	built_in_detector(t_data *data, char *cmd)
 	size_t	i;
 
 	i = 0;
-	// if(cmd == NULL)
-	// 	return;
-	printf("cmd = %s\n", cmd);
+	if(cmd == NULL)
+	{
+		data->built_in = 0;
+		return;
+	}
+	// printf("cmd = %s\n", cmd);
 	while(i < data->v_path->size)
 	{
 		if(ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 
@@ -27,6 +30,7 @@ void	built_in_detector(t_data *data, char *cmd)
 				data->built_in = 1;
 		i++;
 	}
+	data->built_in = 0;
 	return;
 }
 

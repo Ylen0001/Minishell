@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 16:07:43 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:33:08 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ void child(t_data *data, size_t it_cmd)
 	char 	*path;
 	char 	**m_cmd;
 
+	built_in_detector(data, cmd->data[it_cmd]);
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -153,9 +154,8 @@ void child(t_data *data, size_t it_cmd)
 		redirections(data, redir_t, redir_f->data);
 	if(data->built_in == 1)
 	{
-		// dprintf(2, "Bonjour\n");
+		dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
 		built_in_manager(data, cmd->data[it_cmd]);
-		return;
 	}
 	else if(data->built_in == 0)
 	{
@@ -208,7 +208,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 	}
 }
-		// }
+
 void	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_CREAT | O_TRUNC);

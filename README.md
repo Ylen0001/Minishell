@@ -197,3 +197,8 @@ Cas particulier :
 
 ISSUES :
 
+CONDITION DE LA FONCTION MINISHELL:
+
+Si une seule cmd ET non built_in ----> FORK
+Si une seule cmd ET built_in 	 ----> PARENT
+Si plusieurs cmd built_in où non ----> FORK
