@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 16:33:08 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 17:06:26 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int main(int argc, char **argv, char **env)
 	{
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env, ex_st_buff, *env_buff);
-		char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+		// char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+		char *input = readline("minishell: ");
 		if (g_signal_received == 2 || check_spaces(input) != 0)
 		{
 			g_signal_received = 0;
@@ -71,6 +72,7 @@ void	minishell(t_data *data)
 		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
 		if(data->v_path->size > 1) // Si + d'une cmd
 		{
+			// printf("HELLO\n");
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
 				perror("");
@@ -87,7 +89,7 @@ void	minishell(t_data *data)
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
-				child(data, data->i_cmd);
+				child(data, data->i_cmd, data->built_in);
 			data->i_pipes++;
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
@@ -97,10 +99,10 @@ void	minishell(t_data *data)
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
-				child(data, data->i_cmd);
+				child(data, data->i_cmd, data->built_in);
 		}
 		else
-			child(data, data->i_cmd);
+			child(data, data->i_cmd, data->built_in);
 		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
 		{
 			close(data->pipefds[data->i_pipes - 1][0]);
@@ -109,6 +111,7 @@ void	minishell(t_data *data)
 			close(data->pipefds[data->i_pipes - 2][1]);
 		}
 		data->i_cmd++;
+		data->built_in = 0;
 	}
 	it = -1;
 	while(++it < data->i_cmd)
@@ -124,7 +127,7 @@ void	minishell(t_data *data)
 		unlink(data->hd_names[it]);
 }
 
-void child(t_data *data, size_t it_cmd) 
+void child(t_data *data, size_t it_cmd, int	built_in) 
 {
 	const 	t_vectstr *cmd = data->v_path->parsed[it_cmd].cmd;
 	const 	t_vectint *redir_t = data->v_path->parsed[it_cmd].type;
@@ -132,7 +135,7 @@ void child(t_data *data, size_t it_cmd)
 	char 	*path;
 	char 	**m_cmd;
 
-	built_in_detector(data, cmd->data[it_cmd]);
+	// built_in_detector(data, cmd->data[it_cmd]);
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -154,10 +157,12 @@ void child(t_data *data, size_t it_cmd)
 		redirections(data, redir_t, redir_f->data);
 	if(data->built_in == 1)
 	{
-		dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
+		// dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
 		built_in_manager(data, cmd->data[it_cmd]);
+		if(data->v_path->size != 1)
+			exit(EXIT_SUCCESS);
 	}
-	else if(data->built_in == 0)
+	else if(built_in == 0)
 	{
 		m_cmd = ft_split(cmd->data[0], ' ');
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))

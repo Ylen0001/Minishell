@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 13:53:21 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:42:41 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void		free_paths(char **paths);
 char		*construct_path(char *dir, char *cmd);
 void		init_data_2(t_data *data);
 bool		status();
-void		child(t_data *data, size_t idx);
+void		child(t_data *data, size_t idx, int built_in);
 void		open_file_minishell(t_data *data, int type, char *file);
 void		redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f);
 void		here_doc_detector(t_data *data);
