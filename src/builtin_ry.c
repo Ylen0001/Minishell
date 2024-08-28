@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 13:34:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:22:23 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,11 @@ void builtin_export(t_data *s_data)
 
 void send_builtin(t_data *s_data)
 {
-    char *checker = ft_strnstr(s_data->full_string, "export", ft_strlen(s_data->full_string));
-    if(checker[6] == '\0' || checker[6] == ' ' || checker[6] == '\n')
-        builtin_export(s_data);
+    //char *checker = ft_strnstr(s_data->full_string, "export", ft_strlen(s_data->full_string));
+    // if(checker[6] && (checker[6] == '\0' || checker[6] == ' ' || checker[6] == '\n'))
+    //     builtin_export(s_data);
+    builtin_unset(s_data, s_data->full_string);
+    if(strcmp(s_data->v_path->parsed[0].cmd[0].data[0], "exit") == 0)
+        builtin_exit(s_data);
 }
 

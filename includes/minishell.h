@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 11:37:09 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:20:33 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,9 @@ void init_env(t_vectstr *vect_env, char **env);
 t_vectstr *vectstr_dup(t_vectstr *vect);
 void free_t_vectstr(t_vectstr *vect);
 void *ft_realloc(void *ptr, size_t capacity, size_t size, size_t elemSize);
-
+void builtin_unset(t_data *data, char *cmd);
+void builtin_exit(t_data *s_data);
+void builtin_env(t_data *s_data);
 
 #define vect_print(param) _Generic((param), \
 	t_vector *: vector_print,	\

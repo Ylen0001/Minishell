@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/27 15:52:58 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 15:50:26 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,12 +391,12 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
+    send_builtin(s_data);
     // vect_print(s_data->v_path);
     // printf("redir :\n");
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-    send_builtin(s_data);
     // printf("env :\n");
     // vect_print(s_data->vect_env);
 }
