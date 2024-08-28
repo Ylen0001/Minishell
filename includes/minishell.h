@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:14:17 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 11:37:09 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int		rl_event_dummy();
 void	here_doc_error(void);
 
 
-t_data init_data(char **env, int ex_data_buff);
+t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff);
 t_parsed init_parsed();
 void launch_parsing(char *input, t_data *s_data);
 void vectstr_happend(t_vectstr *vect, char *data);
@@ -186,8 +186,12 @@ void vector_print(t_vector *vect);
 t_vectint *init_vect_int();
 int check_spaces(char *input);
 void setup_signal_handlers(void);
-
-
+void send_builtin(t_data *s_data);
+t_vectstr *init_vect_str();
+void init_env(t_vectstr *vect_env, char **env);
+t_vectstr *vectstr_dup(t_vectstr *vect);
+void free_t_vectstr(t_vectstr *vect);
+void *ft_realloc(void *ptr, size_t capacity, size_t size, size_t elemSize);
 
 
 #define vect_print(param) _Generic((param), \
