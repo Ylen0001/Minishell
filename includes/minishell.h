@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:14:17 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 12:22:05 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			cd_trigger;
 	int			status;
 	int			exit_status;
 	size_t 		hd_it;
@@ -153,11 +154,15 @@ char		*lil_gnl_initializer(int *i, int *j, char *tmp);
 // void		here_doc_error(void);
 
 /* ABOUT BUILT_IN */
-
-void	built_in_manager(t_data *data, char **cmd);
-void	b_i_echo(char **cmd);
+void	built_in_detector(t_data *data, char *cmd);
+void	built_in_manager(t_data *data, char *cmd);
+int 	b_i_cd(t_data *data, char *cmd);
+char 	*get_oldpwd_value(t_data *data, char *last_dir);
+void	update_oldpwd_env(t_data *data, char *updated_oldpwd);
+char	*get_home_value(t_data *data, char *home_dir);
+void	b_i_echo(char *cmd);
 int		flag_is_ok(char *flag);
-void	pwd(t_data *data);
+void	b_i_pwd(t_data *data);
 
 /* Prompt display + signaux */
 

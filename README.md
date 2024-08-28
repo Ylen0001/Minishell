@@ -170,6 +170,32 @@ Fonctions nécéssaires :
 
 Structure :
 
-1 - Vérifier si présence de '-' | '~'.
-2 - Vérifier si le path est relatif | absolu. 
-3 - Vérifier si le path est valide avec access. 
+1 - Récupérer le home. 						OK
+2 - Récupérer le cwd. --> get_home_value() 	OK
+3 - Récupérer le previous_directory			EN COURS.
+3b - Le mettre jour avant chaque chdir.
+4 - Gérer le changement de directory avec chdir. EN COURS.
+
+--> Si cd [1] = -
+--> Si cmd[1] = ~
+Sinon 
+--> Si chemin absolu : If access, chdir(cmd[1])
+==> Si chemin relatif : access sur join de cwd + '/' + cmd[1].
+-----> Si access == -1 : Non-existing path. 
+
+1er souci : Si on fait cd - après avoir changé de dir une première fois, on reste dans le même dir. Faut-il utiliser old_pwd et le mettre à jour? Donc free, + strdup?
+
+Pour CD - : Il faut utiliser la variable d'environnement oldpwd, et la mettre à jour avant chaque chdir.
+
+IMPORTANT : On ne doit pas refresh le pwd à chaque nouvel input. Il doit y avoir une continuité de cd tout le long de l'exécution du programme. 
+
+Cas particulier : 
+
+- cd tout court fait comme cd ~ et renvoi à home.
+- cd \42 : Cas de caractère d'échappement? // Pas besoin de gérer.
+- cd /42 : Synthax error.
+
+ISSUES :
+
+- Comment distinguer chemin absolu et chemin relatif? Puisque access semble bloquer les deux.
+- À chaque nouvel input, on recrée le vect_env, donc les mises à jour de OLDPWD ne sont pas conservées : Devrait être réglé au prochain merge.

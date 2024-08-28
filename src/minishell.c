@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 16:13:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/27 14:49:53 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **env)
 		}
 		add_history(input);
 		launch_parsing(input, &s_data);
-		// minishell(&s_data);
+		minishell(&s_data);
 		// garbage_collector(&s_data);
 		free_t_data(&s_data);
 	}
@@ -58,6 +58,7 @@ void	minishell(t_data *data)
 	init_data_2(data);
 	here_doc_detector(data);
 	init_signal(S_EXEC);
+	built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
 	{
 		if(data->v_path->size > 1) // Si + d'une cmd
@@ -144,8 +145,9 @@ void child(t_data *data, size_t it_cmd)
 		redirections(data, redir_t, redir_f->data);
 	if(data->built_in == 1)
 	{
-		built_in_manager(data, cmd->data);
-		exit(EXIT_SUCCESS);
+		// dprintf(2, "Bonjour\n");
+		built_in_manager(data, cmd->data[it_cmd]);
+		return;
 	}
 	else if(data->built_in == 0)
 	{

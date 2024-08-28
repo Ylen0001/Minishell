@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/21 16:14:36 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/27 14:29:35 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,11 +391,11 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    vect_print(s_data->v_path);
-    printf("redir :\n");
-    vect_print(s_data->v_path->parsed->redir);
-    printf("type :\n");
-    vect_print(s_data->v_path->parsed->type);
+    // vect_print(s_data->v_path);
+    // printf("redir :\n");
+    // vect_print(s_data->v_path->parsed->redir);
+    // printf("type :\n");
+    // vect_print(s_data->v_path->parsed->type);
 }
 
 int check_spaces(char *input)

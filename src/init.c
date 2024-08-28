@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/21 16:13:33 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/27 13:54:43 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	init_data_2(t_data *data)
 	size_t	i;
 
 	i = 0;
+	data->cd_trigger = 0;
 	data->hd_names = NULL;
 	data->i_pipes = 0;
 	data->infile = 0;
