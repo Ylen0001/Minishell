@@ -6,11 +6,12 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:23:01 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 13:11:39 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 15:29:33 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/colors.h"
 
 int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 {
@@ -39,14 +40,14 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	if(ft_strcmp(cmd, "cd ~") == 0)
 	{
 		if(chdir(home_dir) == 0)
-			printf("Moves to home directory\n");
+			printf(C_BRONZE"Moves to home directory\n"C_RESET);
 		else
 			perror("chdir() error3.\n");			// Changement de dir vers home.
 	}
 	else if(ft_strcmp(cmd, "cd -") == 0)
 	{
 		if(chdir(last_dir) == 0)
-			printf("Moves to last directory\n");
+			printf(C_LIGHT_ORANGE"Moves to last directory\n"C_RESET);
 		else
 			perror("chdir() error.\n");
 		b_i_pwd(data);
@@ -54,13 +55,21 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	else
 	{
 		path = ft_split(cmd, ' ');
+		if(path[1] == NULL)
+		{
+			if(chdir(home_dir) == 0)
+				printf(C_BRONZE"Moves to home directory\n"C_RESET);
+			else
+				perror("chdir() error3.\n");
+			return(0);
+		}
 		// printf("path[1] = %s\n", path[1]);
 		if(path[1][0] == '/')							// Absolute path
 		{
 			if(access(path[1], F_OK) == 0)
 			{
 				if(chdir(path[1]) == 0)
-					printf("Moves to new directory\n");
+					printf(C_LIGHT_BROWN"Moves to new directory\n"C_RESET);
 				else
 					perror("chdir() error.\n");
 			}
@@ -73,7 +82,7 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 			cwd = ft_strjoin(cwd, path[1]);
 			// printf("Relative path = %s\n", cwd);
 			if(chdir(path[1]) == 0)
-				printf("Moves to new directory\n");
+				printf(C_LIGHT_BROWN"Moves to new directory\n"C_RESET);
 			else
 				perror("chdir() error.\n");
 			b_i_pwd(data);

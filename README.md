@@ -197,5 +197,3 @@ Cas particulier :
 
 ISSUES :
 
-- Comment distinguer chemin absolu et chemin relatif? Puisque access semble bloquer les deux.
-- À chaque nouvel input, on recrée le vect_env, donc les mises à jour de OLDPWD ne sont pas conservées : Devrait être réglé au prochain merge.

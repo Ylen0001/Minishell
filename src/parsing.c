@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 13:55:22 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 14:02:20 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ void launch_parsing(char *input, t_data *s_data)
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-	send_builtin(s_data);
+	// send_builtin(s_data);
 }
 
 int check_spaces(char *input)

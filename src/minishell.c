@@ -6,11 +6,12 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 13:55:41 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:07:43 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/colors.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,7 +33,7 @@ int main(int argc, char **argv, char **env)
 	{
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env, ex_st_buff, *env_buff);
-		char *input = readline("minishell: ");
+		char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
 		if (g_signal_received == 2 || check_spaces(input) != 0)
 		{
 			g_signal_received = 0;
@@ -65,9 +66,9 @@ void	minishell(t_data *data)
 	init_data_2(data);
 	here_doc_detector(data);
 	init_signal(S_EXEC);
-	built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
 	{
+		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
 		if(data->v_path->size > 1) // Si + d'une cmd
 		{
 			if (pipe(data->pipefds[data->i_pipes]) == -1)

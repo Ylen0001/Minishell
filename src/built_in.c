@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 13:20:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:05:41 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ void	built_in_detector(t_data *data, char *cmd)
 	size_t	i;
 
 	i = 0;
+	// if(cmd == NULL)
+	// 	return;
+	printf("cmd = %s\n", cmd);
 	while(i < data->v_path->size)
 	{
-		// printf("cmd = %s\n", cmd);
 		if(ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 
 			|| ft_strcmp(cmd, "pwd") == 0)
 				data->built_in = 1;
@@ -30,11 +32,14 @@ void	built_in_detector(t_data *data, char *cmd)
 
 void	built_in_manager(t_data *data, char *cmd)
 {
-	if(ft_strncmp(cmd, "echo", 4) == 0)
+	char	**splited_cmd;
+
+	splited_cmd = ft_split(cmd, ' ');
+	if(ft_strncmp(splited_cmd[0], "echo\0", 5) == 0)
 		b_i_echo(cmd);
-	if(ft_strcmp(cmd, "pwd") == 0)
+	if(ft_strncmp(splited_cmd[0], "pwd\0", 4) == 0)
 		b_i_pwd(data);
-	if(ft_strncmp(cmd, "cd", 2) == 0)
+	if(ft_strncmp(splited_cmd[0], "cd\0", 3) == 0)
 		b_i_cd(data, cmd);
 	return;
 }

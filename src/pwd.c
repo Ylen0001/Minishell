@@ -6,11 +6,12 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:26:22 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/27 14:31:44 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/28 14:51:08 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/colors.h"
 
 void	b_i_pwd(t_data *data)
 {
@@ -24,8 +25,7 @@ void	b_i_pwd(t_data *data)
 		perror("getcwd");
 		exit(EXIT_FAILURE);
 	}
-	ft_putstr_fd(buffer, STDOUT_FILENO);
-	ft_putstr_fd("\n", 2);
+	printf(C_PEACH"%s\n"C_RESET, buffer);
 	data->exit_status = 0;
 	return;
 }
