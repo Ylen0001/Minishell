@@ -6,15 +6,12 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 12:08:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 15:33:58 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:44:21 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
-
-
-
 
 void		*ft_realloc(void *ptr, size_t capacity, size_t size, size_t elemSize)
 {

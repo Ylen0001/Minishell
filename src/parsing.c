@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 15:50:26 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 16:45:04 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int check_chevron(t_data *s_data)
                 return -1;
             if (s[i + 1] == '<' && s[i + 2] == '<')
                 return -1;
-        }
+		}
         i++;
     }
     return 0;
@@ -194,7 +194,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         }
         i++;
     }
-    return i;
+	return i;
 }
 
 int handle_exit_code(t_data *s_data, char *str, int x)
@@ -391,14 +391,13 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    send_builtin(s_data);
+    // send_builtin(s_data);
     // vect_print(s_data->v_path);
     // printf("redir :\n");
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-    // printf("env :\n");
-    // vect_print(s_data->vect_env);
+	// send_builtin(s_data);
 }
 
 int check_spaces(char *input)

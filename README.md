@@ -154,8 +154,51 @@ i_cmd : 1
 ---> à partir de find_path, plus aucun print ne s'affiche. 
 
 
-19/08
+22/08
 
-IMPORTANT À TRAITER : Si l'input est full whitespace, on ne rentre pas dans la fonction minishell.
+CD built_in
 
-- Size des here_doc pas ok en data->v_path->parsed->type->size
+- Gérer cd sans options
+- Gérer cd - : Retourne au directory précédent. Si le précédent est le même, on effectue tout de même le remplacement.
+- Gérer cd ~ : Retourne à la racine. En l'occurence "/home/user" (Attention à user, il faut récupérer la data dans vect_env).
+- Gérer chemin absolu et relatif.
+
+Fonctions nécéssaires :
+
+- CHDIR int chdir(const char *path) : Change le répertoire courant du processus.
+- GETCWD char *getcwd(char *buf, size_t size) : Remplit un buffer avec le chemin absolu du répertoire courant du processus. La size doit être assez grande pour récupérer le chemin absolu.
+
+Structure :
+
+1 - Récupérer le home. 						OK
+2 - Récupérer le cwd. --> get_home_value() 	OK
+3 - Récupérer le previous_directory			EN COURS.
+3b - Le mettre jour avant chaque chdir.
+4 - Gérer le changement de directory avec chdir. EN COURS.
+
+--> Si cd [1] = -
+--> Si cmd[1] = ~
+Sinon 
+--> Si chemin absolu : If access, chdir(cmd[1])
+==> Si chemin relatif : access sur join de cwd + '/' + cmd[1].
+-----> Si access == -1 : Non-existing path. 
+
+1er souci : Si on fait cd - après avoir changé de dir une première fois, on reste dans le même dir. Faut-il utiliser old_pwd et le mettre à jour? Donc free, + strdup?
+
+Pour CD - : Il faut utiliser la variable d'environnement oldpwd, et la mettre à jour avant chaque chdir.
+
+IMPORTANT : On ne doit pas refresh le pwd à chaque nouvel input. Il doit y avoir une continuité de cd tout le long de l'exécution du programme. 
+
+Cas particulier : 
+
+- cd tout court fait comme cd ~ et renvoi à home.
+- cd \42 : Cas de caractère d'échappement? // Pas besoin de gérer.
+- cd /42 : Synthax error.
+
+ISSUES :
+
+CONDITION DE LA FONCTION MINISHELL:
+
+Si une seule cmd ET non built_in ----> FORK
+Si une seule cmd ET built_in 	 ----> PARENT
+Si plusieurs cmd built_in où non ----> FORK

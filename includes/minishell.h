@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 16:20:33 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 14:30:12 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ typedef enum
 	STDOUT_REDIR = 2, // >
 	STDOUT_APPEND = 3,	// >>
 }	e_redir;
+
+typedef enum {
+	S_HERE_DOC,
+	S_EXEC,
+	S_PROMPT,
+} type_of_signals;
 
 typedef struct s_vectint {		// 1 type = un où plusieurs type de redir 
     int *redir_type; // Enum
@@ -84,6 +90,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			cd_trigger;
 	int			status;
 	int			exit_status;
 	size_t 		hd_it;
@@ -146,12 +153,16 @@ char		*lil_gnl_initializer(int *i, int *j, char *tmp);
 // int		is_dir(t_data *data);
 // void		here_doc_error(void);
 
-typedef enum {
-	S_HERE_DOC,
-	S_EXEC,
-	S_PROMPT,
-} type_of_signals;
-
+/* ABOUT BUILT_IN */
+void	built_in_detector(t_data *data, char *cmd);
+void	built_in_manager(t_data *data, char *cmd);
+int 	b_i_cd(t_data *data, char *cmd);
+char 	*get_oldpwd_value(t_data *data, char *last_dir);
+void	update_oldpwd_env(t_data *data, char *updated_oldpwd);
+char	*get_home_value(t_data *data, char *home_dir);
+void	b_i_echo(char *cmd);
+int		flag_is_ok(char *flag);
+void	b_i_pwd(t_data *data);
 
 /* Prompt display + signaux */
 
@@ -187,8 +198,9 @@ t_vectstr *vectstr_dup(t_vectstr *vect);
 void free_t_vectstr(t_vectstr *vect);
 void *ft_realloc(void *ptr, size_t capacity, size_t size, size_t elemSize);
 void builtin_unset(t_data *data, char *cmd);
-void builtin_exit(t_data *s_data);
+void builtin_exit(t_data *s_data, char *cmd);
 void builtin_env(t_data *s_data);
+void builtin_export(t_data *s_data, char *cmd);
 
 #define vect_print(param) _Generic((param), \
 	t_vector *: vector_print,	\

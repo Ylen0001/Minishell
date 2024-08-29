@@ -6,11 +6,12 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/27 10:50:36 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 17:04:20 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "../includes/colors.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,7 +33,7 @@ int main(int argc, char **argv, char **env)
 	{
 		rl_event_hook = rl_event_dummy;
 		s_data = init_data(env, ex_st_buff, *env_buff);
-		char *input = readline("minishell: ");
+		char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
 		if (g_signal_received == 2 || check_spaces(input) != 0)
 		{
 			g_signal_received = 0;
@@ -47,7 +48,7 @@ int main(int argc, char **argv, char **env)
 		}
 		add_history(input);
 		launch_parsing(input, &s_data);
-		// minishell(&s_data);
+		minishell(&s_data);
 		// garbage_collector(&s_data);
 		env_buff = vectstr_dup(s_data.vect_env);
 		ex_st_buff = s_data.exit_status; 
@@ -67,6 +68,7 @@ void	minishell(t_data *data)
 	init_signal(S_EXEC);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
 	{
+		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
 		if(data->v_path->size > 1) // Si + d'une cmd
 		{
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
@@ -130,6 +132,8 @@ void child(t_data *data, size_t it_cmd)
 	char 	*path;
 	char 	**m_cmd;
 
+	built_in_detector(data, cmd->data[it_cmd]);
+
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -139,24 +143,33 @@ void child(t_data *data, size_t it_cmd)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
 	{
-		// dprintf(2, "ici\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
 	}
 	if(data->pipe_trig)
 	{
-		// dprintf(2, "OK, pid = %d\n", getpid());
 		close(data->pipefds[data->i_pipes][1]);
 		close(data->pipefds[data->i_pipes][0]);
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	m_cmd = ft_split(cmd->data[0], ' ');
-	if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
-		execve(m_cmd[0], m_cmd, data->vect_env->data);
-	path = find_path(m_cmd[0], data->vect_env->data);
-	dprintf(2, "cmd = %s\n", m_cmd[0]);
-	execve(path, m_cmd, data->vect_env->data);
+	if(data->built_in == 1)
+	{
+		// dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
+		built_in_manager(data, cmd->data[it_cmd]);
+		data->built_in = 0;
+	}
+	else if(data->built_in == 0)
+	{
+		m_cmd = ft_split(cmd->data[0], ' ');
+		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
+			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
+				exit(EXIT_FAILURE);
+		path = find_path(m_cmd[0], data->vect_env->data);
+		// dprintf(2, "cmd = %s\n", m_cmd[0]);
+		if(execve(path, m_cmd, data->vect_env->data) == -1)
+			exit(EXIT_FAILURE);
+	}
 	// perror("");
 	// dprintf(2, "cmd = %s", cmd->data[0]);
 }
@@ -197,7 +210,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 	}
 }
-		// }
+
 void	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_CREAT | O_TRUNC);
