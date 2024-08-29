@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 16:45:04 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:28:52 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ int handle_double_quotes(t_data *s_data, const char *s, char *str, int i, int *x
     while (s[i] && s[i] != '"')
     {
         i = handle_variable_expansion(s_data, s, str, i, x);
-        if (s[i] != '$' && s[i] != '"')
+        if (s[i] != '"')
         {
             str[*x] = s[i];
             i++;

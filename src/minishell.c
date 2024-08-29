@@ -6,11 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/28 17:06:26 by ylenoel          ###   ########.fr       */
-=======
-/*   Updated: 2024/08/28 17:04:20 by aberion          ###   ########.fr       */
->>>>>>> Amaury
+/*   Updated: 2024/08/29 16:16:45 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,45 +19,55 @@ volatile int	g_signal_received = 0;
 
 int main(int argc, char **argv, char **env) 
 {
-	(void)argv;
-	if (argc != 1 || env == NULL || *env == NULL)
-		exit(EXIT_FAILURE);
-	t_data s_data;
-	t_vectstr *env_buff;
-	int ex_st_buff;
+    (void)argv;
+    if (argc != 1 || env == NULL || *env == NULL)
+        exit(EXIT_FAILURE);
+    t_data s_data;
+    t_vectstr *env_buff;
+    int ex_st_buff;
 
-	env_buff = init_vect_str();
-	init_env(env_buff, env);
-	ex_st_buff = 0;
-	while (init_prompt() && init_signal(S_PROMPT))
-	{
-		rl_event_hook = rl_event_dummy;
-		s_data = init_data(env, ex_st_buff, *env_buff);
-		// char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
-		char *input = readline("minishell: ");
-		if (g_signal_received == 2 || check_spaces(input) != 0)
-		{
-			g_signal_received = 0;
-			free_t_data(&s_data);
-			continue;
-		}
-		if (!input)
-		{
-			free_t_data(&s_data);
-			free_t_vectstr(env_buff);
-			exit(1);
-		}
-		add_history(input);
-		launch_parsing(input, &s_data);
-		minishell(&s_data);
-		// garbage_collector(&s_data);
-		env_buff = vectstr_dup(s_data.vect_env);
-		ex_st_buff = s_data.exit_status; 
-		free_t_data(&s_data);
-	}
-	garbage_collector(&s_data);
-	rl_clear_history();
-	return (0);
+    env_buff = init_vect_str();
+    init_env(env_buff, env);
+    ex_st_buff = 0;
+    char *input = NULL;
+    while (init_signal(S_PROMPT))
+    {
+        input = NULL;
+        rl_event_hook = rl_event_dummy;
+        s_data = init_data(env, ex_st_buff, *env_buff);
+        // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+        if (isatty(STDIN_FILENO)) {
+            input = readline("minishell: ");
+        } else {
+            printf("minishell: \n");
+            char buffer[1024];
+            if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+                input = strdup(buffer);
+            }
+        }
+        if (g_signal_received == 2 || check_spaces(input) != 0)
+        {
+            g_signal_received = 0;
+            free_t_data(&s_data);
+            continue;
+        }
+        if (!input)
+        {
+            free_t_data(&s_data);
+            free_t_vectstr(env_buff);
+            exit(1);
+        }
+        add_history(input);
+        launch_parsing(input, &s_data);
+        minishell(&s_data);
+        // garbage_collector(&s_data);
+        env_buff = vectstr_dup(s_data.vect_env);
+        ex_st_buff = s_data.exit_status; 
+        free_t_data(&s_data);
+    }
+    garbage_collector(&s_data);
+    rl_clear_history();
+    return (0);
 }
 
 void	minishell(t_data *data)
