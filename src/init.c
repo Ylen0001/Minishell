@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 13:57:52 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/29 14:00:52 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	init_data_2(t_data *data)
 	size_t	i;
 
 	i = 0;
+	data->status = 0;
 	data->cd_trigger = 0;
 	data->hd_names = NULL;
 	data->i_pipes = 0;
@@ -125,7 +126,8 @@ void	init_data_2(t_data *data)
 		ft_putstr_fd("Malloc failed\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	data->pids = malloc(data->nbr_cmd * sizeof(pid_t) + 1);
+	printf("nbr_cmd = %zu\n", data->nbr_cmd);
+	data->pids = calloc((data->nbr_cmd + 1), sizeof(pid_t));
 	if (data->pids == NULL)
 	{
 		ft_putstr_fd("Pid malloc failed\n", 2);

@@ -6,10 +6,10 @@
 }
 
 {
-   ignore_all_grep_leaks
+   ignore_usrbin
    Memcheck:Leak
    ...
-   obj:*grep*
+   obj:/usr/bin/*
 }
 
 {

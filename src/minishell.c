@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/29 16:16:45 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:35:08 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
-			dprintf(2, "STDIN_REDIR redir_f : %s\n", redir_f[it]);
+			// dprintf(2, "STDIN_REDIR redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
@@ -207,7 +207,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
+			// dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
@@ -216,7 +216,7 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else // STDOUT_REDIR où STDOUT_APPEND
 		{
-			dprintf(2, "STDOUT redir_f : %s\n", redir_f[it]);
+			// dprintf(2, "STDOUT redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
