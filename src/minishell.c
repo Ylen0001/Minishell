@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/29 16:35:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:37:17 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,11 @@ void	minishell(t_data *data)
 	init_data_2(data);
 	here_doc_detector(data);
 	init_signal(S_EXEC);
-	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
+	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)
 	{
 		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
-		if(data->v_path->size > 1) // Si + d'une cmd
+		if(data->v_path->size > 1)
 		{
-			// printf("HELLO\n");
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
 				perror("");
@@ -90,12 +89,12 @@ void	minishell(t_data *data)
 				// exit(EXIT_FAILURE);
 			}
 			data->pipe_trig = 1;
-			if(data->v_path->size >= 3 && data->i_pipes >= 2)  // Fermeture des pipes qui ne sont plus utilisés
+			if(data->v_path->size >= 3 && data->i_pipes >= 2)
 			{
 				close(data->pipefds[data->i_pipes - 2][0]);
 				close(data->pipefds[data->i_pipes - 2][1]);
 			}
-			data->pids[data->i_cmd] = fork(); // Création process enfant
+			data->pids[data->i_cmd] = fork();
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
@@ -104,8 +103,7 @@ void	minishell(t_data *data)
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
 		{
-			// dprintf(2, "ICI\n");		// IF une seule cmd ET c'est un BUILT-IN
-			data->pids[data->i_cmd] = fork(); // Création process enfant
+			data->pids[data->i_cmd] = fork();
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
@@ -147,17 +145,17 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 
 	built_in_detector(data, cmd->data[it_cmd]);
 
-	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
+	if (data->i_pipes > 0)
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
-			ft_putstr_fd("Error : Dup2 STDIN\n", 2);
+			perror("Dup2: Error\n");
 		close(data->pipefds[data->i_pipes - 1][0]);
 		close(data->pipefds[data->i_pipes - 1][1]);
 	}
-	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
+	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))
 	{
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
-			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
+			perror("Dup2: Error\n");
 	}
 	if(data->pipe_trig)
 	{
@@ -168,7 +166,6 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		redirections(data, redir_t, redir_f->data);
 	if(data->built_in == 1)
 	{
-		// dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
 		built_in_manager(data, cmd->data[it_cmd]);
 		if(data->v_path->size != 1)
 			exit(EXIT_SUCCESS);
@@ -178,14 +175,17 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		m_cmd = ft_split(cmd->data[0], ' ');
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
+			{
+				perror("execve: Error\n");
 				exit(EXIT_FAILURE);
+			}
 		path = find_path(m_cmd[0], data->vect_env->data);
-		// dprintf(2, "cmd = %s\n", m_cmd[0]);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
+		{
+			perror("execve: Error\n");
 			exit(EXIT_FAILURE);
+		}
 	}
-	// perror("");
-	// dprintf(2, "cmd = %s", cmd->data[0]);
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
@@ -199,31 +199,30 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
-			// dprintf(2, "STDIN_REDIR redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
+				perror("Dup2: STDIN REDIR failed.\n");
 			close(data->a_file);
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			// dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
+				perror("Dup2: HERE_DOC REDIR failed.\n");
 			close(data->a_file);
 			hd_it++;
 		}
-		else // STDOUT_REDIR où STDOUT_APPEND
+		else
 		{
-			// dprintf(2, "STDOUT redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
+				perror("Dup2: STDOUT REDIR failed.\n");
 			close(data->a_file);
 		}
 	}
 }
+
+
 
 void	open_file_minishell(t_data *data, int type, char *file)
 {
@@ -235,10 +234,10 @@ void	open_file_minishell(t_data *data, int type, char *file)
 	{
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
-			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);
+			perror("Error : file Redir mode opening failed.\n");
 		if(data->a_file == 0)
-			ft_putstr_fd("Error : Open failed\n", 2);
+			perror("Error : Open failed\n");
 	}
 	else
-		ft_putstr_fd("File : Access Denied.\n", 2);
+		perror("File : Access Denied.\n");
 }
