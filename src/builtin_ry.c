@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 13:34:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/28 17:03:27 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ int check_presence(t_vectstr *env, char *to_check)
     }
     return 0;
 }
-void builtin_export(t_data *s_data)
+void builtin_export(t_data *s_data, char *cmd)
 {
     int i = 0;
     int j = 0;
-    char *s = s_data->full_string;
+    char *s = cmd;
     while (s[i] && s[i] == ' ')
         i++;
     while(s[i] && s[i] != ' ')
@@ -106,10 +106,13 @@ void builtin_export(t_data *s_data)
     }
 }
 
-void send_builtin(t_data *s_data)
-{
-    char *checker = ft_strnstr(s_data->full_string, "export", ft_strlen(s_data->full_string));
-    if(checker[6] == '\0' || checker[6] == ' ' || checker[6] == '\n')
-        builtin_export(s_data);
-}
+// void send_builtin(t_data *s_data)
+// {
+//     //char *checker = ft_strnstr(s_data->full_string, "export", ft_strlen(s_data->full_string));
+//     // if(checker[6] && (checker[6] == '\0' || checker[6] == ' ' || checker[6] == '\n'))
+//     //     builtin_export(s_data);
+//     builtin_unset(s_data, s_data->full_string);
+//     if(strcmp(s_data->v_path->parsed[0].cmd[0].data[0], "exit") == 0)
+//         builtin_exit(s_data);
+// }
 

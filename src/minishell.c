@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/28 17:06:26 by ylenoel          ###   ########.fr       */
+=======
+/*   Updated: 2024/08/28 17:04:20 by aberion          ###   ########.fr       */
+>>>>>>> Amaury
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +139,8 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	char 	*path;
 	char 	**m_cmd;
 
-	// built_in_detector(data, cmd->data[it_cmd]);
+	built_in_detector(data, cmd->data[it_cmd]);
+
 	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
