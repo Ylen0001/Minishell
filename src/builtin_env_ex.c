@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env_ex.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/29 14:37:41 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:11:02 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ void builtin_env(t_data *s_data)
     }
 }
 
-void builtin_exit(t_data *s_data, char *cmd)
-{
-    free_t_data(s_data);
-    exit(EXIT_SUCCESS);
-}
+// void builtin_exit(t_data *s_data, char *cmd)
+// {
+// 	(void)cmd;
+//     free_t_data(s_data);
+//     exit(EXIT_SUCCESS);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/29 14:38:52 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:11:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	built_in_detector(t_data *data, char *cmd)
 	{
 		if(ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 
 			|| ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "export", 6) == 0
-			|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "exit") == 0
-			|| ft_strcmp(cmd, "env") == 0)
+			|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0) 
 				data->built_in = 1;
 		i++;
 	}
@@ -47,10 +46,12 @@ void	built_in_manager(t_data *data, char *cmd)
 		builtin_export(data, cmd);
 	if(ft_strncmp(splited_cmd[0], "unset\0", 6) == 0)
 		builtin_unset(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
-		builtin_exit(data, cmd);
+	// if(ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
+	// 	builtin_exit(data, cmd);
 	if(ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
 		builtin_env(data);
 
 	return;
 }
+
+// || ft_strcmp(cmd, "exit") == 0)
