@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 15:38:02 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:54:20 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff)
 	// self.hd_it = 0;
     self.full_string = NULL;
     self.env = NULL;
+    self.check_quotes_space = 0;
     self.exit_status = ex_data_buff;
     self.v_path = init_vector();
     self.vect_env = init_vect_str();

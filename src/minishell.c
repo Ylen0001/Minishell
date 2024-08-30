@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 15:37:58 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:41:05 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,13 @@ int main(int argc, char **argv, char **env)
         rl_event_hook = rl_event_dummy;
         s_data = init_data(env, ex_st_buff, *env_buff);
         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
-<<<<<<< HEAD
-		if (isatty(STDIN_FILENO))
-=======
         // input = readline("minishell: ");
-		if (isatty(STDIN_FILENO)) {
->>>>>>> main
+		if (isatty(STDIN_FILENO))
             input = readline("minishell: ");
 		else
 		{
-            char buffer[1024];
             printf("minishell: \n");
+            char buffer[1024];
             if (fgets(buffer, sizeof(buffer), stdin) != NULL)
                 input = ft_strdup(buffer);
         }
