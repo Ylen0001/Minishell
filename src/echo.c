@@ -6,86 +6,58 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 17:03:33 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:43:34 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/minishell.h"
 
-int		flag_is_ok(char *flag)
-{
-	size_t i;
 
-	i = 1;
-	if(flag[0] != '-')
-		return (0);
-	while(flag[i])
-	{
-		if(flag[i] != 'n')
-			return (0);
-		i++;
-	}
-	return (1);
+void b_i_echo(t_data *data, char *cmd)
+{
+    char *splited;
+    int newline = 1;
+
+    splited = clean_input(data, cmd);
+    if (splited == NULL)
+        return;
+
+    if (data->flag_echo_trig == 1)
+        newline = 0;
+
+    printf("%s", splited);
+    if (newline)
+        printf("\n");
+
+    free(splited); // Libère la mémoire allouée par strdup
+    data->exit_status = 0;
 }
 
-void	b_i_echo(t_data *data, char *cmd)
-{
-	// char 	**splited;
-	char 	*splited;
-	int		newline;
-	size_t	i;
-
-	newline = 1;
-	splited = clean_input(data, cmd);
-	if(splited == NULL)
-		return ;
-	// splited = ft_split(cmd, ' ');	
-	i = 1;
-	if(data->flag_echo_trig == 1)
-		newline = 0;
-	while(splited)
-		printf("%s", splited);
-	if (newline)
-		printf("\n");
-	data->exit_status = 0;
-	// builtin_exit(data, "OUI");
-	return;
-}
 
 char *clean_input(t_data *data, char *cmd)
 {
-	char *clean_input;
-	size_t i;
-	size_t j;
+    size_t i = 5; // Skips "echo "
+    while (cmd[i] == ' ' || cmd[i] == '\t') // Skip les espaces après "echo"
+        i++;
 
-	clean_input = NULL;
-	i = 0;
-	j = 0;
+    if (cmd[i] == '-')
+    {
+        i++;
+        while (cmd[i] == 'n')
+            i++;
+        if (cmd[i] == ' ' || cmd[i] == '\t')
+        {
+            i++;
+            data->flag_echo_trig = 1; // Option -n détectée
+        }
+        else
+            i = 5; // Pas d'option valide, on reset à après "echo"
+    }
 
-	while(cmd[i])
-	{
-		if(strncmp(cmd, "echo ", 5)) // On skip echo
-			i += 5;
-		if(cmd[i] == '-') // Si option
-			i++;
-		while(cmd[i] == 'n') // Tant que n 
-			i++;
-		if (cmd[i] == ' ' && cmd[i] == '\t')	// On skip le last whitespace avant la str à echo.
-		{
-			i++;
-			data->flag_echo_trig = 1;
-		}
-		else									// Si invalid flag.
-			i = 5;
-		clean_input = ft_calloc((ft_strlen(cmd) - i) + 1, sizeof(char));
-		while(cmd[i]) // On cpy le reste de cmd dans clean_input.
-		{
-			clean_input[j] = cmd[i];
-			j++;
-			i++; 
-		}
-		return (clean_input);
-	}
-	return (NULL);
+    while (cmd[i] == ' ' || cmd[i] == '\t') // Skip espaces après les options
+        i++;
+
+    // Alloue et copie la chaîne nettoyée
+    return strdup(cmd + i); // strdup gère déjà l'allocation et la copie
 }

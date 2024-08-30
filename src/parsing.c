@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/29 16:28:52 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 16:46:21 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,8 @@ int handle_double_quotes(t_data *s_data, const char *s, char *str, int i, int *x
     }
     if (s[i] == '"')
         i++;
+    if (s[i] == '\0')
+        s_data->check_quotes_space = 1;
     return i;
 }
 
@@ -274,7 +276,7 @@ void path_to_vect(t_data *s_data, int i)
     s_data->v_path->parsed[s_data->v_path->size] = init_parsed();
     while (s[i])
     {
-        if (s[i] == '|')
+        if (s[i] == '|' || s[i] == '\n')
         {
             if (str[x - 1] == ' ' || str[x - 1] == '\t')
             {
@@ -303,6 +305,8 @@ void path_to_vect(t_data *s_data, int i)
             }
             if (s[i] == '\'')
                 i++;
+            if (s[i] == '\0')
+                s_data->check_quotes_space = 1;
         }
         else if (s[i] == '"')
             i = handle_double_quotes(s_data, s, str, i, &x);
@@ -331,7 +335,7 @@ void path_to_vect(t_data *s_data, int i)
             }    
         }
     }
-    if (str[x - 1] == ' ' || str[x - 1] == '\t')
+    if ((str[x - 1] == ' ' || str[x - 1] == '\t') && s_data->check_quotes_space != 1)
     {
         x--;
         while (str[x] == ' ' || str[x] == '\t')
@@ -340,6 +344,7 @@ void path_to_vect(t_data *s_data, int i)
             x--;
         }
     }
+    s_data->check_quotes_space = 0;
     vect_happend(s_data->v_path, str);
 }
 
@@ -397,7 +402,6 @@ void launch_parsing(char *input, t_data *s_data)
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-	// send_builtin(s_data);
 }
 
 int check_spaces(char *input)

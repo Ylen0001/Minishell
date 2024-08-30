@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 16:57:44 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:44:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ int main(int argc, char **argv, char **env)
         s_data = init_data(env, ex_st_buff, *env_buff);
         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
         // input = readline("minishell: ");
-		if (isatty(STDIN_FILENO)) {
+		if (isatty(STDIN_FILENO))
             input = readline("minishell: ");
-        } else {
+		else
+		{
             printf("minishell: \n");
             char buffer[1024];
-            if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-                input = strdup(buffer);
-            }
+            if (fgets(buffer, sizeof(buffer), stdin) != NULL)
+                input = ft_strdup(buffer);
         }
 		if (!input){
 			break;

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 16:46:35 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:45:00 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_vector { 		// 1 v_path = 1 input
 	size_t capacity;
 }	t_vector; // v_path
 
+
 typedef struct s_data // Structure Globale
 {
 
@@ -90,6 +91,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			flag_echo_trig;
 	int			cd_trigger;
 	int			status;
 	int			exit_status;
@@ -119,13 +121,14 @@ typedef struct s_data // Structure Globale
 	char		c;
 	int			errno; // à remplir avec waitpid et avec signal
 	size_t		built_in;
-	int			flag_echo_trig;
+	// int			flag_echo_trig;
 	
 	/* Pour le parsing */
 	t_vectstr *vect_env;
 	t_vector 	*v_path;
 	char *full_string; // Str complète avec les redirections
 	char **env;
+	int check_quotes_space;
 }				t_data;
 
 
@@ -165,7 +168,7 @@ char 	*get_oldpwd_value(t_data *data, char *last_dir);
 void	update_oldpwd_env(t_data *data, char *updated_oldpwd);
 char	*get_home_value(t_data *data, char *home_dir);
 void	b_i_echo(t_data *data, char *cmd);
-char 	*clean_input(t_data *data, char *cmd);
+char	*clean_input(t_data *data, char *cmd);
 int		flag_is_ok(char *flag);
 void	b_i_pwd(t_data *data);
 

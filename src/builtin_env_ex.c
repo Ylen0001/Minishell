@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env_ex.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/29 18:43:33 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:38:11 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 long long	c_toll(const char *str)
 {
 	int				minus;
-	unsigned int	result;
+	size_t	result;
 	int				i;
 
 	i = 0;
-	result = 0;
+	result = 0;           
 	minus = 1;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == 32)
 		i++;
@@ -49,6 +49,17 @@ void builtin_env(t_data *s_data)
         printf("%s\n", s_data->vect_env->data[i]);
         i++;
     }
+}
+
+int check_args_ex(char *cmd)
+{
+	char **splitted;
+	
+	splitted = ft_split(cmd, ' ');
+	if (splitted[2])
+		return -1;
+	
+	return 0;
 }
 
 void builtin_exit(t_data *s_data, char *cmd)

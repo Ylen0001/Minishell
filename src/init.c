@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 16:25:47 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:44:32 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,10 @@ t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff)
     (void)env;
     
 	// self.hd_it = 0;
+	self.flag_echo_trig = 0;
     self.full_string = NULL;
     self.env = NULL;
+    self.check_quotes_space = 0;
     self.exit_status = ex_data_buff;
     self.v_path = init_vector();
     self.vect_env = init_vect_str();
@@ -117,7 +119,7 @@ void	init_data_2(t_data *data)
 	data->built_in = 0;
 	data->k = 0;
 	data->pipe_trig = 0;
-	data->flag_echo_trig = 0;
+	// data->flag_echo_trig = 0;
 	i = 0;
 	data->pipefds = ft_calloc( data->v_path->size, sizeof(int *));
 	while (i < data->v_path->size)
