@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/29 16:28:52 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:36:34 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ void path_to_vect(t_data *s_data, int i)
     s_data->v_path->parsed[s_data->v_path->size] = init_parsed();
     while (s[i])
     {
-        if (s[i] == '|')
+        if (s[i] == '|' || s[i] == '\n')
         {
             if (str[x - 1] == ' ' || str[x - 1] == '\t')
             {
@@ -392,12 +392,11 @@ void launch_parsing(char *input, t_data *s_data)
     }
     path_to_vect(s_data, 0);
     // send_builtin(s_data);
-    // vect_print(s_data->v_path);
+    vect_print(s_data->v_path);
     // printf("redir :\n");
     // vect_print(s_data->v_path->parsed->redir);
     // printf("type :\n");
     // vect_print(s_data->v_path->parsed->type);
-	// send_builtin(s_data);
 }
 
 int check_spaces(char *input)
