@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/29 14:38:33 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/29 16:53:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,9 @@ bool		status();
 void		child(t_data *data, size_t idx, int built_in);
 void		open_file_minishell(t_data *data, int type, char *file);
 void		redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f);
+void		stdout_redir(t_data *data, int redir_type, char *redir_file);
+void		heredoc_redir(t_data *data, int redir_type, char *redir_file);
+void		stdin_redir(t_data *data, int redir_type, char *redir_file);
 void		here_doc_detector(t_data *data);
 void		here_doc_case(t_data *data, char *limiter);
 int			lil_gnl(char **line, t_data *data);
@@ -160,7 +163,7 @@ int 	b_i_cd(t_data *data, char *cmd);
 char 	*get_oldpwd_value(t_data *data, char *last_dir);
 void	update_oldpwd_env(t_data *data, char *updated_oldpwd);
 char	*get_home_value(t_data *data, char *home_dir);
-void	b_i_echo(char *cmd);
+void	b_i_echo(t_data *data, char *cmd);
 int		flag_is_ok(char *flag);
 void	b_i_pwd(t_data *data);
 

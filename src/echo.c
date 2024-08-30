@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 14:18:34 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 13:08:44 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		flag_is_ok(char *flag)
 	return (1);
 }
 
-void	b_i_echo(char *cmd)
+void	b_i_echo(t_data *data, char *cmd)
 {
 	char 	**splited;
 	int		newline;
@@ -52,5 +52,7 @@ void	b_i_echo(char *cmd)
 	}
 	if (newline)
 		printf("\n");
+	data->exit_status = 0;
+	// builtin_exit(data, "OUI");
 	return;
 }

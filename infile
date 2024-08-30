@@ -1,1 +1,83 @@
-Bonjour a vous
+
+void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
+{
+	size_t it;
+	size_t hd_it;
+
+	it = -1;
+	hd_it = 0;
+	while(++it < redir_t->size)
+	{
+		if(redir_t->redir_type[it] == STDIN_REDIR)
+			stdin_redir(data, redir_t->redir_type[it], redir_f[it]);
+		else if(redir_t->redir_type[it] == HERE_DOC)
+			{
+				heredoc_redir(data, redir_t->redir_type[it], data->hd_names[hd_it]);
+				hd_it++;
+			}
+		else
+			stdout_redir(data, redir_t->redir_type[it], redir_f[it]);
+	}
+}
+
+void	stdin_redir(t_data *data, int redir_type, char *redir_file)
+{
+	open_file_minishell(data, redir_type, redir_file);
+	if(dup2(data->a_file, STDIN_FILENO) == -1)
+		perror("Dup2: STDIN REDIR failed.\n");
+	close(data->a_file);
+}
+
+void	stdout_redir(t_data *data, int redir_type, char *redir_file)
+{
+	open_file_minishell(data, redir_type, redir_file);
+	if(dup2(data->a_file, STDIN_FILENO) == -1)
+		perror("Dup2: STDOUT REDIR failed.\n");
+	close(data->a_file);
+}
+
+void	heredoc_redir(t_data *data, int redir_type, char *redir_file)
+{
+	open_file_minishell(data, redir_type, redir_file);
+	if(dup2(data->a_file, STDIN_FILENO) == -1)
+		perror("Dup2: HERE_DOC REDIR failed.\n");
+	close(data->a_file);
+}
+
+
+
+
+
+void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
+{
+	size_t it;
+	size_t hd_it;
+
+	it = -1;
+	hd_it = 0;
+	while(++it < redir_t->size)
+	{
+		if(redir_t->redir_type[it] == STDIN_REDIR)
+		{
+			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
+			if(dup2(data->a_file, STDIN_FILENO) == -1)
+				perror("Dup2: STDIN REDIR failed.\n");
+			close(data->a_file);
+		}
+		else if(redir_t->redir_type[it] == HERE_DOC)
+		{
+			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
+			if(dup2(data->a_file, STDIN_FILENO) == -1)
+				perror("Dup2: HERE_DOC REDIR failed.\n");
+			close(data->a_file);
+			hd_it++;
+		}
+		else
+		{
+			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
+			if(dup2(data->a_file, STDOUT_FILENO) == -1)
+				perror("Dup2: STDOUT REDIR failed.\n");
+			close(data->a_file);
+		}
+	}
+}

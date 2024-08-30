@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 12:32:48 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:37:58 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,41 @@
 #include <stdlib.h>
 
 volatile int	g_signal_received = 0;
+
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff){
+        if (g_signal_received == 2 || check_spaces(input) != 0)
+        {
+            g_signal_received = 0;
+            free_t_data(&s_data);
+            return 1;
+        }
+		// printf("input: %s\n", input);
+        if (!input)		
+        {
+            free_t_data(&s_data);
+            free_t_vectstr(env_buff);
+            exit(1);
+        }
+        add_history(input);
+        launch_parsing(input, &s_data);
+        minishell(&s_data);
+        // garbage_collector(&s_data);
+        env_buff = vectstr_dup(s_data.vect_env);
+        ex_st_buff = s_data.exit_status; 
+	return (0);
+}
+
+
+void free_charchar(char **s){
+	int i;
+	
+	i = 0;
+	while(s[i]){
+		free(s[i]);
+		i++;
+	}
+	free(s);
+}
 
 int main(int argc, char **argv, char **env) 
 {
@@ -36,7 +71,12 @@ int main(int argc, char **argv, char **env)
         rl_event_hook = rl_event_dummy;
         s_data = init_data(env, ex_st_buff, *env_buff);
         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+<<<<<<< HEAD
 		if (isatty(STDIN_FILENO))
+=======
+        // input = readline("minishell: ");
+		if (isatty(STDIN_FILENO)) {
+>>>>>>> main
             input = readline("minishell: ");
 		else
 		{
@@ -45,44 +85,103 @@ int main(int argc, char **argv, char **env)
             if (fgets(buffer, sizeof(buffer), stdin) != NULL)
                 input = ft_strdup(buffer);
         }
-        if (g_signal_received == 2 || check_spaces(input) != 0)
-        {
-            g_signal_received = 0;
-            free_t_data(&s_data);
-            continue;
-        }
-        if (!input)
-        {
-            free_t_data(&s_data);
-            free_t_vectstr(env_buff);
-            exit(1);
-        }
-        add_history(input);
-        launch_parsing(input, &s_data);
-        minishell(&s_data);
-        // garbage_collector(&s_data);
-        env_buff = vectstr_dup(s_data.vect_env);
-        ex_st_buff = s_data.exit_status; 
-        free_t_data(&s_data);
+		if (!input){
+			break;
+		}
+		
+		char **input_list = ft_split(input, '\n');
+		for (int i = 0; input_list[i]; i++){
+			tmp(input_list[i], s_data, env_buff, ex_st_buff);
+		}
+		
+		free_charchar(input_list);
+		//free input
+
+        // if (isatty(STDIN_FILENO)) {
+        // } else {
+        //     printf("minishell: \n");
+        //     char buffer[1024];
+        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        //         input = strdup(buffer);
+        //     }
+        // }
+		
     }
-    garbage_collector(&s_data);
+	free_t_data(&s_data);
+    // garbage_collector(&s_data);
     rl_clear_history();
     return (0);
 }
 
+
+// int main(int argc, char **argv, char **env) 
+// {
+//     (void)argv;
+//     if (argc != 1 || env == NULL || *env == NULL)
+//         exit(EXIT_FAILURE);
+//     t_data s_data;
+//     t_vectstr *env_buff;
+//     int ex_st_buff;
+
+//     env_buff = init_vect_str();
+//     init_env(env_buff, env);
+//     ex_st_buff = 0;
+//     char *input = NULL;
+//     while (init_signal(S_PROMPT))
+//     {
+//         input = NULL;
+//         rl_event_hook = rl_event_dummy;
+//         s_data = init_data(env, ex_st_buff, *env_buff);
+//         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+        // if (isatty(STDIN_FILENO)) {
+        //     input = readline("minishell: ");
+        // } else {
+        //     printf("minishell: \n");
+        //     char buffer[1024];
+        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        //         input = strdup(buffer);
+        //     }
+        // }
+//         if (g_signal_received == 2 || check_spaces(input) != 0)
+//         {
+//             g_signal_received = 0;
+//             free_t_data(&s_data);
+//             continue;
+//         }
+//         if (!input)		
+//         {
+//             free_t_data(&s_data);
+//             free_t_vectstr(env_buff);
+//             exit(1);
+//         }
+//         add_history(input);
+//         launch_parsing(input, &s_data);
+//         minishell(&s_data);
+//         // garbage_collector(&s_data);
+//         env_buff = vectstr_dup(s_data.vect_env);
+//         ex_st_buff = s_data.exit_status; 
+//         free_t_data(&s_data);
+//     }
+//     garbage_collector(&s_data);
+//     rl_clear_history();
+//     return (0);
+// }
+
+
 void	minishell(t_data *data)
 {
 	size_t it;
-	
+
 	init_data_2(data);
 	here_doc_detector(data);
 	init_signal(S_EXEC);
-	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size) // while(data->i_cmd < data->nbr_cmd)
+	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)  //  Size = 2
 	{
-		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
-		if(data->v_path->size > 1) // Si + d'une cmd
+		built_in_detector(data, data->v_path->parsed[data->i_cmd].cmd->data[0]);
+		// printf(C_ROSE"i_cmd = %zu\nsize = %zu\n"C_RESET, data->i_cmd, data->v_path->size);
+		if(data->v_path->size > 1)
 		{
-			// printf("HELLO\n");
+			// printf("BAD\n");
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
 				perror("");
@@ -90,12 +189,12 @@ void	minishell(t_data *data)
 				// exit(EXIT_FAILURE);
 			}
 			data->pipe_trig = 1;
-			if(data->v_path->size >= 3 && data->i_pipes >= 2)  // Fermeture des pipes qui ne sont plus utilisés
+			if(data->v_path->size >= 3 && data->i_pipes >= 2)
 			{
 				close(data->pipefds[data->i_pipes - 2][0]);
 				close(data->pipefds[data->i_pipes - 2][1]);
 			}
-			data->pids[data->i_cmd] = fork(); // Création process enfant
+			data->pids[data->i_cmd] = fork();
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
@@ -104,8 +203,8 @@ void	minishell(t_data *data)
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
 		{
-			// dprintf(2, "ICI\n");		// IF une seule cmd ET c'est un BUILT-IN
-			data->pids[data->i_cmd] = fork(); // Création process enfant
+			// printf("Bad\n");
+			data->pids[data->i_cmd] = fork();
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
 			if (data->pids[data->i_cmd] == 0)
@@ -126,9 +225,9 @@ void	minishell(t_data *data)
 	it = -1;
 	while(++it < data->i_cmd)
 	{
-		waitpid(data->pids[it], &data->status, 0);
-		if(WIFEXITED(data->status))
-			data->exit_status = WEXITSTATUS(data->status);
+		waitpid(data->pids[it], &data->exit_status, 0);
+		if(WIFEXITED(data->exit_status))
+			data->exit_status = WEXITSTATUS(data->exit_status);
 		else
 			data->exit_status = 1;
 	}
@@ -145,20 +244,21 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	char 	*path;
 	char 	**m_cmd;
 
-	built_in_detector(data, cmd->data[it_cmd]);
-
-	if (data->i_pipes > 0) 							// If not first pipe [ENTRE LES DEUX]
+	// built_in_detector(data, cmd->data[it_cmd]);
+	if (data->i_pipes > 0)
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
-			ft_putstr_fd("Error : Dup2 STDIN\n", 2);
+			perror("Dup2: Error\n");
 		close(data->pipefds[data->i_pipes - 1][0]);
 		close(data->pipefds[data->i_pipes - 1][1]);
 	}
-	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))			   // If first pipe? Donc i_cmd = 0 et la size est au moins de 2.
+	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))
 	{
+		// printf("REDIR\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
-			ft_putstr_fd("Error : Dup2 STDOUT\n", 2);
+			perror("Dup2: Error\n");
 	}
+	// printf(C_ORANGE"built_in = %d\n"C_RESET, built_in);
 	if(data->pipe_trig)
 	{
 		close(data->pipefds[data->i_pipes][1]);
@@ -166,10 +266,10 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	if(data->built_in == 1)
+	if(built_in == 1)
 	{
-		// dprintf(2, "Bonjour built_in = %zu\n", data->built_in);
-		built_in_manager(data, cmd->data[it_cmd]);
+		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
+		built_in_manager(data, cmd->data[0]);
 		if(data->v_path->size != 1)
 			exit(EXIT_SUCCESS);
 	}
@@ -178,14 +278,17 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		m_cmd = ft_split(cmd->data[0], ' ');
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
+			{
+				perror("execve: Error\n");
 				exit(EXIT_FAILURE);
+			}
 		path = find_path(m_cmd[0], data->vect_env->data);
-		// dprintf(2, "cmd = %s\n", m_cmd[0]);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
-			exit(EXIT_FAILURE);
+		{
+			ft_putstr_fd("0: command not found\n", 2);
+			exit(0);
+		}
 	}
-	// perror("");
-	// dprintf(2, "cmd = %s", cmd->data[0]);
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
@@ -199,31 +302,30 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
-			// dprintf(2, "STDIN_REDIR redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDIN REDIR failed.\n", 2);
+				perror("Dup2: STDIN REDIR failed.\n");
 			close(data->a_file);
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			// dprintf(2, "HEREDOC redir_f : %s\n", data->hd_names[hd_it]);
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 HERE_DOC failed.\n", 2);
+				perror("Dup2: HERE_DOC REDIR failed.\n");
 			close(data->a_file);
 			hd_it++;
 		}
-		else // STDOUT_REDIR où STDOUT_APPEND
+		else
 		{
-			// dprintf(2, "STDOUT redir_f : %s\n", redir_f[it]);
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
-				ft_putstr_fd("Error : Dup2 STDOUT REDIR failed.\n", 2);
+				perror("Dup2: STDOUT REDIR failed.\n");
 			close(data->a_file);
 		}
 	}
 }
+
+
 
 void	open_file_minishell(t_data *data, int type, char *file)
 {
@@ -235,10 +337,10 @@ void	open_file_minishell(t_data *data, int type, char *file)
 	{
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
-			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);
+			perror("Error : file Redir mode opening failed.\n");
 		if(data->a_file == 0)
-			ft_putstr_fd("Error : Open failed\n", 2);
+			perror("Error : Open failed\n");
 	}
 	else
-		ft_putstr_fd("File : Access Denied.\n", 2);
+		perror("File : Access Denied.\n");
 }
