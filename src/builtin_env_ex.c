@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 15:38:11 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:20:42 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,18 @@ long long	c_toll(const char *str)
 		i++;
 		minus *= (-1);
 	}
+	if(str[i] == '+' || str[i] == '-')
+	{
+		ft_putstr_fd("exit: numeric argument required\n", 2);
+		return 0;
+	}
+	int j = 0;
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
 		result *= 10;
 		result += str[i] - 48;
 		i++;
+		j++;
 	}
 	return (result *= minus);
 }
