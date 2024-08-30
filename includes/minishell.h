@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 15:51:53 by aberion          ###   ########.fr       */
+/*   Updated: 2024/08/30 17:39:06 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_vector { 		// 1 v_path = 1 input
 	size_t capacity;
 }	t_vector; // v_path
 
+
 typedef struct s_data // Structure Globale
 {
 
@@ -90,6 +91,7 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			flag_echo_trig;
 	int			cd_trigger;
 	int			status;
 	int			exit_status;
@@ -165,6 +167,7 @@ char 	*get_oldpwd_value(t_data *data, char *last_dir);
 void	update_oldpwd_env(t_data *data, char *updated_oldpwd);
 char	*get_home_value(t_data *data, char *home_dir);
 void	b_i_echo(t_data *data, char *cmd);
+char	*clean_input(t_data *data, char *cmd);
 int		flag_is_ok(char *flag);
 void	b_i_pwd(t_data *data);
 
