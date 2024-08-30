@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/29 16:37:42 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/29 18:43:33 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ void builtin_exit(t_data *s_data, char *cmd)
 {
     (void)cmd;
     free_t_data(s_data);
-    exit(EXIT_SUCCESS);
+	// ft_putstr_fd("exit", 2);
+    exit(s_data->exit_status);
 }

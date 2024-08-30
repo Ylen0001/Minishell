@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/29 16:37:17 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/08/30 15:31:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,41 @@
 #include <stdlib.h>
 
 volatile int	g_signal_received = 0;
+
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff){
+        if (g_signal_received == 2 || check_spaces(input) != 0)
+        {
+            g_signal_received = 0;
+            free_t_data(&s_data);
+            return 1;
+        }
+		// printf("input: %s\n", input);
+        if (!input)		
+        {
+            free_t_data(&s_data);
+            free_t_vectstr(env_buff);
+            exit(1);
+        }
+        add_history(input);
+        launch_parsing(input, &s_data);
+        minishell(&s_data);
+        // garbage_collector(&s_data);
+        env_buff = vectstr_dup(s_data.vect_env);
+        ex_st_buff = s_data.exit_status; 
+	return (0);
+}
+
+
+void free_charchar(char **s){
+	int i;
+	
+	i = 0;
+	while(s[i]){
+		free(s[i]);
+		i++;
+	}
+	free(s);
+}
 
 int main(int argc, char **argv, char **env) 
 {
@@ -36,7 +71,8 @@ int main(int argc, char **argv, char **env)
         rl_event_hook = rl_event_dummy;
         s_data = init_data(env, ex_st_buff, *env_buff);
         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
-        if (isatty(STDIN_FILENO)) {
+        // input = readline("minishell: ");
+		if (isatty(STDIN_FILENO)) {
             input = readline("minishell: ");
         } else {
             printf("minishell: \n");
@@ -45,43 +81,103 @@ int main(int argc, char **argv, char **env)
                 input = strdup(buffer);
             }
         }
-        if (g_signal_received == 2 || check_spaces(input) != 0)
-        {
-            g_signal_received = 0;
-            free_t_data(&s_data);
-            continue;
-        }
-        if (!input)
-        {
-            free_t_data(&s_data);
-            free_t_vectstr(env_buff);
-            exit(1);
-        }
-        add_history(input);
-        launch_parsing(input, &s_data);
-        minishell(&s_data);
-        // garbage_collector(&s_data);
-        env_buff = vectstr_dup(s_data.vect_env);
-        ex_st_buff = s_data.exit_status; 
-        free_t_data(&s_data);
+		if (!input){
+			break;
+		}
+		
+		char **input_list = ft_split(input, '\n');
+		for (int i = 0; input_list[i]; i++){
+			tmp(input_list[i], s_data, env_buff, ex_st_buff);
+		}
+		
+		free_charchar(input_list);
+		//free input
+
+        // if (isatty(STDIN_FILENO)) {
+        // } else {
+        //     printf("minishell: \n");
+        //     char buffer[1024];
+        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        //         input = strdup(buffer);
+        //     }
+        // }
+		
     }
-    garbage_collector(&s_data);
+	free_t_data(&s_data);
+    // garbage_collector(&s_data);
     rl_clear_history();
     return (0);
 }
 
+
+// int main(int argc, char **argv, char **env) 
+// {
+//     (void)argv;
+//     if (argc != 1 || env == NULL || *env == NULL)
+//         exit(EXIT_FAILURE);
+//     t_data s_data;
+//     t_vectstr *env_buff;
+//     int ex_st_buff;
+
+//     env_buff = init_vect_str();
+//     init_env(env_buff, env);
+//     ex_st_buff = 0;
+//     char *input = NULL;
+//     while (init_signal(S_PROMPT))
+//     {
+//         input = NULL;
+//         rl_event_hook = rl_event_dummy;
+//         s_data = init_data(env, ex_st_buff, *env_buff);
+//         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+        // if (isatty(STDIN_FILENO)) {
+        //     input = readline("minishell: ");
+        // } else {
+        //     printf("minishell: \n");
+        //     char buffer[1024];
+        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        //         input = strdup(buffer);
+        //     }
+        // }
+//         if (g_signal_received == 2 || check_spaces(input) != 0)
+//         {
+//             g_signal_received = 0;
+//             free_t_data(&s_data);
+//             continue;
+//         }
+//         if (!input)		
+//         {
+//             free_t_data(&s_data);
+//             free_t_vectstr(env_buff);
+//             exit(1);
+//         }
+//         add_history(input);
+//         launch_parsing(input, &s_data);
+//         minishell(&s_data);
+//         // garbage_collector(&s_data);
+//         env_buff = vectstr_dup(s_data.vect_env);
+//         ex_st_buff = s_data.exit_status; 
+//         free_t_data(&s_data);
+//     }
+//     garbage_collector(&s_data);
+//     rl_clear_history();
+//     return (0);
+// }
+
+
 void	minishell(t_data *data)
 {
 	size_t it;
-	
+
 	init_data_2(data);
 	here_doc_detector(data);
 	init_signal(S_EXEC);
-	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)
+	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)  //  Size = 2
 	{
-		built_in_detector(data, data->v_path->parsed[0].cmd->data[data->i_cmd]);
+		built_in_detector(data, data->v_path->parsed[data->i_cmd].cmd->data[0]);
+		// printf(C_ROSE"i_cmd = %zu\nsize = %zu\n"C_RESET, data->i_cmd, data->v_path->size);
 		if(data->v_path->size > 1)
 		{
+			// printf("BAD\n");
 			if (pipe(data->pipefds[data->i_pipes]) == -1)
 			{
 				perror("");
@@ -103,6 +199,7 @@ void	minishell(t_data *data)
 		}
 		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
 		{
+			// printf("Bad\n");
 			data->pids[data->i_cmd] = fork();
 			if (data->pids[data->i_cmd] == -1) 
 				ft_putstr_fd("Error : Fork Failed\n", 2);
@@ -124,9 +221,9 @@ void	minishell(t_data *data)
 	it = -1;
 	while(++it < data->i_cmd)
 	{
-		waitpid(data->pids[it], &data->status, 0);
-		if(WIFEXITED(data->status))
-			data->exit_status = WEXITSTATUS(data->status);
+		waitpid(data->pids[it], &data->exit_status, 0);
+		if(WIFEXITED(data->exit_status))
+			data->exit_status = WEXITSTATUS(data->exit_status);
 		else
 			data->exit_status = 1;
 	}
@@ -143,8 +240,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	char 	*path;
 	char 	**m_cmd;
 
-	built_in_detector(data, cmd->data[it_cmd]);
-
+	// built_in_detector(data, cmd->data[it_cmd]);
 	if (data->i_pipes > 0)
 	{
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
@@ -154,9 +250,11 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))
 	{
+		// printf("REDIR\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			perror("Dup2: Error\n");
 	}
+	// printf(C_ORANGE"built_in = %d\n"C_RESET, built_in);
 	if(data->pipe_trig)
 	{
 		close(data->pipefds[data->i_pipes][1]);
@@ -164,9 +262,10 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	}
 	if(redir_f->size > 0)
 		redirections(data, redir_t, redir_f->data);
-	if(data->built_in == 1)
+	if(built_in == 1)
 	{
-		built_in_manager(data, cmd->data[it_cmd]);
+		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
+		built_in_manager(data, cmd->data[0]);
 		if(data->v_path->size != 1)
 			exit(EXIT_SUCCESS);
 	}
@@ -182,8 +281,8 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		path = find_path(m_cmd[0], data->vect_env->data);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
 		{
-			perror("execve: Error\n");
-			exit(EXIT_FAILURE);
+			ft_putstr_fd("0: command not found\n", 2);
+			exit(0);
 		}
 	}
 }
