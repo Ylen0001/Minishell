@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 17:44:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:41:34 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,20 +267,26 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
 		built_in_manager(data, cmd->data[0]);
 		if(data->v_path->size != 1)
-			exit(EXIT_SUCCESS);
+			return;
+		else
+			return;
 	}
 	else if(built_in == 0)
 	{
 		m_cmd = ft_split(cmd->data[0], ' ');
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
+		{
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
 			{
 				perror("execve: Error\n");
 				exit(EXIT_FAILURE);
 			}
+		}
 		path = find_path(m_cmd[0], data->vect_env->data);
+		// dprintf(2, "path = %s\n", path);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
 		{
+			perror("");
 			ft_putstr_fd("0: command not found\n", 2);
 			exit(0);
 		}
@@ -300,14 +306,20 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
+			{	
 				perror("Dup2: STDIN REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
+			{
 				perror("Dup2: HERE_DOC REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 			hd_it++;
 		}
@@ -315,7 +327,10 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
+			{	
 				perror("Dup2: STDOUT REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 		}
 	}

@@ -202,3 +202,12 @@ CONDITION DE LA FONCTION MINISHELL:
 Si une seule cmd ET non built_in ----> FORK
 Si une seule cmd ET built_in 	 ----> PARENT
 Si plusieurs cmd built_in où non ----> FORK
+
+
+TESTER DEBUG :
+
+59: Bug si 
+
+Pour echo : exit code toujours à 0
+
+Si une seule commande : 

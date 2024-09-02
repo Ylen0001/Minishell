@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 17:45:00 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 13:11:41 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_vector { 		// 1 v_path = 1 input
 	size_t size;
 	size_t capacity;
 }	t_vector; // v_path
-
 
 typedef struct s_data // Structure Globale
 {

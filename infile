@@ -86,12 +86,14 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 
 
 
+echo hello world
+echo bonjour
+echo au revoir
 
 
 
 
-
-
+hithere
 
 
 
