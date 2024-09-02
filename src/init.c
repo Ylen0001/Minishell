@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 17:44:32 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:33:50 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	init_data_2(t_data *data)
 	data->built_in = 0;
 	data->k = 0;
 	data->pipe_trig = 0;
+	data->old_fdin = 0;
+	data->old_fdout = 0;
 	// data->flag_echo_trig = 0;
 	i = 0;
 	data->pipefds = ft_calloc( data->v_path->size, sizeof(int *));

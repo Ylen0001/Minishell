@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 13:41:34 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:42:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,11 @@ void	minishell(t_data *data)
 	init_signal(S_EXEC);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)  //  Size = 2
 	{
+		// sleep(1);
 		built_in_detector(data, data->v_path->parsed[data->i_cmd].cmd->data[0]);
-		// printf(C_ROSE"i_cmd = %zu\nsize = %zu\n"C_RESET, data->i_cmd, data->v_path->size);
+		// dprintf(2, "built_in = %zu\n", data->built_in);
+		// dprintf(2, "i_cmd = %zu\nsize = %zu\n", data->i_cmd, data->v_path->size);
+		// dprintf(2, "cmd = %s\n", data->v_path->parsed[data->i_cmd].cmd->data[0]);
 		if(data->v_path->size > 1)
 		{
 			// printf("BAD\n");
@@ -207,7 +210,15 @@ void	minishell(t_data *data)
 				child(data, data->i_cmd, data->built_in);
 		}
 		else
+		{
+			// dprintf(2, "Hello\n");
+			data->old_fdin = dup(STDIN_FILENO);
+			data->old_fdout = dup(STDOUT_FILENO);
 			child(data, data->i_cmd, data->built_in);
+			dup2(data->old_fdin, STDIN_FILENO);
+			dup2(data->old_fdout, STDOUT_FILENO);
+		}
+		// dprintf(2, "SENT BON\n");
 		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
 		{
 			close(data->pipefds[data->i_pipes - 1][0]);
@@ -266,10 +277,8 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	{
 		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
 		built_in_manager(data, cmd->data[0]);
-		if(data->v_path->size != 1)
-			return;
-		else
-			return;
+		// exit(0);
+		return;
 	}
 	else if(built_in == 0)
 	{
@@ -291,6 +300,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 			exit(0);
 		}
 	}
+	return;
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)

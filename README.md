@@ -206,8 +206,17 @@ Si plusieurs cmd built_in où non ----> FORK
 
 TESTER DEBUG :
 
-59: Bug si 
+59; echo hi < ./minishell_tester/test_files/infile bye bye 
+59: Pour débuguer, rajouter exit(0) ligne 269.
+Problème sur ce test : On devrait renvoyer "hi bye bye".
+Je print bien hi bye bye, mais ensuite boucle infinie.
+On rentre dans une boucle infinie dans minishell. 
+i_cmd ne s'itère pas.
+Le souci semble venir de la redirection. 
+
+Problème rencontré : Si on exit pas après built_in_manager, on rentre dans une boucle infinie d'execve. 
 
 Pour echo : exit code toujours à 0
 
-Si une seule commande : 
+Si une seule commande :
+

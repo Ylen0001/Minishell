@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 13:11:41 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:29:34 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ typedef struct s_data // Structure Globale
 
 	/* Pour l'exec */
 	
+	int			old_fdin;
+	int			old_fdout;
 	int			flag_echo_trig;
 	int			cd_trigger;
 	int			status;
