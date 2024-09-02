@@ -22,6 +22,7 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	size_t it;
 
 	it = 0;
+	(void)it;
 	path = NULL;
 	cwd = NULL;
 	last_dir = NULL;

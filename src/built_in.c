@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 15:28:17 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:38:56 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ void	built_in_manager(t_data *data, char *cmd)
 {
 	char	**splited_cmd;
 
-	// dprintf(2, "Bonj\n");
+	// dprintf(2, "cmd = %s\n", cmd);
 	splited_cmd = ft_split(cmd, ' ');
 	if(ft_strncmp(splited_cmd[0], "echo\0", 5) == 0)
 		b_i_echo(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "pwd\0", 4) == 0)
+	else if(ft_strncmp(splited_cmd[0], "pwd\0", 4) == 0)
 		b_i_pwd(data);
-	if(ft_strncmp(splited_cmd[0], "cd\0", 3) == 0)
+	else if(ft_strncmp(splited_cmd[0], "cd\0", 3) == 0)
 		b_i_cd(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "export", 6) == 0)
+	else if(ft_strncmp(splited_cmd[0], "export", 6) == 0)
 		builtin_export(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "unset\0", 6) == 0)
+	else if(ft_strncmp(splited_cmd[0], "unset\0", 6) == 0)
 		builtin_unset(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
+	else if(ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
 		builtin_exit(data, cmd);
-	if(ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
+	else if(ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
 		builtin_env(data);
 
 	return;

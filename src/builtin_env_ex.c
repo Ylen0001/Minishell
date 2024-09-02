@@ -19,7 +19,9 @@ long long	c_toll(const char *str)
 	int				minus;
 	size_t	result;
 	int				i;
+	size_t	checker;
 
+	checker = 9223372036854775807;
 	i = 0;
 	result = 0;           
 	minus = 1;
@@ -45,7 +47,14 @@ long long	c_toll(const char *str)
 		i++;
 		j++;
 	}
-	return (result *= minus);
+	if (j >= 19)
+		return 0;
+	if (result > checker && minus == 1)
+		return 0;
+	if (result > (checker + 1) && minus == -1)
+		return 0;
+	long long r_res = result * minus;
+	return (r_res);
 }
 
 void builtin_env(t_data *s_data)
@@ -65,6 +74,11 @@ int check_args_ex(char *cmd)
 	splitted = ft_split(cmd, ' ');
 	if (splitted[2])
 		return -1;
+	if (splitted[1])
+	{
+		int i = 0;
+		
+	}
 	
 	return 0;
 }

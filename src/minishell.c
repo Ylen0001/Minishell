@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/30 15:41:05 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:42:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,28 @@
 
 volatile int	g_signal_received = 0;
 
-int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff){
-        if (g_signal_received == 2 || check_spaces(input) != 0)
-        {
-            g_signal_received = 0;
-            free_t_data(&s_data);
-            return 1;
-        }
-		// printf("input: %s\n", input);
-        if (!input)		
-        {
-            free_t_data(&s_data);
-            free_t_vectstr(env_buff);
-            exit(1);
-        }
-        add_history(input);
-        launch_parsing(input, &s_data);
-        minishell(&s_data);
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff)
+{
+    if (g_signal_received == 2 || check_spaces(input) != 0)
+    {
+        g_signal_received = 0;
+        free_t_data(&s_data);
+        return 1;
+    }
+	// printf("input: %s\n", input);
+    if (!input)		
+    {
+        free_t_data(&s_data);
+        free_t_vectstr(env_buff);
+        exit(1);
+    }
+    add_history(input);
+    launch_parsing(input, &s_data);
+    minishell(&s_data);
         // garbage_collector(&s_data);
-        env_buff = vectstr_dup(s_data.vect_env);
-        ex_st_buff = s_data.exit_status; 
+    env_buff = vectstr_dup(s_data.vect_env);
+    ex_st_buff = s_data.exit_status;
+	(void)ex_st_buff;
 	return (0);
 }
 
@@ -173,8 +175,11 @@ void	minishell(t_data *data)
 	init_signal(S_EXEC);
 	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)  //  Size = 2
 	{
+		// sleep(1);
 		built_in_detector(data, data->v_path->parsed[data->i_cmd].cmd->data[0]);
-		// printf(C_ROSE"i_cmd = %zu\nsize = %zu\n"C_RESET, data->i_cmd, data->v_path->size);
+		// dprintf(2, "built_in = %zu\n", data->built_in);
+		// dprintf(2, "i_cmd = %zu\nsize = %zu\n", data->i_cmd, data->v_path->size);
+		// dprintf(2, "cmd = %s\n", data->v_path->parsed[data->i_cmd].cmd->data[0]);
 		if(data->v_path->size > 1)
 		{
 			// printf("BAD\n");
@@ -207,7 +212,15 @@ void	minishell(t_data *data)
 				child(data, data->i_cmd, data->built_in);
 		}
 		else
+		{
+			// dprintf(2, "Hello\n");
+			data->old_fdin = dup(STDIN_FILENO);
+			data->old_fdout = dup(STDOUT_FILENO);
 			child(data, data->i_cmd, data->built_in);
+			dup2(data->old_fdin, STDIN_FILENO);
+			dup2(data->old_fdout, STDOUT_FILENO);
+		}
+		// dprintf(2, "SENT BON\n");
 		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
 		{
 			close(data->pipefds[data->i_pipes - 1][0]);
@@ -266,25 +279,30 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	{
 		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
 		built_in_manager(data, cmd->data[0]);
-		if(data->v_path->size != 1)
-			exit(EXIT_SUCCESS);
+		// exit(0);
+		return;
 	}
 	else if(built_in == 0)
 	{
 		m_cmd = ft_split(cmd->data[0], ' ');
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
+		{
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
 			{
 				perror("execve: Error\n");
 				exit(EXIT_FAILURE);
 			}
+		}
 		path = find_path(m_cmd[0], data->vect_env->data);
+		// dprintf(2, "path = %s\n", path);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
 		{
+			perror("");
 			ft_putstr_fd("0: command not found\n", 2);
 			exit(0);
 		}
 	}
+	return;
 }
 
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
@@ -300,14 +318,20 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
+			{	
 				perror("Dup2: STDIN REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
+			{
 				perror("Dup2: HERE_DOC REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 			hd_it++;
 		}
@@ -315,7 +339,10 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		{
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
+			{	
 				perror("Dup2: STDOUT REDIR failed.\n");
+				exit(2);
+			}
 			close(data->a_file);
 		}
 	}
