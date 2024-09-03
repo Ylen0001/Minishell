@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 12:07:32 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 12:12:07 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	built_in_detector(t_data *data, char *cmd)
 	{
 		if(ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 
 			|| ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "export", 6) == 0
-			|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 || 
+			|| ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 3) == 0 || 
 			ft_strncmp(cmd, "exit", 4) == 0)
 				data->built_in = 1;
 		i++;

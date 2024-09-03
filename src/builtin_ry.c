@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_ry.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 17:03:27 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/03 12:22:17 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void builtin_export(t_data *s_data, char *cmd)
         j = 0;
         while(s[i] && s[i] != ' ' && s[i] != '"' && s[i] != '\'')
         {
+			// if(ft_isalnum(s[i]) == 0 || s[i] == '_')
+			// 	s_data->exit_status = 1;
             to_add[j] = s[i];
             i++;
             j++;
@@ -100,7 +102,11 @@ void builtin_export(t_data *s_data, char *cmd)
         if (to_add[0])
         {
             if (check_presence(s_data->vect_env, to_add) == 0)
+			{
                vect_happend(s_data->vect_env, to_add);
+			}
+			else
+				s_data->exit_status = 1;
         }
         i++;
     }
