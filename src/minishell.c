@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 15:48:36 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:58:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	// built_in_detector(data, cmd->data[it_cmd]);
 	if (data->i_pipes > 0)
 	{
+		// dprintf(2, "REDIR IN, i_cmd = %zu\n", it_cmd);
 		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
 			perror("Dup2: Error\n");
 		close(data->pipefds[data->i_pipes - 1][0]);
@@ -289,7 +290,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	}
 	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))
 	{
-		// printf("REDIR\n");
+		// dprintf(2, "REDIR out\n");
 		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
 			perror("Dup2: Error\n");
 	}
@@ -304,13 +305,18 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	if(built_in == 1)
 	{
 		built_in_manager(data, cmd->data[0]);
-		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
-		// exit(0);
+		if(data->v_path->size > 1)
+			exit(0);
 		return;
 	}
 	else if(built_in == 0)
 	{
 		m_cmd = ft_split(cmd->data[0], ' ');
+		// if(check_file(m_cmd[0]) == NULL)
+		// {
+		// 	data->exit_status = 1;
+		// 	return;
+		// }
 		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
 		{
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
@@ -331,6 +337,48 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	return;
 }
 
+char	*check_file(char *cmd)
+{
+	struct stat file_stat;
+
+	if (stat(cmd, &file_stat) != -1)
+	{
+		if (S_ISDIR(file_stat.st_mode))
+		{
+			dprintf(2, "%s: Is a directory\n", cmd);
+			return (NULL);
+		}
+		if (file_stat.st_mode & S_IXUSR){
+			return (cmd);
+		}
+		else
+		{
+			dprintf(2, "%s: Permission Denied\n", cmd);
+			return (NULL);
+		}
+	}
+	else if (there_is_slash(cmd))
+	{
+		dprintf(2, "%s: No such file or directory\n", cmd);
+		return (NULL);
+	}
+	return (NULL);
+}
+
+int		there_is_slash(char *cmd)
+{
+	size_t i;
+
+	i = 0;
+	while(cmd[i])
+	{
+		if(cmd[i] == '/')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 {
 	size_t it;
@@ -345,8 +393,9 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 			{	
+				data->exit_status = 2;
 				perror("Dup2: STDIN REDIR failed.\n");
-				exit(2);
+				// exit(2);
 			}
 			close(data->a_file);
 		}
@@ -355,8 +404,9 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 			{
-				perror("Dup2: HERE_DOC REDIR failed.\n");
-				exit(2);
+				data->exit_status = 2;
+				// perror("Dup2: HERE_DOC REDIR failed.\n");
+				// exit(2);
 			}
 			close(data->a_file);
 			hd_it++;
@@ -367,7 +417,8 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 			{	
 				perror("Dup2: STDOUT REDIR failed.\n");
-				exit(2);
+				// exit(2);
+				data->exit_status = 2;
 			}
 			close(data->a_file);
 		}
@@ -391,5 +442,5 @@ void	open_file_minishell(t_data *data, int type, char *file)
 			perror("Error : Open failed\n");
 	}
 	else
-		perror("File : Access Denied.\n");
+		return;
 }
