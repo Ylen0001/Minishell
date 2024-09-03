@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/28 17:03:27 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/03 17:18:37 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,27 @@ void print_export(t_data *s_data)
     }
 }
 
-int check_presence(t_vectstr *env, char *to_check)
+int check_presence(t_data *s_data, char *to_check)
 {
     int i = 0;
     char clean[500] = {'\0'};
 
     while (to_check[i] && to_check[i] != '=')
     {
+        if ((ft_isalnum(to_check[i]) == 0 && to_check[i] != '_'))
+        {
+            s_data->exit_status = 1;
+            return 1;
+        }
         clean[i] = to_check[i];
         i++;
     }
     i = 0;
-    while(env->data[i])
+    while(s_data->vect_env->data[i])
     {
-        if (ft_strnstr(env->data[i], clean, ft_strlen(clean)) != 0)
+        if (ft_strnstr(s_data->vect_env->data[i], clean, ft_strlen(clean)) != 0)
         {
-            replace_variable(env, to_check, i);
+            replace_variable(s_data->vect_env, to_check, i);
             return 1;
         }
         i++;
@@ -73,9 +78,11 @@ int check_presence(t_vectstr *env, char *to_check)
 }
 void builtin_export(t_data *s_data, char *cmd)
 {
+    (void)cmd;
     int i = 0;
     int j = 0;
-    char *s = cmd;
+    char *s = s_data->v_path->parsed[s_data->i_cmd].cmd->data[0];
+    printf("%s\n", s);
     while (s[i] && s[i] == ' ')
         i++;
     while(s[i] && s[i] != ' ')
@@ -93,13 +100,18 @@ void builtin_export(t_data *s_data, char *cmd)
         j = 0;
         while(s[i] && s[i] != ' ' && s[i] != '"' && s[i] != '\'')
         {
+            // if ((ft_isalnum(s[i]) == 0 && s[i] != '_') && s[i] != '=')
+            // {
+            //     s_data->exit_status = 1;
+            //     return;
+            // }
             to_add[j] = s[i];
             i++;
             j++;
         }
         if (to_add[0])
         {
-            if (check_presence(s_data->vect_env, to_add) == 0)
+            if (check_presence(s_data, to_add) == 0)
                vect_happend(s_data->vect_env, to_add);
         }
         i++;
