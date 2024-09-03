@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/03 13:21:14 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/03 14:45:10 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,23 +75,29 @@ int check_args_ex(char *cmd)
 	if (splitted[2])
 		return 1;
 	if (splitted[1])
+	{
+		
 		return 42;
+	}
 	return 0;
 }
 
 void builtin_exit(t_data *s_data, char *cmd)
 {
-	long long dehors;
-
 	
-	if (check_args_ex(cmd) == 1)
+	long long dehors;
+	char **splitted;
+	(void)cmd;
+	
+	splitted = ft_split(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0], ' ');
+	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 1)
 	{
     	free_t_data(s_data);
 		exit(1);
 	}
-	if (check_args_ex(cmd) == 42)
+	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 42)
 	{
-		dehors = c_toll(cmd);
+		dehors = c_toll(splitted[1]);
 		free_t_data(s_data);
 		exit(dehors);
 	}

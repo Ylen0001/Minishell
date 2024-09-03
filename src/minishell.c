@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 16:42:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:48:36 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,26 @@
 
 volatile int	g_signal_received = 0;
 
-int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff)
-{
-    if (g_signal_received == 2 || check_spaces(input) != 0)
-    {
-        g_signal_received = 0;
-        free_t_data(&s_data);
-        return 1;
-    }
-	// printf("input: %s\n", input);
-    if (!input)		
-    {
-        free_t_data(&s_data);
-        free_t_vectstr(env_buff);
-        exit(1);
-    }
-    add_history(input);
-    launch_parsing(input, &s_data);
-    minishell(&s_data);
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff){
+        if (g_signal_received == 2 || check_spaces(input) != 0)
+        {
+            g_signal_received = 0;
+            free_t_data(&s_data);
+            return 1;
+        }
+		// printf("input: %s\n", input);
+        if (!input)		
+        {
+            free_t_data(&s_data);
+            free_t_vectstr(env_buff);
+            exit(1);
+        }
+        add_history(input);
+        launch_parsing(input, &s_data);
+        minishell(&s_data);
         // garbage_collector(&s_data);
-    env_buff = vectstr_dup(s_data.vect_env);
-    ex_st_buff = s_data.exit_status;
-	(void)ex_st_buff;
+        env_buff = vectstr_dup(s_data.vect_env);
+        *ex_st_buff = s_data.exit_status; 
 	return (0);
 }
 
@@ -78,10 +76,36 @@ int main(int argc, char **argv, char **env)
             input = readline("minishell: ");
 		else
 		{
-            printf("minishell: \n");
-            char buffer[1024];
-            if (fgets(buffer, sizeof(buffer), stdin) != NULL)
-                input = ft_strdup(buffer);
+			ssize_t bytes_read = 0;
+			size_t len = 0;
+			char buffer[2] = {0}; // Used to store the character read
+			char *line = calloc(1024, sizeof(char)); // Allocate memory for the line
+				
+			if (line == NULL) {
+				perror("calloc");
+				return 1;
+			}
+			
+			while ((bytes_read = read(STDIN_FILENO, buffer, 1)) > 0) {
+				line[len++] = buffer[0];
+				if (buffer[0] == '\n' || buffer[0] == '\0') break;
+			}
+			
+			if (bytes_read < 0 || strlen(line) == 0) {
+				input = NULL;
+				break;
+			}
+			
+			line[len] = '\0';
+			
+			if (strlen(line) > 0) {
+				input = line;
+			} else
+			{ 
+				input = NULL;
+				break;
+			}
+			printf("minishell: \n");
         }
 		if (!input){
 			break;
@@ -89,9 +113,8 @@ int main(int argc, char **argv, char **env)
 		
 		char **input_list = ft_split(input, '\n');
 		for (int i = 0; input_list[i]; i++){
-			tmp(input_list[i], s_data, env_buff, ex_st_buff);
+			tmp(input_list[i], s_data, env_buff, &ex_st_buff);
 		}
-		
 		free_charchar(input_list);
 		//free input
 
@@ -110,6 +133,8 @@ int main(int argc, char **argv, char **env)
     rl_clear_history();
     return (0);
 }
+
+// echo -e "./minishell\nexit 123\necho \$?\nexit\n"
 
 
 // int main(int argc, char **argv, char **env) 
@@ -187,7 +212,8 @@ void	minishell(t_data *data)
 			{
 				perror("");
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
-				// exit(EXIT_FAILURE);
+				// exit(EXIT_FAILURE);		s_data->exit_status = dehors;
+
 			}
 			data->pipe_trig = 1;
 			if(data->v_path->size >= 3 && data->i_pipes >= 2)
@@ -277,8 +303,8 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		redirections(data, redir_t, redir_f->data);
 	if(built_in == 1)
 	{
-		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
 		built_in_manager(data, cmd->data[0]);
+		// dprintf(2, C_YELLOW"ICI\n"C_RESET);
 		// exit(0);
 		return;
 	}

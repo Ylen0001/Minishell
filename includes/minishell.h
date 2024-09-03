@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 16:29:34 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 15:32:50 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct s_vector { 		// 1 v_path = 1 input
 	size_t capacity;
 }	t_vector; // v_path
 
-typedef struct s_data // Structure Globale
+typedef struct s_data // Structure Globalem
 {
 
 	/* Pour les tests */
@@ -138,6 +138,7 @@ void 		recup_data(t_data *data);
 t_vector	*init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data);
+int 		tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff);
 void		infile_or_heredoc(t_data *data, char **env);
 void		garbage_collector(t_data *data);
 void		exec_cmd(t_data *data, char **env, char *cmd);
