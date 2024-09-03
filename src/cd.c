@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:23:01 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 15:29:33 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 12:05:11 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	if(ft_strcmp(cmd, "cd ~") == 0)
 	{
 		if(chdir(home_dir) == 0)
-			printf(C_BRONZE"Moves to home directory\n"C_RESET);
+			// printf(C_BRONZE"Moves to home directory\n"C_RESET);
 		else
 			perror("chdir() error3.\n");			// Changement de dir vers home.
 	}
 	else if(ft_strcmp(cmd, "cd -") == 0)
 	{
-		if(chdir(last_dir) == 0)
-			printf(C_LIGHT_ORANGE"Moves to last directory\n"C_RESET);
+		// if(chdir(last_dir) == 0)
+		// 	printf(C_LIGHT_ORANGE"Moves to last directory\n"C_RESET);
 		else
 			perror("chdir() error.\n");
 		b_i_pwd(data);

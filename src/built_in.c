@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 16:38:56 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 12:01:15 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	built_in_detector(t_data *data, char *cmd)
 	while(i < data->v_path->size)
 	{
 		if(ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 
-			|| ft_strcmp(cmd, "pwd") == 0 || ft_strncmp(cmd, "export", 6) == 0
+			|| ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "export", 6) == 0
 			|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 || 
 			ft_strncmp(cmd, "exit", 4) == 0)
 				data->built_in = 1;
 		i++;
 	}
-	// printf(C_GREEN"cmd = %s\nbuilt_in = %zu\n"C_RESET, cmd, data->built_in);
+	// printf("cmd = %s\nbuilt_in = %zu\n", cmd, data->built_in);
 	return;
 }
 
