@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:23:01 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/28 15:29:33 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 10:34:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	char		*cwd;
 	char		**path;
 	size_t it;
-
+		
 	it = 0;
 	path = NULL;
 	cwd = NULL;
@@ -29,7 +29,20 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	cwd = getcwd(cwd, 0);
 	last_dir = get_oldpwd_value(data, last_dir);
 	home_dir = get_home_value(data, home_dir);		// Penser à free.
-	update_oldpwd_env(data, cwd);					// Update old_pwd avant tout changement de dir. 
+	update_oldpwd_env(data, cwd);				// Update old_pwd avant tout changement de dir. 
+	path = ft_split(cmd, ' ');
+	while(path[it])
+		it++;
+	// dprintf(2, "data %zu = %s\n", it, data->v_path->parsed[data->i_cmd].cmd->data[0]);
+	// dprintf(2, "size data = %zu\n", it);
+	if(it > 2)
+	{	
+		data->exit_status = 1;
+		ft_putstr_fd("Too many arguments\n", 2);
+		return(0);
+	}
+	path = NULL;
+	it = 0;
 	if(home_dir == NULL|| last_dir == NULL)
 	{
 		free(last_dir);
@@ -39,16 +52,12 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	// printf("last_dir = %s\nhome_dir = %s\ncwd = %s\n", last_dir, home_dir, cwd);
 	if(ft_strcmp(cmd, "cd ~") == 0)
 	{
-		if(chdir(home_dir) == 0)
-			printf(C_BRONZE"Moves to home directory\n"C_RESET);
-		else
-			perror("chdir() error3.\n");			// Changement de dir vers home.
+		if(chdir(home_dir) == -1)
+			perror("chdir() error.\n");			// Changement de dir vers home.
 	}
 	else if(ft_strcmp(cmd, "cd -") == 0)
 	{
-		if(chdir(last_dir) == 0)
-			printf(C_LIGHT_ORANGE"Moves to last directory\n"C_RESET);
-		else
+		if(chdir(last_dir) == -1)
 			perror("chdir() error.\n");
 		b_i_pwd(data);
 	}
@@ -57,10 +66,8 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 		path = ft_split(cmd, ' ');
 		if(path[1] == NULL)
 		{
-			if(chdir(home_dir) == 0)
-				printf(C_BRONZE"Moves to home directory\n"C_RESET);
-			else
-				perror("chdir() error3.\n");
+			if(chdir(home_dir) == -1)
+				perror("chdir() error.\n");
 			return(0);
 		}
 		// printf("path[1] = %s\n", path[1]);
@@ -68,9 +75,7 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 		{
 			if(access(path[1], F_OK) == 0)
 			{
-				if(chdir(path[1]) == 0)
-					printf(C_LIGHT_BROWN"Moves to new directory\n"C_RESET);
-				else
+				if(chdir(path[1]) == -1)
 					perror("chdir() error.\n");
 			}
 			else
@@ -82,8 +87,6 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 			cwd = ft_strjoin(cwd, path[1]);
 			// printf("Relative path = %s\n", cwd);
 			if(chdir(path[1]) == 0)
-				printf(C_LIGHT_BROWN"Moves to new directory\n"C_RESET);
-			else
 				perror("chdir() error.\n");
 			b_i_pwd(data);
 		}

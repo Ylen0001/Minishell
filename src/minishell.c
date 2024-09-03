@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/02 16:42:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 11:50:20 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 volatile int	g_signal_received = 0;
 
-int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff){
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff){
         if (g_signal_received == 2 || check_spaces(input) != 0)
         {
             g_signal_received = 0;
@@ -36,7 +36,7 @@ int tmp(char *input, t_data s_data, t_vectstr *env_buff, int ex_st_buff){
         minishell(&s_data);
         // garbage_collector(&s_data);
         env_buff = vectstr_dup(s_data.vect_env);
-        ex_st_buff = s_data.exit_status; 
+        *ex_st_buff = s_data.exit_status; 
 	return (0);
 }
 
@@ -87,7 +87,7 @@ int main(int argc, char **argv, char **env)
 		
 		char **input_list = ft_split(input, '\n');
 		for (int i = 0; input_list[i]; i++){
-			tmp(input_list[i], s_data, env_buff, ex_st_buff);
+			tmp(input_list[i], s_data, env_buff, &ex_st_buff);
 		}
 		
 		free_charchar(input_list);
