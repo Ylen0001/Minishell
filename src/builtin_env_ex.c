@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/03 12:53:01 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/03 13:21:14 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ long long	c_toll(const char *str)
 	int				minus;
 	u_int64_t result;
 	int				i;
+	size_t	checker;
 
+	checker = 9223372036854775807;
 	i = 0;
 	result = 0;
 	minus = 1;
