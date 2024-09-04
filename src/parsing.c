@@ -6,12 +6,19 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 16:46:21 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 16:52:08 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
+
+int ft_isspace(char c)
+{
+    if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+        return 1;
+    return 0;
+}
 
 int check_chevron(t_data *s_data)
 {
@@ -120,13 +127,15 @@ void append_redir(t_data *s_data, char *str, int i)
 {
     char to_add[500] = {'\0'};
     int x = 0;
+    int check_q = 0;
     if (str[i] == '<' || str[i] == '>')
         i++;
     if (str[i] == '<' || str[i] == '>')
         i++;
     while(str[i] && (str[i] == ' ' || str[i] == '\t'))
         i++;
-    while(str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '<' && str[i] != '>'))
+    
+    while(str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '<' && str[i] != '>' && str[i] != '|'))
     {
         if (str[i] == '$' && ((str[i + 1] >= 'A' && str[i + 1] <= 'Z') 
             || (str[i + 1] == '_') || (str[i + 1] >= 'a' && str[i + 1] <= 'z') 
@@ -145,8 +154,16 @@ void append_redir(t_data *s_data, char *str, int i)
                     x = search_n_append(s_data, check_var, to_add, x);
                     i = j;
                 }
-        if(str[i] == '"' || str[i] == '\'')
+        if((str[i] == '"' || str[i] == '\'') && check_q % 2 == 0)
+        {
             i++;
+            check_q++;
+        }
+        else if ((str[i] == '"' || str[i] == '\'') && check_q % 2 == 1)
+        {
+            vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
+            return;
+        }
         to_add[x] = str[i];
         i++;
         x++;
@@ -192,6 +209,9 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
             while(str[i] && str[i] == ' ')
                 i++;
         }
+        i++;
+    }
+    if (str[i] == '"'){
         i++;
     }
 	return i;
@@ -266,14 +286,36 @@ int handle_double_quotes(t_data *s_data, const char *s, char *str, int i, int *x
     return i;
 }
 
+int	ft_strncmp_index(const char *s1, const char *s2, size_t n, size_t start_index)
+{
+	size_t	i;
+
+	// Initialiser i avec start_index pour commencer la comparaison à partir de cet index
+	i = start_index;
+
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		// Comparer les caractères correspondants de s1 et s2
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
+}
 
 void path_to_vect(t_data *s_data, int i)
 {
     char *s = s_data->full_string;
     char str[5000] = {'\0'};
     int x = 0;
-
+    
+    s_data->checkerino = 0;
     s_data->v_path->parsed[s_data->v_path->size] = init_parsed();
+    size_t j = i;
+    while(s[j] && ft_isspace(s[j]) != 0)
+        j++;
+    if (ft_strncmp_index(s, "export", 6, j) == 0)
+        s_data->checkerino = 1;    
     while (s[i])
     {
         if (s[i] == '|' || s[i] == '\n')
@@ -308,12 +350,14 @@ void path_to_vect(t_data *s_data, int i)
             if (s[i] == '\0')
                 s_data->check_quotes_space = 1;
         }
-        else if (s[i] == '"')
+        else if (s[i] == '"' && s_data->checkerino != 1)
+        {
             i = handle_double_quotes(s_data, s, str, i, &x);
+        }
         else
         {
             i = handle_variable_expansion(s_data, s, str, i, &x);
-            if (s[i] && s[i] == '"')
+            if (s[i] && s[i] == '"' && s_data->checkerino != 1)
                     i++;
             else if (s[i] && (s[i] == '<' || s[i] == '>'))
             {
