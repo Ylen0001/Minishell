@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/08/30 16:46:21 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:29:02 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,11 @@ void append_redir_here(t_data *s_data, char *str, int i)
 
 void append_redir(t_data *s_data, char *str, int i)
 {
+	int check_q; 
     char to_add[500] = {'\0'};
     int x = 0;
+
+	check_q = 0;
     if (str[i] == '<' || str[i] == '>')
         i++;
     if (str[i] == '<' || str[i] == '>')
@@ -145,8 +148,18 @@ void append_redir(t_data *s_data, char *str, int i)
                     x = search_n_append(s_data, check_var, to_add, x);
                     i = j;
                 }
-        if(str[i] == '"' || str[i] == '\'')
+        // if(str[i] == '"' || str[i] == '\'')
+        //     i++;
+        if((str[i] == '"' || str[i] == '\'') && check_q % 2 == 0)
+        {
             i++;
+            check_q++;
+        }
+        else if ((str[i] == '"' || str[i] == '\'') && check_q % 2 == 1)
+        {
+            vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
+            return;
+        }
         to_add[x] = str[i];
         i++;
         x++;
@@ -194,6 +207,8 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         }
         i++;
     }
+	if(str[i] == '"')
+		i++;
 	return i;
 }
 

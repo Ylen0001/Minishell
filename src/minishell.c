@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 15:58:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:22:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,8 +212,7 @@ void	minishell(t_data *data)
 			{
 				perror("");
 				ft_putstr_fd("Error : Pipe failed.\n", 2);
-				// exit(EXIT_FAILURE);		s_data->exit_status = dehors;
-
+				// exit(EXIT_FAILURE);
 			}
 			data->pipe_trig = 1;
 			if(data->v_path->size >= 3 && data->i_pipes >= 2)
@@ -241,10 +240,22 @@ void	minishell(t_data *data)
 		{
 			// dprintf(2, "Hello\n");
 			data->old_fdin = dup(STDIN_FILENO);
+			if(data->old_fdin == 0)
+			{
+				dprintf(2, "ERREUR in oldfd_in = %d\n", data->old_fdin);
+				data->exit_status = 0;
+			}
 			data->old_fdout = dup(STDOUT_FILENO);
+			if(data->old_fdout == -1)
+			{
+				dprintf(2, "ERREUR out oldfd out = %d\n", data->old_fdout);
+				data->exit_status = 0;
+			}
 			child(data, data->i_cmd, data->built_in);
-			dup2(data->old_fdin, STDIN_FILENO);
-			dup2(data->old_fdout, STDOUT_FILENO);
+			if(dup2(data->old_fdin, STDIN_FILENO) == -1)
+				ft_putstr_fd("dup in merde\n", 2);
+			if(dup2(data->old_fdout, STDOUT_FILENO) == -1)
+				ft_putstr_fd("dup out merde\n", 2);
 		}
 		// dprintf(2, "SENT BON\n");
 		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
@@ -263,6 +274,13 @@ void	minishell(t_data *data)
 		waitpid(data->pids[it], &data->exit_status, 0);
 		if(WIFEXITED(data->exit_status))
 			data->exit_status = WEXITSTATUS(data->exit_status);
+		else if(WIFSIGNALED(data->exit_status))
+		{
+			data->signal_number = WTERMSIG(data->exit_status);
+			data->exit_status = 128 + data->signal_number;
+		}
+		else if(WIFSTOPPED(data->exit_status))
+			data->exit_status = 128 + WSTOPSIG(data->exit_status);
 		else
 			data->exit_status = 1;
 	}
@@ -279,6 +297,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 	char 	*path;
 	char 	**m_cmd;
 
+	// dprintf(2, "cmd = %s\n", cmd->data[0]);
 	// built_in_detector(data, cmd->data[it_cmd]);
 	if (data->i_pipes > 0)
 	{
@@ -301,7 +320,10 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		close(data->pipefds[data->i_pipes][0]);
 	}
 	if(redir_f->size > 0)
+	{
+		// dprintf(2, "Hello\n");
 		redirections(data, redir_t, redir_f->data);
+	}
 	if(built_in == 1)
 	{
 		built_in_manager(data, cmd->data[0]);
@@ -317,50 +339,60 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		// 	data->exit_status = 1;
 		// 	return;
 		// }
-		if (m_cmd[0] && (access(m_cmd[0], X_OK) == 0 && access(m_cmd[0], F_OK) == 0))
+		check_file(data, m_cmd[0]);
+		if (m_cmd[0] && (access(m_cmd[0], X_OK | F_OK) == 0))
 		{
 			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
 			{
-				perror("execve: Error\n");
-				exit(EXIT_FAILURE);
+				ft_putstr_fd("execve: Error\n", 2);
+				data->exit_status = 1;
+				builtin_exit(data, NULL);
+				// exit(EXIT_FAILURE);
 			}
 		}
 		path = find_path(m_cmd[0], data->vect_env->data);
 		// dprintf(2, "path = %s\n", path);
 		if(execve(path, m_cmd, data->vect_env->data) == -1)
 		{
-			perror("");
+			// perror("");
 			ft_putstr_fd("0: command not found\n", 2);
-			exit(0);
+			data->exit_status = 127;
+			builtin_exit(data, NULL);
+			// exit(1);
 		}
 	}
 	return;
 }
 
-char	*check_file(char *cmd)
+char	*check_file(t_data *data, char *cmd)
 {
 	struct stat file_stat;
 
-	if (stat(cmd, &file_stat) != -1)
+	// dprintf(2, "cmd = %s\n", cmd);
+	if (stat(cmd, &file_stat) != -1) // Si relatif 
 	{
 		if (S_ISDIR(file_stat.st_mode))
 		{
 			dprintf(2, "%s: Is a directory\n", cmd);
-			return (NULL);
+			data->exit_status = 126;
+			builtin_exit(data, NULL);
 		}
 		if (file_stat.st_mode & S_IXUSR){
 			return (cmd);
 		}
 		else
 		{
-			dprintf(2, "%s: Permission Denied\n", cmd);
-			return (NULL);
+			dprintf(2, "%s: Permission denied\n", cmd);
+			data->exit_status = 127;
+			builtin_exit(data, NULL);
 		}
 	}
-	else if (there_is_slash(cmd))
+	else if (there_is_slash(cmd)) // Si absolu
 	{
-		dprintf(2, "%s: No such file or directory\n", cmd);
-		return (NULL);
+		// dprintf(2, "%s: No such file or directory\n", cmd);
+		ft_putstr_fd(" No such file or directory\n", 2);
+		data->exit_status = 127;
+		builtin_exit(data, NULL);
 	}
 	return (NULL);
 }
@@ -386,26 +418,34 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 
 	it = -1;
 	hd_it = 0;
+	// dprintf(2, "|%d|\n", redir_t->redir_type[0]);
+	// dprintf(2, "|%s|\n", redir_f[0]);
 	while(++it < redir_t->size)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
-			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
+			if(open_file_minishell(data, redir_t->redir_type[it], redir_f[it]) == 0)
+			{
+				// ft_putstr_fd("Access a foiré\n", 2);
+				builtin_exit(data, NULL);
+				return;
+			}
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 			{	
-				data->exit_status = 2;
-				perror("Dup2: STDIN REDIR failed.\n");
+				data->exit_status = 0;
+				ft_putstr_fd("Dup2: STDIN REDIR failed.\n", 2);
 				// exit(2);
 			}
 			close(data->a_file);
 		}
 		else if(redir_t->redir_type[it] == HERE_DOC)
 		{
-			open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]);
+			if(open_file_minishell(data, redir_t->redir_type[it], data->hd_names[hd_it]) == 0)
+				return;
 			if(dup2(data->a_file, STDIN_FILENO) == -1)
 			{
 				data->exit_status = 2;
-				// perror("Dup2: HERE_DOC REDIR failed.\n");
+				ft_putstr_fd("Dup2: HERE_DOC REDIR failed.\n", 2);
 				// exit(2);
 			}
 			close(data->a_file);
@@ -413,10 +453,11 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 		}
 		else
 		{
-			open_file_minishell(data, redir_t->redir_type[it], redir_f[it]);
+			if(open_file_minishell(data, redir_t->redir_type[it], redir_f[it]) == 0)
+				return;
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 			{	
-				perror("Dup2: STDOUT REDIR failed.\n");
+				ft_putstr_fd("Dup2: STDOUT REDIR failed.\n", 2);
 				// exit(2);
 				data->exit_status = 2;
 			}
@@ -427,20 +468,27 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 
 
 
-void	open_file_minishell(t_data *data, int type, char *file)
+int	open_file_minishell(t_data *data, int type, char *file)
 {
 	int openFlags = (type == STDOUT_REDIR) * (O_WRONLY | O_CREAT | O_TRUNC);
 	openFlags += (type == STDOUT_APPEND) * (O_WRONLY | O_CREAT | O_APPEND);
 	openFlags += (type == STDIN_REDIR) * (O_RDONLY);
 	openFlags += (type == HERE_DOC) * (O_RDONLY);
-	if((type == STDIN_REDIR && access(file, F_OK | W_OK) != -1) || type >= HERE_DOC)
+	if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC 
+		|| (type == STDOUT_REDIR && access(file, F_OK | W_OK) != -1))
 	{
+		dprintf(2, "file = %s\n", file);
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
-			perror("Error : file Redir mode opening failed.\n");
+			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);
 		if(data->a_file == 0)
-			perror("Error : Open failed\n");
+			ft_putstr_fd("Error : Open failed\n", 2);
+		return (1);
 	}
 	else
-		return;
+	{
+		// ft_putstr_fd("Access a foiré\n", 2);
+		data->exit_status = 1;
+		return (0);
+	}
 }
