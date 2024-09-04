@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 15:32:50 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:55:21 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ typedef struct s_data // Structure Globalem
 	char *full_string; // Str complète avec les redirections
 	char **env;
 	int check_quotes_space;
+	int checkerino;
 }				t_data;
 
 
@@ -138,7 +139,7 @@ void 		recup_data(t_data *data);
 t_vector	*init_vector();
 t_vectstr 	*init_vect_str();
 void		minishell(t_data *data);
-int 		tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff);
+int 		tmp(char *input, t_data s_data, t_vectstr **env_buff, int *ex_st_buff);
 void		infile_or_heredoc(t_data *data, char **env);
 void		garbage_collector(t_data *data);
 void		exec_cmd(t_data *data, char **env, char *cmd);

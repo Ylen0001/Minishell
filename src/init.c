@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/02 16:33:50 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:55:50 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff)
     
 	// self.hd_it = 0;
 	self.flag_echo_trig = 0;
+    self.checkerino = 0;
     self.full_string = NULL;
     self.env = NULL;
     self.check_quotes_space = 0;
