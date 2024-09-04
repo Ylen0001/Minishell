@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/04 16:52:08 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:24:27 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void append_redir_here(t_data *s_data, char *str, int i)
 
 void append_redir(t_data *s_data, char *str, int i)
 {
+	int check_q; 
     char to_add[500] = {'\0'};
     int x = 0;
     int check_q = 0;
@@ -211,9 +212,8 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         }
         i++;
     }
-    if (str[i] == '"'){
-        i++;
-    }
+	if(str[i] == '"')
+		i++;
 	return i;
 }
 

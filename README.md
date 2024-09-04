@@ -218,5 +218,42 @@ Problème rencontré : Si on exit pas après built_in_manager, on rentre dans un
 
 Pour echo : exit code toujours à 0
 
-Si une seule commande :
+Si une seule commande.
 
+03/09
+
+DEBUG TESTER :
+
+68/69/70 : P-E un souci avec echo.
+
+
+
+04/09 
+
+I - Debug pour le check de cmd.
+
+1 - On split la cmd. m_cmd[0] = cmd m_cmd[1] = options où arguments etc...
+2 - On envoie m_cmd[0] dans check_file.
+a --> On vérifie avec stat si la commande existe.
+---> Si elle n'existe pas, on regarde si elle contient des slashs, si c'est le cas c'est p-ê une cmd absolue. 
+---> Sinon c'est que la cmd relatif n'existe pas, et que ce n'est pas non plus un chemin absolu. Donc exit_code 127?
+b ---> Si la cmd relative existe, on check si c'est un directory. Si oui, exit_code 127?
+c ---> Si la cmd existe, et qu'on a les permissions dessus on return la cmd
+---> Sinon exit_code 127? 
+
+Ensuite, de retour dans child :
+
+Si check_file return m_cmd[0], on avance. Sinon ???
+
+a - Si la cmd existe, que c'est une relative, et qu'access X_OK | F_OK est bon, on execve.
+Sinon, on cherche le path et on execve. 
+Test  26: ✅ ls >         ./outfiles/outfile01 
+
+
+
+TEST VARIABLES :
+
+Redirect 75 : exit_status = wildcards (Mais pourquoi en fait?)
+Redirect 50 : Invalid permissions --> Une fois sur deux l'exit code n'est pas récupéré.
+Redirect 22 : Exit code == oi (#MAGIE_NOIRE)
+Redirect 20 : exit_code vide.

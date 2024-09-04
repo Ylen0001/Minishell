@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:31:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/04 17:11:40 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:24:39 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_data // Structure Globalem
 	char		c;
 	int			errno; // à remplir avec waitpid et avec signal
 	size_t		built_in;
+	int			signal_number;
 	// int			flag_echo_trig;
 	
 	/* Pour le parsing */
@@ -148,12 +149,12 @@ char		*find_path(char *cmd, char *env[]);
 char		*get_env_path(char *env[]);
 void		free_paths(char **paths);
 char		*construct_path(char *dir, char *cmd);
-char		*check_file(char *cmd);
+char		*check_file(t_data *data, char *cmd);
 int			there_is_slash(char *cmd);
 void		init_data_2(t_data *data);
 bool		status();
 void		child(t_data *data, size_t idx, int built_in);
-void		open_file_minishell(t_data *data, int type, char *file);
+int			open_file_minishell(t_data *data, int type, char *file);
 void		redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f);
 void		stdout_redir(t_data *data, int redir_type, char *redir_file);
 void		heredoc_redir(t_data *data, int redir_type, char *redir_file);
