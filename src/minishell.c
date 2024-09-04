@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/04 17:23:11 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:32:53 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 
 volatile int	g_signal_received = 0;
 
-int tmp(char *input, t_data s_data, t_vectstr **env_buff, int *ex_st_buff)
-{
+int tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff){
         if (g_signal_received == 2 || check_spaces(input) != 0)
         {
             g_signal_received = 0;
@@ -29,14 +28,14 @@ int tmp(char *input, t_data s_data, t_vectstr **env_buff, int *ex_st_buff)
         if (!input)		
         {
             free_t_data(&s_data);
-            free_t_vectstr(*env_buff);
+            free_t_vectstr(env_buff);
             exit(1);
         }
         add_history(input);
         launch_parsing(input, &s_data);
         minishell(&s_data);
         // garbage_collector(&s_data);
-        *env_buff = vectstr_dup(s_data.vect_env);
+        env_buff = vectstr_dup(s_data.vect_env);
         *ex_st_buff = s_data.exit_status; 
 	return (0);
 }
@@ -71,6 +70,8 @@ int main(int argc, char **argv, char **env)
         input = NULL;
         rl_event_hook = rl_event_dummy;
         s_data = init_data(env, ex_st_buff, *env_buff);
+        // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
+        // input = readline("minishell: ");
 		if (isatty(STDIN_FILENO))
             input = readline("minishell: ");
 		else
@@ -106,13 +107,26 @@ int main(int argc, char **argv, char **env)
 			}
 			printf("minishell: \n");
         }
-		if (!input)
+		if (!input){
 			break;
+		}
+		
 		char **input_list = ft_split(input, '\n');
 		for (int i = 0; input_list[i]; i++){
-			tmp(input_list[i], s_data, &env_buff, &ex_st_buff);
+			tmp(input_list[i], s_data, env_buff, &ex_st_buff);
 		}
 		free_charchar(input_list);
+		//free input
+
+        // if (isatty(STDIN_FILENO)) {
+        // } else {
+        //     printf("minishell: \n");
+        //     char buffer[1024];
+        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        //         input = strdup(buffer);
+        //     }
+        // }
+		
     }
 	free_t_data(&s_data);
     // garbage_collector(&s_data);
@@ -260,13 +274,13 @@ void	minishell(t_data *data)
 		waitpid(data->pids[it], &data->exit_status, 0);
 		if(WIFEXITED(data->exit_status))
 			data->exit_status = WEXITSTATUS(data->exit_status);
-		else if(WIFSIGNALED(data->exit_status))
-		{
-			data->signal_number = WTERMSIG(data->exit_status);
-			data->exit_status = 128 + data->signal_number;
-		}
-		else if(WIFSTOPPED(data->exit_status))
-			data->exit_status = 128 + WSTOPSIG(data->exit_status);
+		// else if(WIFSIGNALED(data->exit_status))
+		// {
+		// 	data->signal_number = WTERMSIG(data->exit_status);
+		// 	data->exit_status = 128 + data->signal_number;
+		// }
+		// else if(WIFSTOPPED(data->exit_status))
+		// 	data->exit_status = 128 + WSTOPSIG(data->exit_status);
 		else
 			data->exit_status = 1;
 	}
