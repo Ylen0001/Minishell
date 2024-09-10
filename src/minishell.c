@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/04 17:32:53 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/04 18:32:14 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,6 +339,7 @@ void child(t_data *data, size_t it_cmd, int	built_in)
 		// 	data->exit_status = 1;
 		// 	return;
 		// }
+
 		check_file(data, m_cmd[0]);
 		if (m_cmd[0] && (access(m_cmd[0], X_OK | F_OK) == 0))
 		{
@@ -373,7 +374,7 @@ char	*check_file(t_data *data, char *cmd)
 	{
 		if (S_ISDIR(file_stat.st_mode))
 		{
-			dprintf(2, "%s: Is a directory\n", cmd);
+			ft_putstr_fd("Is a directory\n", 2);
 			data->exit_status = 126;
 			builtin_exit(data, NULL);
 		}
@@ -382,7 +383,7 @@ char	*check_file(t_data *data, char *cmd)
 		}
 		else
 		{
-			dprintf(2, "%s: Permission denied\n", cmd);
+			ft_putstr_fd("Permission denied\n", 2);
 			data->exit_status = 127;
 			builtin_exit(data, NULL);
 		}
@@ -477,7 +478,7 @@ int	open_file_minishell(t_data *data, int type, char *file)
 	if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC 
 		|| (type == STDOUT_REDIR && access(file, F_OK | W_OK) != -1))
 	{
-		dprintf(2, "file = %s\n", file);
+		// dprintf(2, "file = %s\n", file);
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
 			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);

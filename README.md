@@ -257,3 +257,20 @@ Redirect 75 : exit_status = wildcards (Mais pourquoi en fait?)
 Redirect 50 : Invalid permissions --> Une fois sur deux l'exit code n'est pas récupéré.
 Redirect 22 : Exit code == oi (#MAGIE_NOIRE)
 Redirect 20 : exit_code vide.
+
+
+103/146 :
+
+Il y a un souci avec check_file sur ./test_file où /test_file où README.md
+On ne rentre pas aux mêmes endroits de check_file en fonction 
+
+minishell_tester/test_file : No such file or directory 126
+ici on devrait renvoyer 127.
+
+./minishell_tester/test_file/invalid_permissions : No such file or directory 127
+
+ici on devrait renvoyer 126.
+
+
+
+Je passe No such file en 127
