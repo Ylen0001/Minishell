@@ -67,6 +67,19 @@ int check_presence(t_data *s_data, char *to_check)
         i++;
     }
     i = 0;
+    int checker = 0;
+    while(clean[i])
+    {
+        if(ft_isdigit(clean[i]) != 0)
+            checker++;
+        i++;
+    }
+    if (checker == i)
+    {
+        s_data->exit_status = 1;
+        return 1;
+    }
+    i = 0;
     while(s_data->vect_env->data[i])
     {
         if (ft_strnstr(s_data->vect_env->data[i], clean, ft_strlen(clean)) != 0)
@@ -114,9 +127,18 @@ void builtin_export(t_data *s_data, char *cmd)
                 i++;
                 break;                
             }
+            if (ft_isspace(s[i]) == 1 && check_qote == 0)
+            {
+                break;
+            }
             to_add[j] = s[i];
             i++;
             j++;
+        }
+        if (to_add[0] == '=')
+        {
+            s_data->exit_status = 1;
+            return;
         }
         if (to_add[0])
         {            
