@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:23:01 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 10:34:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/03 12:12:46 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	if(it > 2)
 	{	
 		data->exit_status = 1;
-		ft_putstr_fd("Too many arguments\n", 2);
+		ft_putstr_fd(" too many arguments\n", 2);
 		return(0);
 	}
 	path = NULL;
