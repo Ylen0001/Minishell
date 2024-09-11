@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/04 17:21:22 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/11 10:04:10 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,52 +123,99 @@ void append_redir_here(t_data *s_data, char *str, int i)
     vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
 }
 
-void append_redir(t_data *s_data, char *str, int i)
+int handle_characters(t_data *s_data, char *str, char *to_add, int *i, int *x)
+{
+    // int check_q = 0;
+    while (str[*i] && (str[*i] != ' ' && str[*i] != '\t' && str[*i] != '<' && str[*i] != '>' && str[*i] != '|'))
+    {
+        if (str[*i] == '$' && ((str[*i + 1] >= 'A' && str[*i + 1] <= 'Z') 
+            || (str[*i + 1] == '_') || (str[*i + 1] >= 'a' && str[*i + 1] <= 'z') 
+                || (str[*i + 1] >= '0' && str[*i + 1] <= '9')))
+        {
+            int j = *i + 1;
+            int y = 0;
+            char check_var[500] = {'\0'};
+            while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] == '_') 
+                    || (str[j] >= 'a' && str[j] <= 'z') || (str[j] >= '0' && str[j] <= '9')))
+            {
+                check_var[y] = str[j];
+                y++;
+                j++;
+            }
+            *x = search_n_append(s_data, check_var, to_add, *x);
+            *i = j;
+        }
+        // else if ((str[*i] == '"' || str[*i] == '\'') && check_q % 2 == 0)
+        // {
+        //     (*i)++;
+        //     check_q++;
+        // }
+        // else if ((str[*i] == '"' || str[*i] == '\'') && check_q % 2 == 1)
+        //     return 1;
+        else
+        {
+            to_add[*x] = str[*i];
+            (*i)++;
+            (*x)++;
+        }
+    }
+    return 0;
+}
+
+void handle_characters_qotes(t_data *s_data, char *str, char *to_add, int *i, int *x)
+{
+    while (str[*i] && str[*i] != '"')
+    {
+        if (str[*i] == '$' && ((str[*i + 1] >= 'A' && str[*i + 1] <= 'Z') 
+            || (str[*i + 1] == '_') || (str[*i + 1] >= 'a' && str[*i + 1] <= 'z') 
+                || (str[*i + 1] >= '0' && str[*i + 1] <= '9')))
+        {
+            int j = *i + 1;
+            int y = 0;
+            char check_var[500] = {'\0'};
+            while (str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] == '_') 
+                    || (str[j] >= 'a' && str[j] <= 'z') || (str[j] >= '0' && str[j] <= '9')))
+            {
+                check_var[y] = str[j];
+                y++;
+                j++;
+            }
+            *x = search_n_append(s_data, check_var, to_add, *x);
+            *i = j;
+        }
+        else
+        {
+            to_add[*x] = str[*i];
+            (*i)++;
+            (*x)++;
+        }
+    }
+}
+
+int append_redir(t_data *s_data, char *str, int i)
 {
     char to_add[500] = {'\0'};
     int x = 0;
-    int check_q = 0;
     if (str[i] == '<' || str[i] == '>')
         i++;
     if (str[i] == '<' || str[i] == '>')
         i++;
     while(str[i] && (str[i] == ' ' || str[i] == '\t'))
         i++;
-    
-    while(str[i] && (str[i] != ' ' && str[i] != '\t' && str[i] != '<' && str[i] != '>' && str[i] != '|'))
+    if(str[i] == '"')
     {
-        if (str[i] == '$' && ((str[i + 1] >= 'A' && str[i + 1] <= 'Z') 
-            || (str[i + 1] == '_') || (str[i + 1] >= 'a' && str[i + 1] <= 'z') 
-                || (str[i + 1] >= '0' && str[i + 1] <= '9')))
-                {
-                    int j = i + 1;
-                    int y = 0;
-                    char check_var[500] = {'\0'};
-                    while(str[j] && ((str[j] >= 'A' && str[j] <= 'Z') || (str[j] == '_') 
-                        || (str[j] >= 'a' && str[j] <= 'z') || (str[j] >= '0' && str[j] <= '9')))
-                    {
-                        check_var[y] = str[j];
-                        y++;
-                        j++;   
-                    }
-                    x = search_n_append(s_data, check_var, to_add, x);
-                    i = j;
-                }
-        if((str[i] == '"' || str[i] == '\'') && check_q % 2 == 0)
-        {
-            i++;
-            check_q++;
-        }
-        else if ((str[i] == '"' || str[i] == '\'') && check_q % 2 == 1)
-        {
-            vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
-            return;
-        }
-        to_add[x] = str[i];
         i++;
-        x++;
+        handle_characters_qotes(s_data, str, to_add, &i, &x);
+        vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
+        return i;
     }
-    vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
+    if (handle_characters(s_data, str, to_add, &i, &x))
+    {
+        vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
+        return i;
+    }
+    vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);    
+    return i;
 }
 int manage_chevron(t_data *s_data, char *str, int prev_i)
 {
@@ -178,27 +225,30 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         if (str[i] == '>' && str[i + 1] != '>')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_REDIR);
-            append_redir(s_data, str, i);
+            i = append_redir(s_data, str, i);
             i++;
             while(str[i] && str[i] == ' ')
                 i++;
+            break;
         }
         if (str[i] == '>' && str[i + 1] == '>')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_APPEND);
-            append_redir(s_data, str, i);
+            i = append_redir(s_data, str, i);
             i++;
             i++;
             while(str[i] && str[i] == ' ')
                 i++;
+            break;
         }
         if (str[i] == '<' && str[i + 1] != '<')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDIN_REDIR);
-            append_redir(s_data, str, i);
+            i = append_redir(s_data, str, i);
             i++;
             while(str[i] && str[i] == ' ')
-                i++;
+                i++; 
+            break;          
         }
         if (str[i] == '<' && str[i + 1] == '<')
         {
@@ -211,10 +261,9 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         }
         i++;
     }
-    if (str[i] == '"'){
+    if (str[i] == '"')
         i++;
-    }
-	return i;
+    return i;
 }
 
 int handle_exit_code(t_data *s_data, char *str, int x)
@@ -440,7 +489,6 @@ void launch_parsing(char *input, t_data *s_data)
         return;
     }
     path_to_vect(s_data, 0);
-    // send_builtin(s_data);
     // vect_print(s_data->v_path);
     // printf("redir :\n");
     // vect_print(s_data->v_path->parsed->redir);
