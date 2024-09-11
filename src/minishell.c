@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/04 18:32:14 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/10 13:36:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -475,13 +475,15 @@ int	open_file_minishell(t_data *data, int type, char *file)
 	openFlags += (type == STDOUT_APPEND) * (O_WRONLY | O_CREAT | O_APPEND);
 	openFlags += (type == STDIN_REDIR) * (O_RDONLY);
 	openFlags += (type == HERE_DOC) * (O_RDONLY);
-	if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC 
-		|| (type == STDOUT_REDIR && access(file, F_OK | W_OK) != -1))
+	if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC)
 	{
 		// dprintf(2, "file = %s\n", file);
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
-			ft_putstr_fd("Error : file Redir mode opening failed.\n", 2);
+		{
+			ft_putstr_fd(" Permission Denied.\n", 2);
+			data->exit_status = 1;
+		}
 		if(data->a_file == 0)
 			ft_putstr_fd("Error : Open failed\n", 2);
 		return (1);
@@ -493,3 +495,6 @@ int	open_file_minishell(t_data *data, int type, char *file)
 		return (0);
 	}
 }
+
+	// if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC 
+		// || (type == STDOUT_REDIR && access(file, F_OK | W_OK) != -1))

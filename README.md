@@ -269,8 +269,3 @@ ici on devrait renvoyer 127.
 
 ./minishell_tester/test_file/invalid_permissions : No such file or directory 127
 
-ici on devrait renvoyer 126.
-
-
-
-Je passe No such file en 127
