@@ -215,6 +215,7 @@ void builtin_unset(t_data *data, char *cmd);
 void builtin_exit(t_data *s_data, char *cmd);
 void builtin_env(t_data *s_data);
 void builtin_export(t_data *s_data, char *cmd);
+int ft_isspace(char c);
 
 #define vect_print(param) _Generic((param), \
 	t_vector *: vector_print,	\

@@ -20,9 +20,7 @@ long long	c_toll(const char *str)
 	int				minus;
 	u_int64_t result;
 	int				i;
-	size_t	checker;
 
-	checker = 9223372036854775807;
 	i = 0;
 	result = 0;
 	minus = 1;
@@ -70,13 +68,19 @@ void builtin_env(t_data *s_data)
 int check_args_ex(char *cmd)
 {
 	char **splitted;
+	int i = 0;
 	
 	splitted = ft_split(cmd, ' ');
 	if (splitted[2])
 		return 1;
 	if (splitted[1])
 	{
-		
+		while(splitted[1][i])
+		{
+			if(ft_isdigit(splitted[1][i]) == 0 && splitted[1][i] != '+' && splitted[1][i] != '-')
+				return 2;
+			i++;
+		}
 		return 42;
 	}
 	return 0;
@@ -94,6 +98,11 @@ void builtin_exit(t_data *s_data, char *cmd)
 	{
     	free_t_data(s_data);
 		exit(1);
+	}
+	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 2)
+	{
+		free_t_data(s_data);
+		exit(2);
 	}
 	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 42)
 	{
