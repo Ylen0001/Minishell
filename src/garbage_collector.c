@@ -6,14 +6,47 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:27:33 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/27 11:06:46 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/18 15:12:00 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void	garbage_destructor(t_data *data)
+{
+	size_t i;
+
+	i = 0;
+	if(data->m_cmd != NULL)
+	{
+		while(data->m_cmd[i] != NULL)
+		{
+			free(data->m_cmd[i]);
+			i++;
+		}
+		free(data->m_cmd);
+	}
+	i = 0;
+	if(data->pipefds != NULL)
+	{
+		while(i < data->nbr_cmd)
+			free(data->pipefds[i++]);
+		free(data->pipefds);
+	}
+	if(data->pids != NULL)
+		free(data->pids);
+	i = 0;
+	// if(data->hd_names != NULL)
+	// {
+	// 	while(i < data->hd_count)
+	// 		free(data->hd_names[i++]);
+	// 	free(data->hd_names);
+	// }
+}
+
 void	garbage_collector(t_data *data)
 {
+	// (void)data;
 	size_t i;
 
 	i = 0;
@@ -23,7 +56,7 @@ void	garbage_collector(t_data *data)
 		free(data->pipefds[i++]);
 	free(data->pipefds);
 	i = 0;
-	exit(EXIT_FAILURE);
+
 }
 
 void free_t_vectint(t_vectint *vect)
@@ -92,20 +125,22 @@ void free_t_vector(t_vector *vector)
     }
 }
 
-void free_t_data(t_data *data)
+void free_t_data(t_data *data, int check)
 {
     size_t i;
 
     i = 0;
+    if (!data)
+        return;
     if (data) 
     {
         if (data->vect_env)
             free_t_vectstr(data->vect_env);
-        if (data->v_path->parsed)
+        if (data->v_path)
             free_t_vector(data->v_path);
         if (data->full_string)
             free(data->full_string);
-        if (data->env)
+        if (check == 0 && data->env)
         {
             while (data->env[i])
             {
@@ -116,4 +151,5 @@ void free_t_data(t_data *data)
         }
     }
 }
+
 

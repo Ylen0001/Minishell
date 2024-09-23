@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:48:33 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/04 12:12:11 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/18 15:09:10 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,9 @@ t_parsed init_parsed()
 {
     t_parsed self;
     
-    // self.cmd = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
-    // if (!self.cmd)
-    //     exit(EXIT_FAILURE);
     self.cmd = init_vect_str();
-    // self.redir = (t_vectstr *)ft_calloc(10, sizeof(t_vectstr *));
-    // if (!self.redir)
-    //     exit(EXIT_FAILURE);
     self.redir = init_vect_str();
     self.type = init_vect_int();
-
     return self;
 }
 
@@ -80,7 +73,7 @@ void init_env(t_vectstr *vect_env, char **env)
     }
 }
 
-t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff)
+t_data init_data(char **env, int ex_data_buff, t_vectstr *env_buff)
 {
     t_data self;
 
@@ -88,13 +81,14 @@ t_data init_data(char **env, int ex_data_buff, t_vectstr env_buff)
     
 	// self.hd_it = 0;
 	self.flag_echo_trig = 0;
+    self.checkerino = 0;
     self.full_string = NULL;
     self.env = NULL;
     self.check_quotes_space = 0;
     self.exit_status = ex_data_buff;
     self.v_path = init_vector();
-    self.vect_env = init_vect_str();
-    self.vect_env = vectstr_dup(&env_buff);
+    // self.vect_env = init_vect_str();
+    self.vect_env = env_buff;
     return self;
 }
 
@@ -121,10 +115,10 @@ void	init_data_2(t_data *data)
 	data->pipe_trig = 0;
 	data->old_fdin = 0;
 	data->old_fdout = 0;
-	data->signal_number = 0;
+	data->m_cmd = NULL;
 	// data->flag_echo_trig = 0;
 	i = 0;
-	data->pipefds = ft_calloc( data->v_path->size, sizeof(int *));
+	data->pipefds = ft_calloc(data->v_path->size, sizeof(int *));
 	while (i < data->v_path->size)
 		data->pipefds[i++] = ft_calloc(2, sizeof(int) + 1);
 	if (!data->pipefds)

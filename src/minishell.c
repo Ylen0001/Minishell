@@ -3,40 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 16:33:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/10 13:36:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/20 10:51:53 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include "../includes/colors.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 volatile int	g_signal_received = 0;
 
-int tmp(char *input, t_data s_data, t_vectstr *env_buff, int *ex_st_buff){
+int tmp(char *input, t_data *s_data, t_vectstr *env_buff, int *ex_st_buff)
+{
         if (g_signal_received == 2 || check_spaces(input) != 0)
         {
             g_signal_received = 0;
-            free_t_data(&s_data);
+            free_t_data(s_data, 1);
             return 1;
         }
-		// printf("input: %s\n", input);
         if (!input)		
         {
-            free_t_data(&s_data);
+            free_t_data(s_data, 0);
             free_t_vectstr(env_buff);
-            exit(1);
+            return 42;
         }
         add_history(input);
-        launch_parsing(input, &s_data);
-        minishell(&s_data);
+        launch_parsing(input, s_data);
+        minishell(s_data);
         // garbage_collector(&s_data);
-        env_buff = vectstr_dup(s_data.vect_env);
-        *ex_st_buff = s_data.exit_status; 
+        env_buff = s_data->vect_env;
+        *ex_st_buff = s_data->exit_status; 
 	return (0);
 }
 
@@ -54,6 +51,7 @@ void free_charchar(char **s){
 
 int main(int argc, char **argv, char **env) 
 {
+	// char **input_list;
     (void)argv;
     if (argc != 1 || env == NULL || *env == NULL)
         exit(EXIT_FAILURE);
@@ -69,9 +67,7 @@ int main(int argc, char **argv, char **env)
     {
         input = NULL;
         rl_event_hook = rl_event_dummy;
-        s_data = init_data(env, ex_st_buff, *env_buff);
-        // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
-        // input = readline("minishell: ");
+        s_data = init_data(env, ex_st_buff, env_buff);
 		if (isatty(STDIN_FILENO))
             input = readline("minishell: ");
 		else
@@ -81,316 +77,85 @@ int main(int argc, char **argv, char **env)
 			char buffer[2] = {0}; // Used to store the character read
 			char *line = calloc(1024, sizeof(char)); // Allocate memory for the line
 				
-			if (line == NULL) {
+			if (line == NULL)
+			{
+				free_t_data(&s_data, 0);
 				perror("calloc");
 				return 1;
 			}
-			
 			while ((bytes_read = read(STDIN_FILENO, buffer, 1)) > 0) {
 				line[len++] = buffer[0];
-				if (buffer[0] == '\n' || buffer[0] == '\0') break;
+			if (buffer[0] == '\n' || buffer[0] == '\0') 
+				break;
 			}
-			
-			if (bytes_read < 0 || strlen(line) == 0) {
+			if (bytes_read < 0 || strlen(line) == 0)
+			{
 				input = NULL;
 				break;
 			}
-			
 			line[len] = '\0';
-			
-			if (strlen(line) > 0) {
+			if (strlen(line) > 0)
 				input = line;
-			} else
+			else
 			{ 
 				input = NULL;
 				break;
 			}
-			printf("minishell: \n");
+			ft_putstr_fd("minishell: \n", STDOUT_FILENO);
         }
-		if (!input){
+		if (!input)
+		{
 			break;
 		}
-		
 		char **input_list = ft_split(input, '\n');
-		for (int i = 0; input_list[i]; i++){
-			tmp(input_list[i], s_data, env_buff, &ex_st_buff);
+		for (int i = 0; input_list[i]; i++)
+		{
+			if (tmp(input_list[i], &s_data, env_buff, &ex_st_buff) == 42)
+			{
+				free_charchar(input_list);
+				exit(1);
+			}
 		}
 		free_charchar(input_list);
-		//free input
-
-        // if (isatty(STDIN_FILENO)) {
-        // } else {
-        //     printf("minishell: \n");
-        //     char buffer[1024];
-        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-        //         input = strdup(buffer);
-        //     }
-        // }
-		
+		free_t_vector(s_data.v_path);
+		s_data.v_path = NULL;
     }
-	free_t_data(&s_data);
+	free_t_data(&s_data, 0);
     // garbage_collector(&s_data);
     rl_clear_history();
     return (0);
-}
-
-// echo -e "./minishell\nexit 123\necho \$?\nexit\n"
-
-
-// int main(int argc, char **argv, char **env) 
-// {
-//     (void)argv;
-//     if (argc != 1 || env == NULL || *env == NULL)
-//         exit(EXIT_FAILURE);
-//     t_data s_data;
-//     t_vectstr *env_buff;
-//     int ex_st_buff;
-
-//     env_buff = init_vect_str();
-//     init_env(env_buff, env);
-//     ex_st_buff = 0;
-//     char *input = NULL;
-//     while (init_signal(S_PROMPT))
-//     {
-//         input = NULL;
-//         rl_event_hook = rl_event_dummy;
-//         s_data = init_data(env, ex_st_buff, *env_buff);
-//         // char *input = readline(C_LIGHT_ORANGE"minishell: "C_RESET);
-        // if (isatty(STDIN_FILENO)) {
-        //     input = readline("minishell: ");
-        // } else {
-        //     printf("minishell: \n");
-        //     char buffer[1024];
-        //     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-        //         input = strdup(buffer);
-        //     }
-        // }
-//         if (g_signal_received == 2 || check_spaces(input) != 0)
-//         {
-//             g_signal_received = 0;
-//             free_t_data(&s_data);
-//             continue;
-//         }
-//         if (!input)		
-//         {
-//             free_t_data(&s_data);
-//             free_t_vectstr(env_buff);
-//             exit(1);
-//         }
-//         add_history(input);
-//         launch_parsing(input, &s_data);
-//         minishell(&s_data);
-//         // garbage_collector(&s_data);
-//         env_buff = vectstr_dup(s_data.vect_env);
-//         ex_st_buff = s_data.exit_status; 
-//         free_t_data(&s_data);
-//     }
-//     garbage_collector(&s_data);
-//     rl_clear_history();
-//     return (0);
-// }
-
-
-void	minishell(t_data *data)
-{
-	size_t it;
-
-	init_data_2(data);
-	here_doc_detector(data);
-	init_signal(S_EXEC);
-	while (data->v_path->size > 0 && data->i_cmd < data->v_path->size)  //  Size = 2
-	{
-		// sleep(1);
-		built_in_detector(data, data->v_path->parsed[data->i_cmd].cmd->data[0]);
-		// dprintf(2, "built_in = %zu\n", data->built_in);
-		// dprintf(2, "i_cmd = %zu\nsize = %zu\n", data->i_cmd, data->v_path->size);
-		// dprintf(2, "cmd = %s\n", data->v_path->parsed[data->i_cmd].cmd->data[0]);
-		if(data->v_path->size > 1)
-		{
-			// printf("BAD\n");
-			if (pipe(data->pipefds[data->i_pipes]) == -1)
-			{
-				perror("");
-				ft_putstr_fd("Error : Pipe failed.\n", 2);
-				// exit(EXIT_FAILURE);
-			}
-			data->pipe_trig = 1;
-			if(data->v_path->size >= 3 && data->i_pipes >= 2)
-			{
-				close(data->pipefds[data->i_pipes - 2][0]);
-				close(data->pipefds[data->i_pipes - 2][1]);
-			}
-			data->pids[data->i_cmd] = fork();
-			if (data->pids[data->i_cmd] == -1) 
-				ft_putstr_fd("Error : Fork Failed\n", 2);
-			if (data->pids[data->i_cmd] == 0)
-				child(data, data->i_cmd, data->built_in);
-			data->i_pipes++;
-		}
-		else if(data->i_cmd == 0 && data->built_in == 0 && data->v_path->size == 1)
-		{
-			// printf("Bad\n");
-			data->pids[data->i_cmd] = fork();
-			if (data->pids[data->i_cmd] == -1) 
-				ft_putstr_fd("Error : Fork Failed\n", 2);
-			if (data->pids[data->i_cmd] == 0)
-				child(data, data->i_cmd, data->built_in);
-		}
-		else
-		{
-			// dprintf(2, "Hello\n");
-			data->old_fdin = dup(STDIN_FILENO);
-			if(data->old_fdin == 0)
-			{
-				dprintf(2, "ERREUR in oldfd_in = %d\n", data->old_fdin);
-				data->exit_status = 0;
-			}
-			data->old_fdout = dup(STDOUT_FILENO);
-			if(data->old_fdout == -1)
-			{
-				dprintf(2, "ERREUR out oldfd out = %d\n", data->old_fdout);
-				data->exit_status = 0;
-			}
-			child(data, data->i_cmd, data->built_in);
-			if(dup2(data->old_fdin, STDIN_FILENO) == -1)
-				ft_putstr_fd("dup in merde\n", 2);
-			if(dup2(data->old_fdout, STDOUT_FILENO) == -1)
-				ft_putstr_fd("dup out merde\n", 2);
-		}
-		// dprintf(2, "SENT BON\n");
-		if(data->i_cmd == data->v_path->size - 1 && data->pipe_trig)
-		{
-			close(data->pipefds[data->i_pipes - 1][0]);
-			close(data->pipefds[data->i_pipes - 1][1]);
-			close(data->pipefds[data->i_pipes - 2][0]);
-			close(data->pipefds[data->i_pipes - 2][1]);
-		}
-		data->i_cmd++;
-		data->built_in = 0;
-	}
-	it = -1;
-	while(++it < data->i_cmd)
-	{
-		waitpid(data->pids[it], &data->exit_status, 0);
-		if(WIFEXITED(data->exit_status))
-			data->exit_status = WEXITSTATUS(data->exit_status);
-		// else if(WIFSIGNALED(data->exit_status))
-		// {
-		// 	data->signal_number = WTERMSIG(data->exit_status);
-		// 	data->exit_status = 128 + data->signal_number;
-		// }
-		// else if(WIFSTOPPED(data->exit_status))
-		// 	data->exit_status = 128 + WSTOPSIG(data->exit_status);
-		else
-			data->exit_status = 1;
-	}
-	it = -1;
-	while(++it < data->hd_count)
-		unlink(data->hd_names[it]);
-}
-
-void child(t_data *data, size_t it_cmd, int	built_in) 
-{
-	const 	t_vectstr *cmd = data->v_path->parsed[it_cmd].cmd;
-	const 	t_vectint *redir_t = data->v_path->parsed[it_cmd].type;
-	const	t_vectstr *redir_f = data->v_path->parsed[it_cmd].redir;
-	char 	*path;
-	char 	**m_cmd;
-
-	// dprintf(2, "cmd = %s\n", cmd->data[0]);
-	// built_in_detector(data, cmd->data[it_cmd]);
-	if (data->i_pipes > 0)
-	{
-		// dprintf(2, "REDIR IN, i_cmd = %zu\n", it_cmd);
-		if(dup2(data->pipefds[data->i_pipes - 1][0], STDIN_FILENO) == -1)
-			perror("Dup2: Error\n");
-		close(data->pipefds[data->i_pipes - 1][0]);
-		close(data->pipefds[data->i_pipes - 1][1]);
-	}
-	if (it_cmd != data->v_path->size - 1 || (it_cmd == 0 && data->v_path->size >= 2))
-	{
-		// dprintf(2, "REDIR out\n");
-		if(dup2(data->pipefds[data->i_pipes][1], STDOUT_FILENO) == -1)
-			perror("Dup2: Error\n");
-	}
-	// printf(C_ORANGE"built_in = %d\n"C_RESET, built_in);
-	if(data->pipe_trig)
-	{
-		close(data->pipefds[data->i_pipes][1]);
-		close(data->pipefds[data->i_pipes][0]);
-	}
-	if(redir_f->size > 0)
-	{
-		// dprintf(2, "Hello\n");
-		redirections(data, redir_t, redir_f->data);
-	}
-	if(built_in == 1)
-	{
-		built_in_manager(data, cmd->data[0]);
-		if(data->v_path->size > 1)
-			exit(0);
-		return;
-	}
-	else if(built_in == 0)
-	{
-		m_cmd = ft_split(cmd->data[0], ' ');
-		// if(check_file(m_cmd[0]) == NULL)
-		// {
-		// 	data->exit_status = 1;
-		// 	return;
-		// }
-
-		check_file(data, m_cmd[0]);
-		if (m_cmd[0] && (access(m_cmd[0], X_OK | F_OK) == 0))
-		{
-			if(execve(m_cmd[0], m_cmd, data->vect_env->data) == -1)
-			{
-				ft_putstr_fd("execve: Error\n", 2);
-				data->exit_status = 1;
-				builtin_exit(data, NULL);
-				// exit(EXIT_FAILURE);
-			}
-		}
-		path = find_path(m_cmd[0], data->vect_env->data);
-		// dprintf(2, "path = %s\n", path);
-		if(execve(path, m_cmd, data->vect_env->data) == -1)
-		{
-			// perror("");
-			ft_putstr_fd("0: command not found\n", 2);
-			data->exit_status = 127;
-			builtin_exit(data, NULL);
-			// exit(1);
-		}
-	}
-	return;
 }
 
 char	*check_file(t_data *data, char *cmd)
 {
 	struct stat file_stat;
 
-	// dprintf(2, "cmd = %s\n", cmd);
-	if (stat(cmd, &file_stat) != -1) // Si relatif 
+	if (stat(cmd, &file_stat) != -1) // Si relatif (Est-ce que la cmd existe)
 	{
-		if (S_ISDIR(file_stat.st_mode))
+		if (there_is_slash(cmd) && S_ISDIR(file_stat.st_mode))
 		{
-			ft_putstr_fd("Is a directory\n", 2);
+			ft_putstr_fd(" Is a directory\n", 2);
 			data->exit_status = 126;
 			builtin_exit(data, NULL);
 		}
 		if (file_stat.st_mode & S_IXUSR){
 			return (cmd);
 		}
+		else if(access(cmd, X_OK) == -1)
+		{
+			ft_putstr_fd(" Permission denied\n", 2);
+			data->exit_status = 126;
+			builtin_exit(data, NULL);
+		}
 		else
 		{
-			ft_putstr_fd("Permission denied\n", 2);
+			ft_putstr_fd(" command not found\n", 2);
 			data->exit_status = 127;
 			builtin_exit(data, NULL);
 		}
 	}
-	else if (there_is_slash(cmd)) // Si absolu
+	else if(there_is_slash(cmd)) // Si absolu
 	{
-		// dprintf(2, "%s: No such file or directory\n", cmd);
 		ft_putstr_fd(" No such file or directory\n", 2);
 		data->exit_status = 127;
 		builtin_exit(data, NULL);
@@ -419,15 +184,12 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 
 	it = -1;
 	hd_it = 0;
-	// dprintf(2, "|%d|\n", redir_t->redir_type[0]);
-	// dprintf(2, "|%s|\n", redir_f[0]);
 	while(++it < redir_t->size)
 	{
 		if(redir_t->redir_type[it] == STDIN_REDIR)
 		{
 			if(open_file_minishell(data, redir_t->redir_type[it], redir_f[it]) == 0)
 			{
-				// ft_putstr_fd("Access a foiré\n", 2);
 				builtin_exit(data, NULL);
 				return;
 			}
@@ -435,7 +197,6 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			{	
 				data->exit_status = 0;
 				ft_putstr_fd("Dup2: STDIN REDIR failed.\n", 2);
-				// exit(2);
 			}
 			close(data->a_file);
 		}
@@ -447,7 +208,6 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			{
 				data->exit_status = 2;
 				ft_putstr_fd("Dup2: HERE_DOC REDIR failed.\n", 2);
-				// exit(2);
 			}
 			close(data->a_file);
 			hd_it++;
@@ -459,7 +219,6 @@ void	redirections(t_data *data, const struct s_vectint *redir_t, char **redir_f)
 			if(dup2(data->a_file, STDOUT_FILENO) == -1)
 			{	
 				ft_putstr_fd("Dup2: STDOUT REDIR failed.\n", 2);
-				// exit(2);
 				data->exit_status = 2;
 			}
 			close(data->a_file);
@@ -481,8 +240,9 @@ int	open_file_minishell(t_data *data, int type, char *file)
 		data->a_file = open(file, openFlags, 0644);
 		if (data->a_file == -1)
 		{
-			ft_putstr_fd(" Permission Denied.\n", 2);
+			ft_putstr_fd(" Permission denied\n", 2);
 			data->exit_status = 1;
+			builtin_exit(data, NULL);
 		}
 		if(data->a_file == 0)
 			ft_putstr_fd("Error : Open failed\n", 2);
@@ -490,11 +250,7 @@ int	open_file_minishell(t_data *data, int type, char *file)
 	}
 	else
 	{
-		// ft_putstr_fd("Access a foiré\n", 2);
 		data->exit_status = 1;
 		return (0);
 	}
 }
-
-	// if((type == STDIN_REDIR && access(file, F_OK | R_OK) != -1) || type >= HERE_DOC 
-		// || (type == STDOUT_REDIR && access(file, F_OK | W_OK) != -1))

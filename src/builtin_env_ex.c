@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/03 14:45:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/18 15:13:07 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,25 +93,34 @@ void builtin_exit(t_data *s_data, char *cmd)
 	char **splitted;
 	(void)cmd;
 	
+	// printf("Exit status = %d\n", s_data->exit_status);
 	splitted = ft_split(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0], ' ');
-	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 1)
+	if (ft_strncmp(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0], "exit", 4) == 0)
 	{
-    	free_t_data(s_data);
-		exit(1);
-	}
-	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 2)
-	{
-		free_t_data(s_data);
-		exit(2);
-	}
-	if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 42)
-	{
-		dehors = c_toll(splitted[1]);
-		free_t_data(s_data);
-		exit(dehors);
+		if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 1)
+		{
+			free_t_data(s_data, 0);
+			exit(1);
+		}
+		if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 2)
+		{
+			free_t_data(s_data, 0);
+			exit(2);
+		}
+		if (check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]) == 42)
+		{
+			dehors = c_toll(splitted[1]);
+			free_t_data(s_data, 0);
+			exit(dehors);
+		}
 	}
 	dehors = s_data->exit_status;
-    free_t_data(s_data);
+    free_t_data(s_data, 0);
+	s_data->i = 0;
+	while(splitted[s_data->i])
+		free(splitted[s_data->i++]);
+	free(splitted);
+	garbage_destructor(s_data);
 	// ft_putstr_fd("exit", 2);
     exit(dehors);
 }

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:23:01 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 12:12:46 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/16 14:47:03 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	char		*last_dir;
 	char		*cwd;
 	char		**path;
-	size_t it;
+	size_t 		it;
 		
 	it = 0;
-	(void)it;
+	// (void)it;
 	path = NULL;
 	cwd = NULL;
 	last_dir = NULL;
@@ -54,12 +54,12 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 	if(ft_strcmp(cmd, "cd ~") == 0)
 	{
 		if(chdir(home_dir) == -1)
-			perror("chdir() error.\n");			// Changement de dir vers home.
+			ft_putstr_fd("Error: cd ~\n", 2);			// Changement de dir vers home.
 	}
 	else if(ft_strcmp(cmd, "cd -") == 0)
 	{
 		if(chdir(last_dir) == -1)
-			perror("chdir() error.\n");
+			ft_putstr_fd("Error: cd -\n", 2);
 		b_i_pwd(data);
 	}
 	else
@@ -87,12 +87,16 @@ int b_i_cd(t_data *data, char *cmd) // Chemin absolu / relatif
 			cwd = ft_strjoin(cwd, "/");
 			cwd = ft_strjoin(cwd, path[1]);
 			// printf("Relative path = %s\n", cwd);
-			if(chdir(path[1]) == 0)
-				perror("chdir() error.\n");
+			chdir(path[1]);
+				// perror("chdir() error.\n");
 			b_i_pwd(data);
 		}
 		else
-			perror("Access: Error\n");
+		{
+			ft_putstr_fd(" No such file or directory\n", 2);
+            data->exit_status = 1;
+            builtin_exit(data, NULL);
+		}
 	}
 	free(path);
 	free(cwd);

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 15:27:36 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/08/21 14:00:25 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/17 13:32:12 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	 here_doc_case(t_data *data, char *limiter)
 		data->hd_names = ft_calloc(data->hd_count + 1, sizeof(char *));
 	hd_suffix = ft_itoa(data->suffix);
 	buffer = ft_strjoin("here_doc", hd_suffix);
+	free(hd_suffix);
 	data->hd_names[data->suffix] = ft_strjoin(buffer, ".tmp");
 	// printf("hd_name = %s\n", data->hd_names[data->suffix]);
 	// printf("EOF = %s\n", limiter);

@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 07:33:52 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/11 10:27:51 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/04 17:11:26 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ int check_presence(t_data *s_data, char *to_check)
 
     while (to_check[i] && to_check[i] != '=')
     {
+        if ((ft_isalnum(to_check[i]) == 0 && to_check[i] != '_'))
+        {
+            
+            s_data->exit_status = 1;
+            return 1;
+        }
+
         clean[i] = to_check[i];
         i++;
     }
@@ -86,26 +93,28 @@ int check_presence(t_data *s_data, char *to_check)
 }
 void builtin_export(t_data *s_data, char *cmd)
 {
+    (void)cmd;
     int i = 0;
     int j = 0;
-    char *s = cmd;
-    int check_qote = 0;
+    char *s = s_data->v_path->parsed[s_data->i_cmd].cmd->data[0];
+    // printf("%s\n", s);
     while (s[i] && s[i] == ' ')
         i++;
     while(s[i] && s[i] != ' ')
+        i++;
+    while (s[i] && s[i] == ' ')
         i++;
     if (s[i] == '\0')
     {
         print_export(s_data);
         return;
     }
-    while (s[i] && s[i] == ' ')
-        i++;
+    int check_qote = 0;
     while(s[i])
     {
         char to_add[500] = {'\0'};
         j = 0;
-        while(s[i] && s[i] != ' ' && s[i] != '"' && s[i] != '\'')
+        while(s[i])
         {
             if((s[i] == '"' || s[i] == '\'') && check_qote == 0)
             {
@@ -132,13 +141,9 @@ void builtin_export(t_data *s_data, char *cmd)
             return;
         }
         if (to_add[0])
-        {
+        {            
             if (check_presence(s_data, to_add) == 0)
-			{
-               vect_happend(s_data->vect_env, to_add);
-			}
-			else
-				s_data->exit_status = 1;
+                vect_happend(s_data->vect_env, to_add);
         }
         i++;
     }

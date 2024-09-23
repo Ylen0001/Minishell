@@ -6,51 +6,15 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:39:20 by aberion           #+#    #+#             */
-/*   Updated: 2024/09/11 10:29:45 by aberion          ###   ########.fr       */
+/*   Updated: 2024/09/20 14:10:13 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <stdlib.h>
 
-int ft_isspace(char c)
-{
-    if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
-        return 1;
-    return 0;
-}
+void path_to_vect(t_data *s_data, int i);
 
-int check_chevron(t_data *s_data)
-{
-    int check_double = 0;
-    int check_single = 0;
-    char *s =s_data->full_string;
-    int i = 0;
-    
-    while(s[i])
-    {
-        if(s[i] == '"')
-            check_double++;
-        if(s[i] == '\'')
-            check_single++;
-        if(s[i] == '>' && check_double % 2 == 0 && check_single % 2 == 0)
-        {
-            if(s[i + 1] == '<')
-                return -1;
-            if (s[i + 1] == '>' && s[i + 2] == '>')
-                return -1;
-        }
-        if(s[i] == '<' && check_double % 2 == 0 && check_single % 2 == 0)
-        {
-            if(s[i + 1] == '>')
-                return -1;
-            if (s[i + 1] == '<' && s[i + 2] == '<')
-                return -1;
-		}
-        i++;
-    }
-    return 0;
-}
 int is_this_ok(t_data *s_data)
 {
     if (!s_data->full_string || s_data->full_string == NULL)
@@ -102,8 +66,9 @@ int search_n_append(t_data *s_data, char *check_var, char *str, int x_prev)
     }
     return safe;
 }
-void append_redir_here(t_data *s_data, char *str, int i)
+void append_redir_here(t_data *s_data, int i)
 {
+    const char *str = s_data->full_string;
     char to_add[500] = {'\0'};
     int j = 0;
     if (str[i] == '<' || str[i] == '>')
@@ -123,8 +88,9 @@ void append_redir_here(t_data *s_data, char *str, int i)
     vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
 }
 
-int handle_characters(t_data *s_data, char *str, char *to_add, int *i, int *x)
+int handle_characters(t_data *s_data, char *to_add, int *i, int *x)
 {
+    const char *str = s_data->full_string;
     // int check_q = 0;
     while (str[*i] && (str[*i] != ' ' && str[*i] != '\t' && str[*i] != '<' && str[*i] != '>' && str[*i] != '|'))
     {
@@ -162,8 +128,9 @@ int handle_characters(t_data *s_data, char *str, char *to_add, int *i, int *x)
     return 0;
 }
 
-void handle_characters_qotes(t_data *s_data, char *str, char *to_add, int *i, int *x)
+void handle_characters_qotes(t_data *s_data, char *to_add, int *i, int *x)
 {
+    const char *str = s_data->full_string;
     while (str[*i] && str[*i] != '"')
     {
         if (str[*i] == '$' && ((str[*i + 1] >= 'A' && str[*i + 1] <= 'Z') 
@@ -192,8 +159,9 @@ void handle_characters_qotes(t_data *s_data, char *str, char *to_add, int *i, in
     }
 }
 
-int append_redir(t_data *s_data, char *str, int i)
+int append_redir(t_data *s_data, int i)
 {
+    const char *str = s_data->full_string;
     char to_add[500] = {'\0'};
     int x = 0;
     if (str[i] == '<' || str[i] == '>')
@@ -205,11 +173,11 @@ int append_redir(t_data *s_data, char *str, int i)
     if(str[i] == '"')
     {
         i++;
-        handle_characters_qotes(s_data, str, to_add, &i, &x);
+        handle_characters_qotes(s_data, to_add, &i, &x);
         vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
         return i;
     }
-    if (handle_characters(s_data, str, to_add, &i, &x))
+    if (handle_characters(s_data, to_add, &i, &x))
     {
         vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);
         return i;
@@ -217,16 +185,16 @@ int append_redir(t_data *s_data, char *str, int i)
     vect_happend(s_data->v_path->parsed[s_data->v_path->size].redir, to_add);    
     return i;
 }
-int manage_chevron(t_data *s_data, char *str, int prev_i)
+int manage_chevron(t_data *s_data, int prev_i)
 {
+    const char *str = s_data->full_string;
     int i = prev_i;
     while (str[i] && str[i] != '"' && str[i] != '\'' && str[i] != '|' && str[i] != ' ')
     {
         if (str[i] == '>' && str[i + 1] != '>')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_REDIR);
-            i = append_redir(s_data, str, i);
-            i++;
+            i = append_redir(s_data, i);
             while(str[i] && str[i] == ' ')
                 i++;
             break;
@@ -234,8 +202,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         if (str[i] == '>' && str[i + 1] == '>')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDOUT_APPEND);
-            i = append_redir(s_data, str, i);
-            i++;
+            i = append_redir(s_data, i);
             i++;
             while(str[i] && str[i] == ' ')
                 i++;
@@ -244,8 +211,7 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         if (str[i] == '<' && str[i + 1] != '<')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, STDIN_REDIR);
-            i = append_redir(s_data, str, i);
-            i++;
+            i = append_redir(s_data, i);
             while(str[i] && str[i] == ' ')
                 i++; 
             break;          
@@ -253,13 +219,13 @@ int manage_chevron(t_data *s_data, char *str, int prev_i)
         if (str[i] == '<' && str[i + 1] == '<')
         {
             vectint_happend(s_data->v_path->parsed[s_data->v_path->size].type, HERE_DOC);
-            append_redir_here(s_data, str, i);
+            append_redir_here(s_data, i);
             i++;
             i++;
             while(str[i] && str[i] == ' ')
                 i++;
+			break;
         }
-        i++;
     }
     if (str[i] == '"')
         i++;
@@ -283,7 +249,7 @@ int handle_exit_code(t_data *s_data, char *str, int x)
     return x;
 }
 
-int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, int *x)
+int handle_variable_expansion(t_data *s_data, const char *s, int i, int *x)
 {
     int j;
     int y;
@@ -294,7 +260,7 @@ int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, i
     y = 0;
     if (s[i+ 1] && s[i] == '$' && s[i + 1] == '?')
     {   
-        *x = handle_exit_code(s_data, str, *x);
+        *x = handle_exit_code(s_data, s_data->buffer, *x);
         i+=2;
     }
     if (s[i] && s[i] == '$' && ((s[i + 1] >= 'A' && s[i + 1] <= 'Z') || (s[i + 1] == '_') || 
@@ -307,7 +273,7 @@ int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, i
             y++;
             j++;
         }
-        *x = search_n_append(s_data, check_var, str, *x);
+        *x = search_n_append(s_data, check_var, s_data->buffer, *x);
         i = j;
     }
     free(check_var);
@@ -315,15 +281,15 @@ int handle_variable_expansion(t_data *s_data, const char *s, char *str, int i, i
 }
 
 
-int handle_double_quotes(t_data *s_data, const char *s, char *str, int i, int *x)
+int handle_double_quotes(t_data *s_data, const char *s, int i, int *x)
 {
     i++;
     while (s[i] && s[i] != '"')
     {
-        i = handle_variable_expansion(s_data, s, str, i, x);
+        i = handle_variable_expansion(s_data, s, i, x);
         if (s[i] != '"')
         {
-            str[*x] = s[i];
+            s_data->buffer[*x] = s[i];
             i++;
             (*x)++;
         }
@@ -335,86 +301,132 @@ int handle_double_quotes(t_data *s_data, const char *s, char *str, int i, int *x
     return i;
 }
 
+int	ft_strncmp_index(const char *s1, const char *s2, size_t n, size_t start_index)
+{
+	size_t	i;
+    size_t j;
+
+    j = 0;
+	i = start_index;
+	while ((s1[i] && s2[j]) && j < n)
+	{
+		if ((unsigned char)s1[i] != (unsigned char)s2[j])
+			return ((unsigned char)s1[i] - (unsigned char)s2[j]);
+		i++;
+        j++;
+	}
+	return (0);
+}
+
+void skip_whitespaces(t_data *s_data, int *it)
+{
+    const char *str = s_data->full_string;
+	while (str[*it] && ft_isspace(str[*it]))
+		(*it)++;
+}
+
+bool vect_append_command(int *i, int *j, int *x, t_data *s_data)
+{
+    const char *s = s_data->full_string;
+    (void)j;
+	if (ft_strchr("|", s[*i]))
+	{
+		if (ft_isspace(s[*x -1]))
+		{
+			(*x)--;
+			while (ft_isspace(s[*x]))
+				s_data->buffer[(*x)--] = '\0';
+		}
+		vect_happend(s_data->v_path, s_data->buffer);
+		(*i)++;
+		while(s[*i] && ft_isspace(s[*i]))
+			(*i)++;
+		path_to_vect(s_data, *i);
+		return true;
+	}
+	return false;
+}
+
+void handle_simple_quotes(int *i, int *x, t_data *s_data)
+{
+    const char *s = s_data->full_string;
+	(*i)++;
+	while(s[*i] && s[*i] != '\'')
+	{
+		s_data->buffer[*x] = s[*i];
+		(*i)++;
+		(*x)++;
+	}
+	if (s[*i] == '\'')
+		(*i)++;
+	if (s[*i] == '\0')
+		s_data->check_quotes_space = 1;
+}
+
+void fill_command(t_data *s_data, int *i, int *x)
+{
+    const char *s = s_data->full_string;
+	(*i) = handle_variable_expansion(s_data, s, *i, x);
+	if (s[(*i)] && s[(*i)] == '"' && s_data->checkerino != 1)
+		(*i)++;
+	else if (s[(*i)] && (s[(*i)] == '<' || s[(*i)] == '>'))
+	{
+		(*i) = manage_chevron(s_data, (*i));
+		while(s[(*i)] && s[(*i)] == ' ')
+			(*i)++;
+	}
+	else if (s[(*i)] && s[(*i)] != '$' && s[(*i)] != '"')
+	{
+		s_data->buffer[(*x)] = s[(*i)];
+		(*i)++;
+		(*x)++;
+	}
+	else if (s[(*i)])
+	{
+		s_data->buffer[(*x)] = s[(*i)];
+		(*i)++;
+		(*x)++;
+	}    
+}
+
+bool parse_input(int *i, int *j, int *x, t_data *s_data)
+{
+    const char *s = s_data->full_string;
+	if (vect_append_command(i, j, x, s_data))
+		return true;
+	if (s[*i] == '\'')
+		handle_simple_quotes(i, x, s_data);
+	else if (s[*i] == '\"' && s_data->checkerino != 1)
+		*i = handle_double_quotes(s_data, s, *i, x);
+	else
+		fill_command(s_data, i, x);
+	return false;
+}
 
 void path_to_vect(t_data *s_data, int i)
 {
-    char *s = s_data->full_string;
-    char str[5000] = {'\0'};
-    int x = 0;
-
+    const char *s = s_data->full_string;
+	int j;
+    int x;
+    
+	ft_memset(s_data->buffer, '\0', BUFFER_SIZE2);
+	x = 0;
+    s_data->checkerino = 0;
     s_data->v_path->parsed[s_data->v_path->size] = init_parsed();
+	skip_whitespaces(s_data, &j);
+	j = i;
+    if (!ft_strncmp(&s[j], "export", 6))
+        s_data->checkerino = 1;
     while (s[i])
+		if (parse_input(&i, &j, &x, s_data))
+			return;
+    if (ft_isspace(s_data->buffer[x - 1]) && s_data->check_quotes_space != 1 && (x-- == 0) + 1)
     {
-        if (s[i] == '|' || s[i] == '\n')
-        {
-            if (str[x - 1] == ' ' || str[x - 1] == '\t')
-            {
-                x--;
-                while (str[x] == ' ' || str[x] == '\t')
-                {
-                    str[x] = '\0';
-                    x--;
-                }
-            }
-            vect_happend(s_data->v_path, str);
-            i++;
-            while(s[i] && (s[i] == ' ' || s[i] == '\t'))
-                i++;
-            path_to_vect(s_data, i);
-            return;
-        }
-        if (s[i] == '\'')
-        {
-            i++;
-            while(s[i] && s[i] != '\'')
-            {
-                str[x] = s[i];
-                i++;
-                x++;
-            }
-            if (s[i] == '\'')
-                i++;
-            if (s[i] == '\0')
-                s_data->check_quotes_space = 1;
-        }
-        else if (s[i] == '"')
-            i = handle_double_quotes(s_data, s, str, i, &x);
-        else
-        {
-            i = handle_variable_expansion(s_data, s, str, i, &x);
-            if (s[i] && s[i] == '"')
-                    i++;
-            else if (s[i] && (s[i] == '<' || s[i] == '>'))
-            {
-                i = manage_chevron(s_data, s, i);
-                while(s[i] && s[i] == ' ')
-                    i++;
-            }
-            else if (s[i] && s[i] != '$' && s[i] != '"')
-            {
-                str[x] = s[i];
-                i++;
-                x++;
-            }
-            else if (s[i])
-            {
-                str[x] = s[i];
-                i++;
-                x++;
-            }    
-        }
-    }
-    if ((str[x - 1] == ' ' || str[x - 1] == '\t') && s_data->check_quotes_space != 1)
-    {
-        x--;
-        while (str[x] == ' ' || str[x] == '\t')
-        {
-            str[x] = '\0';
-            x--;
-        }
+        while (s_data->buffer[x] == ' ' || s_data->buffer[x] == '\t')
+            s_data->buffer[x--] = '\0';
     }
     s_data->check_quotes_space = 0;
-    vect_happend(s_data->v_path, str);
+    vect_happend(s_data->v_path, s_data->buffer);
 }
 
 int check_after_chev(char *line)

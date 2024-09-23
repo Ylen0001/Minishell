@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 15:58:09 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/16 15:30:48 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ void	built_in_manager(t_data *data, char *cmd)
 		builtin_exit(data, cmd);
 	else if(ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
 		builtin_env(data);
-
+	data->i = 0;
+	while(splited_cmd[data->i])
+		free(splited_cmd[data->i++]);
+	free(splited_cmd);
+	// garbage_destructor(data);
 	return;
 }
-
-// || ft_strcmp(cmd, "exit") == 0)

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/03 17:27:31 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/09/16 15:19:01 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void b_i_echo(t_data *data, char *cmd)
 	char *splited;
 	int newline = 1;
 
-	// dprintf(2, "|||S %s S|||\n", cmd);
 	splited = clean_input(data, cmd);
 	if (splited == NULL)
 		return;
@@ -30,6 +29,7 @@ void b_i_echo(t_data *data, char *cmd)
 		printf("\n");
 
 	free(splited); // Libère la mémoire allouée par strdup
+	// free(cmd);
 	data->exit_status = 0;
 	// exit(0);
 }

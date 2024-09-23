@@ -6,10 +6,11 @@ CFLAGS = -Wall -Wextra -Werror -g3
 LDFLAGS	= -lreadline -lncurses
 LIB_DIR = libft
 SRC_DIR = src
+MINISHELL_CORE_DIR = $(SRC_DIR)/minishell_core
 OBJ_DIR = obj
 INCLUDES_DIR = includes
 
-SRCS = $(addprefix $(SRC_DIR)/, minishell.c / builtin_env_ex.c / builtin_unset.c / builtin_ry.c / cd.c / built_in.c / pwd.c / echo.c / path_exec.c / lil_gnl.c / here_doc_handler.c / signal.c / prompt.c / init.c / parsing.c / workinprog_vect.c / garbage_collector.c)
+SRCS = $(addprefix $(SRC_DIR)/, minishell.c / parsing_utils_0.c / minishell_core.c / mc_utils1.c / core_exec.c / builtin_env_ex.c / builtin_unset.c / builtin_ry.c / cd.c / built_in.c / pwd.c / echo.c / path_exec.c / lil_gnl.c / here_doc_handler.c / signal.c / prompt.c / init.c / parsing.c / workinprog_vect.c / garbage_collector.c)
 
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
 

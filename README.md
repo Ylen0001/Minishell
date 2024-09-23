@@ -218,54 +218,43 @@ Problème rencontré : Si on exit pas après built_in_manager, on rentre dans un
 
 Pour echo : exit code toujours à 0
 
-Si une seule commande.
+Si une seule commande :
 
-03/09
+11 / 09
 
-DEBUG TESTER :
+Test 136 : Test 136: ❌ ./test_files/invalid_permission 
+mini exit code = 127
+bash exit code = 126
 
-68/69/70 : P-E un souci avec echo.
 
-
-
-04/09 
-
-I - Debug pour le check de cmd.
-
-1 - On split la cmd. m_cmd[0] = cmd m_cmd[1] = options où arguments etc...
-2 - On envoie m_cmd[0] dans check_file.
-a --> On vérifie avec stat si la commande existe.
----> Si elle n'existe pas, on regarde si elle contient des slashs, si c'est le cas c'est p-ê une cmd absolue. 
----> Sinon c'est que la cmd relatif n'existe pas, et que ce n'est pas non plus un chemin absolu. Donc exit_code 127?
-b ---> Si la cmd relative existe, on check si c'est un directory. Si oui, exit_code 127?
-c ---> Si la cmd existe, et qu'on a les permissions dessus on return la cmd
----> Sinon exit_code 127? 
-
-Ensuite, de retour dans child :
-
-Si check_file return m_cmd[0], on avance. Sinon ???
-
-a - Si la cmd existe, que c'est une relative, et qu'access X_OK | F_OK est bon, on execve.
-Sinon, on cherche le path et on execve. 
-Test  26: ✅ ls >         ./outfiles/outfile01 
+127 : La cmd n'existe pas où n'a pas été trouvée
+126 : La cmd existe, mais on a pas les permissions dessus. 
 
 
 
-TEST VARIABLES :
+                         --- CLEANING ---
 
-Redirect 75 : exit_status = wildcards (Mais pourquoi en fait?)
-Redirect 50 : Invalid permissions --> Une fois sur deux l'exit code n'est pas récupéré.
-Redirect 22 : Exit code == oi (#MAGIE_NOIRE)
-Redirect 20 : exit_code vide.
+0 - Cmd erronée : ✅ (Les leaks restant viennent du parsing)
+1 - Cmd simple (ls) : ✅
+2 - Cmd simple avec argument (cat logo.txt) : ✅
+3 - Cmd simple avec arguments (cat -e logo.txt) : ✅
+4 - Cmd built-in echo avec et sans options (echo -n) : ✅
+5 - Cmd non built_in avec redir > : ✅
+6 - Cmd built_in avec redir > ✅
+5 - 2 cmd non Built_in avec pipe : ✅
+6 - 2 cmd Built_in avec pipe : echo bonjour | rev : ✅
+7 - Here_doc : Broken ❌
+8 - ^C / ^D : ❌
 
 
-103/146 :
+❌ Souci de fermeture de FD après utilisation d'un built_in. Réglé ✅
+❌ Souci quand on utilise exit.
 
-Il y a un souci avec check_file sur ./test_file où /test_file où README.md
-On ne rentre pas aux mêmes endroits de check_file en fonction 
 
-minishell_tester/test_file : No such file or directory 126
-ici on devrait renvoyer 127.
 
-./minishell_tester/test_file/invalid_permissions : No such file or directory 127
+
+
+1 - **m_cmd qui passe dans data au lieu d'être locale à la fonction child. 
+Fonctionne ---> 143/146 
+2 - 
 
