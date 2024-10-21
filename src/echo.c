@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/07 17:47:39 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:11:09 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	b_i_echo(t_data *data, char *cmd)
 	int		i;
 
 	newline = 1;
+	if (cmd[4] == '\0')
+		return;
 	splited = clean_input(data, cmd);
 	i = 6;
 	while (cmd[i] && cmd[i] == 'n')
@@ -72,8 +74,11 @@ char	*remove_quotes_from_string_2(const char *str)
 
 void	option_detector(t_data *data, char *cmd, size_t *i)
 {
+	int safe;
+
 	if (cmd[(*i)] == '-')
 	{
+		safe = (*i);
 		(*i)++;
 		while (cmd[(*i)] == 'n')
 			(*i)++;
@@ -83,8 +88,13 @@ void	option_detector(t_data *data, char *cmd, size_t *i)
 			data->flag_echo_trig = 1;
 		}
 		else
-			(*i) = 5;
+		{
+			data->checkerina = 1;
+			(*i) = safe;
+		}	
 	}
+	else
+			data->checkerina = 1;
 }
 
 char	*clean_input(t_data *data, char *cmd)
@@ -96,11 +106,14 @@ char	*clean_input(t_data *data, char *cmd)
 	i = 5;
 	if (cmd[4] == '\0')
 		return (NULL);
-	while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
-		i++;
-	option_detector(data, cmd, &i);
-	while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
-		i++;
+	while (!data->checkerina)
+	{
+		while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
+			i++;
+		option_detector(data, cmd, &i);
+		while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
+			i++;
+	}
 	cleaned_cmd = ft_strdup(cmd + i);
 	result = remove_quotes_from_string_2(cleaned_cmd);
 	free(cleaned_cmd);

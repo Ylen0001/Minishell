@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:37:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 08:48:21 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:57:53 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ typedef struct s_data // Structure Globale
 	int			check_single;
 	int			in_q;
 	int			too_many_args;
+	int			checkerina;
 }				t_data;
 
 void		free_before_exit(t_data *s_data);

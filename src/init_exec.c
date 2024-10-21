@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:09:49 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 08:54:10 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:01:02 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_data	init_data(char **env, int ex_data_buff, t_vectstr *env_buff)
 	self.hd_trigger = 0;
 	self.in_q = 0;
 	self.too_many_args = 0;
+	self.checkerina = 0;
 	return (self);
 }
 
