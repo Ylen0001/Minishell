@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:37:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 14:57:53 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:42:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,7 @@ char		*get_home_value(t_data *data);
 void		swap_dir(t_data *data);
 void		variables_initializer(t_data *data);
 void		b_i_echo(t_data *data, char *cmd);
+int			check_newline_option(char *cmd);
 char		*clean_input(t_data *data, char *cmd);
 int			flag_is_ok(char *flag);
 void		b_i_pwd(t_data *data);

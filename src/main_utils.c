@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:31:12 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/04 14:27:57 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:28:29 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	process_input(char *input, t_data *s_data, t_vectstr *env_buff,
 	int	i;
 
 	s_data->input_list = ft_split(input, '\n');
+	free(input);
 	i = 0;
 	while (s_data->input_list[i])
 	{

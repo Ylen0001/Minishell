@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:44:26 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/21 08:16:23 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:48:17 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	handle_variable_expansion(t_data *s_data, const char *s, int i, int *x)
 		*x = search_n_append(s_data, check_var, s_data->buffer, *x);
 		i = j;
 	}
-	if (s[i] == '$' && s_data->in_q == 0 && !ft_isspace(s[i + 1]) && s[i + 1] != '\0')
+	if (s[i] == '$' && s_data->in_q == 0 && !ft_isspace(s[i + 1])
+		&& s[i + 1] != '\0')
 		i++;
 	return (i);
 }

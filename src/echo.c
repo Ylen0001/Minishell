@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:11:09 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:46:42 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,12 @@ void	b_i_echo(t_data *data, char *cmd)
 {
 	char	*splited;
 	int		newline;
-	int		i;
 
 	newline = 1;
 	if (cmd[4] == '\0')
-		return;
+		return ;
 	splited = clean_input(data, cmd);
-	i = 6;
-	while (cmd[i] && cmd[i] == 'n')
-	{
-		i++;
-		if (cmd[i] == '\0')
-		{
-			free(splited);
-			return ;
-		}
-	}
+	newline = check_newline_option(cmd);
 	if (splited == NULL)
 		return ;
 	if (data->flag_echo_trig == 1)
@@ -41,6 +31,20 @@ void	b_i_echo(t_data *data, char *cmd)
 		printf("\n");
 	free(splited);
 	data->exit_status = 0;
+}
+
+int	check_newline_option(char *cmd)
+{
+	int	i;
+
+	i = 6;
+	while (cmd[i] && cmd[i] == 'n')
+	{
+		i++;
+		if (cmd[i] == '\0')
+			return (0);
+	}
+	return (1);
 }
 
 char	*remove_quotes_from_string_2(const char *str)
@@ -74,7 +78,7 @@ char	*remove_quotes_from_string_2(const char *str)
 
 void	option_detector(t_data *data, char *cmd, size_t *i)
 {
-	int safe;
+	int	safe;
 
 	if (cmd[(*i)] == '-')
 	{

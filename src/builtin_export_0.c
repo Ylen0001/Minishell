@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export_0.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:54:10 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/03 14:40:45 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:44:37 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_first_digit(t_data *s_data, char *to_check)
 	if (ft_isdigit(to_check[0]) != 0)
 	{
 		s_data->exit_status = 1;
-		ft_putstr_fd("invalid variable\n", 2);
+		ft_putstr_fd(" not a valid identifier\n", 2);
 		return (1);
 	}
 	return (0);
@@ -71,7 +71,7 @@ int	clean_and_check_variable(t_data *s_data, char *to_check, char *clean)
 		if ((ft_isalnum(to_check[i]) == 0 && to_check[i] != '_'))
 		{
 			s_data->exit_status = 1;
-			ft_putstr_fd("invalid variable\n", 2);
+			ft_putstr_fd(" not a valid identifier\n", 2);
 			return (1);
 		}
 		clean[i] = to_check[i];

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env_ex_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 11:23:37 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/21 08:50:20 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:51:31 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ long long	c_toll(const char *str)
 		i++;
 		j++;
 	}
-	if ((j > 19) || (minus == 1 && result > INT64_MAX) || (minus == -1
-			&& result > (u_int64_t)INT64_MAX + 1))
+	if ((j > 19) || (minus == 1 && result > INT64_MAX)
+		|| (minus == -1 && result > (u_int64_t)INT64_MAX + 1))
 	{
 		ft_putstr_fd("exit: numeric argument required\n", 2);
 		return (2);

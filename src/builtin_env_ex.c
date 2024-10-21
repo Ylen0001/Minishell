@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env_ex.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:00:00 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/21 08:58:47 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:51:56 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void	builtin_exit(t_data *s_data, char *cmd)
 
 	(void)cmd;
 	splitted = ft_split_sa(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0]);
-	result = check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0], s_data);
+	result = check_args_ex(s_data->v_path->parsed[s_data->i_cmd].cmd->data[0],
+			s_data);
 	if (s_data->too_many_args)
 	{
 		s_data->exit_status = 1;
 		free_charchar(splitted);
-		return;
+		return ;
 	}
 	dehors = c_toll(splitted[1]);
 	free_charchar(splitted);

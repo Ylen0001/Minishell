@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 14:40:16 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/12 13:36:20 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:43:53 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	check_equal(t_data *s_data, char *s)
 	{
 		if (s[i] == '=' && ft_isspace(s[(i - 1)]))
 		{
-			ft_putstr_fd("invalid variable\n", 2);
+			ft_putstr_fd(" not a valid identifier\n", 2);
 			s_data->exit_status = 1;
 			return (1);
 		}
