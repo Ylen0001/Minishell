@@ -5,63 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 15:49:02 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/16 18:14:50 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/13 16:31:39 by ylenoel           #+#    #+#             */
+/*   Updated: 2024/08/21 15:57:25 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	count_digit(int n)
+static int	int_len(long nbr)
 {
-	int	i;
+	int	count;
 
-	i = 0;
-	if (n == 0)
-		return (1);
-	while (n != 0)
+	count = 0;
+	if (nbr < 0)
 	{
-		n /= 10;
-		i++;
+		count++;
+		nbr = -nbr;
 	}
-	return (i);
+	if (nbr == 0)
+		count++;
+	while (nbr != 0)
+	{
+		nbr /= 10;
+		count++;
+	}
+	return (count);
 }
 
-char	*norminette_killer(unsigned int un, char *res, int digit, int n)
+static char	*pre_conv(int len)
 {
-	if (n < 0)
-		res[0] = '-';
-	while (un > 0)
-	{
-		digit--;
-		res[digit] = (un % 10) + '0';
-		un /= 10;
-	}
-	return (res);
+	char	*buffer;
+
+	buffer = malloc((len + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	buffer[0] = '0';
+	return (buffer);
 }
 
 char	*ft_itoa(int n)
 {
-	int				digit;
-	unsigned int	un;
-	char			*res;
+	char	*result;
+	int		n_len;
+	long	nbr;
+	int		i;
 
-	digit = count_digit(n);
-	if (n < 0)
-	{
-		un = -n;
-		digit++;
-	}
-	else
-		un = n;
-	res = (char *)malloc((sizeof(char) * (digit + 1)));
-	if (!res)
+	nbr = n;
+	n_len = int_len(nbr);
+	result = pre_conv(n_len);
+	if (!result)
 		return (NULL);
-	res[digit] = 0;
-	if (n == 0)
+	if (nbr < 0)
+		nbr = -nbr;
+	i = n_len - 1;
+	while (nbr != 0)
 	{
-		res[0] = '0';
-		return (res);
+		result[i] = (nbr % 10) + 48;
+		nbr = nbr / 10;
+		i--;
 	}
-	return (norminette_killer(un, res, digit, n));
+	if (n < 0)
+		result[0] = '-';
+	result[n_len] = 0;
+	return (result);
 }

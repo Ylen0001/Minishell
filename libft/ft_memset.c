@@ -3,37 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 17:51:08 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/13 15:33:40 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/06 16:35:30 by ylenoel           #+#    #+#             */
+/*   Updated: 2023/11/08 12:56:08 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 void	*ft_memset(void *s, int c, size_t n)
 {
-	unsigned char	*p;
+	size_t			i;
+	unsigned char	*str;
 
-	p = s;
-	while (n--)
+	str = (unsigned char *) s;
+	i = 0;
+	while (i < n)
 	{
-		*p++ = (unsigned char)c;
+		str[i] = c;
+		i++;
 	}
 	return (s);
 }
-/*
-int	main(void) {
-	char str[50] = "bonjourno";
-
-	printf("Avant memset: %s\n", str);
-
-		ft_memset(str, 'n', 2);
-
-	printf("Après memset: %s\n", str);
-
-	return (0);
-}
-*/

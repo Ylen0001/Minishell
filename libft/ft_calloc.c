@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 16:26:12 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/14 16:41:43 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/10 11:03:36 by ylenoel           #+#    #+#             */
+/*   Updated: 2023/11/14 13:25:49 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,23 @@
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	void	*p;
-	size_t	bigfat_size;
+	unsigned char	*buffer;
+	size_t			i;
 
-	bigfat_size = nmemb * size;
-	if (nmemb != 0 && size != 0 && bigfat_size / nmemb != size)
+	i = 0;
+	if (size == 0)
+		return (malloc(0));
+	if (nmemb <= 0 && size <= 0)
 		return (NULL);
-	p = malloc(bigfat_size);
-	if (p)
-		ft_bzero(p, bigfat_size);
-	return (p);
+	if (nmemb > (SIZE_MAX / size))
+		return (NULL);
+	buffer = malloc(nmemb * size);
+	if (!buffer)
+		return (NULL);
+	while (i < nmemb * size)
+	{
+		buffer[i] = 0;
+		i++;
+	}
+	return ((void *)buffer);
 }

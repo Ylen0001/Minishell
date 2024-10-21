@@ -3,49 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 18:21:57 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/16 21:40:11 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/10 20:06:12 by ylenoel           #+#    #+#             */
+/*   Updated: 2023/11/14 16:17:38 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_is_in_set(char c, const char *set)
+static int	check_set(char s1, char const *set)
 {
-	while (*set)
+	int	i;
+
+	i = 0;
+	while (set[i])
 	{
-		if (c == *set)
+		if (s1 == set[i])
 			return (1);
-		set++;
+		i++;
 	}
 	return (0);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*trimmed_str;
-	int		start;
-	int		end;
-	int		i;
+	char		*result;
+	size_t		i;
+	size_t		istart;
+	size_t		s1_len;
+	size_t		result_len;
 
-	if (!s1)
-	{
+	if (!s1 || !set)
 		return (NULL);
-	}
-	start = 0;
-	while (s1[start] && ft_is_in_set(s1[start], set))
-		start++;
-	end = ft_strlen(s1);
-	while (end > start && ft_is_in_set(s1[end - 1], set))
-		end--;
-	trimmed_str = malloc((end - start + 1) * sizeof(char));
-	if (!trimmed_str)
-		return (NULL);
+	s1_len = ft_strlen(s1);
 	i = 0;
-	while (start < end)
-		trimmed_str[i++] = s1[start++];
-	trimmed_str[i] = '\0';
-	return (trimmed_str);
+	while (check_set(s1[i], set) == 1)
+		i++;
+	istart = i;
+	while (check_set(s1[s1_len - 1], set) == 1)
+		s1_len--;
+	result_len = s1_len - istart;
+	result = ft_substr(s1 + istart, 0, result_len);
+	return (result);
 }
