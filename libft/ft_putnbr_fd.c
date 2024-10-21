@@ -3,38 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 16:38:15 by ylenoel           #+#    #+#             */
-/*   Updated: 2023/11/13 11:48:27 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/16 20:13:49 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/20 18:09:44 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnbr_fd(int nb, int fd)
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	digit;
+	size_t	i;
+	char	*nb_str;
 
-	if (nb == -2147483648)
-	{
-		write(fd, "-2147483648", 11);
+	if (!fd)
 		return ;
-	}
-	if (nb < 0)
-	{
-		write(fd, "-", 1);
-		nb = -nb;
-		ft_putnbr_fd(nb, fd);
-	}
-	else if (nb > 9)
-	{
-		ft_putnbr_fd(nb / 10, fd);
-		ft_putnbr_fd(nb % 10, fd);
-	}
+	if (n == 0)
+		write(fd, "0", 1);
 	else
 	{
-		digit = nb + 48;
-		write(fd, &digit, 1);
+		i = 0;
+		nb_str = ft_itoa(n);
+		while (nb_str[i])
+		{
+			write(fd, &nb_str[i], 1);
+			i++;
+		}
 	}
 }

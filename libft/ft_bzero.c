@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 10:02:35 by ylenoel           #+#    #+#             */
-/*   Updated: 2023/11/10 13:48:23 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/07 11:23:41 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/13 15:15:26 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,33 @@
 
 void	ft_bzero(void *s, size_t n)
 {
-	char		*str;
-	size_t		i;
+	size_t	i;
+	char	*p;
 
+	p = s;
 	i = 0;
-	str = (char *) s;
 	while (i < n)
 	{
-		str[i] = 0;
+		p[i] = 0;
 		i++;
 	}
 }
+
+/*
+}
+int	main(void) {
+	char str[50] = "Bonjour tout le monde!";
+
+	printf("Avant ft_bzero: %s\n", str);
+
+	ft_bzero(str, 6);
+
+	printf("Après ft_bzero: ");
+	for (size_t i = 0; i < sizeof(str); ++i) {
+		putchar(str[i] ? str[i] : ' ');
+	}
+	putchar('\n');
+
+	return (0);
+}
+*/

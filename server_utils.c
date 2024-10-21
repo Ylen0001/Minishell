@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   server_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 16:44:03 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/14 17:07:07 by aberion          ###   ########.fr       */
+/*   Created: 2024/06/25 15:31:55 by aberion           #+#    #+#             */
+/*   Updated: 2024/06/25 15:32:54 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minitalk.h"
 
-char	*ft_strdup(const char *s)
+void	*ft_realloc(void *ptr, size_t newsize, size_t oldsize)
 {
-	size_t	l;
-	size_t	i;
-	char	*dup;
+	char	*newptr;
 
-	l = ft_strlen(s);
-	i = 0;
-	dup = (char *)malloc(l + 1);
-	if (!dup)
-		return (NULL);
-	while (s[i])
+	if (ptr == 0)
+		return (malloc(newsize));
+	if (newsize <= oldsize)
+		return (ptr);
+	newptr = malloc(newsize);
+	if (newptr)
 	{
-		dup[i] = s[i];
-		i++;
+		ft_memcpy(newptr, ptr, oldsize);
+		free(ptr);
 	}
-	dup[i] = 0;
-	return (dup);
+	return (newptr);
 }

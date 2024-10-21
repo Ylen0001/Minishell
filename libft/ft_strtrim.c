@@ -3,47 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 20:06:12 by ylenoel           #+#    #+#             */
-/*   Updated: 2023/11/14 16:17:38 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/14 18:21:57 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/16 21:40:11 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	check_set(char s1, char const *set)
+static int	ft_is_in_set(char c, const char *set)
 {
-	int	i;
-
-	i = 0;
-	while (set[i])
+	while (*set)
 	{
-		if (s1 == set[i])
+		if (c == *set)
 			return (1);
-		i++;
+		set++;
 	}
 	return (0);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char		*result;
-	size_t		i;
-	size_t		istart;
-	size_t		s1_len;
-	size_t		result_len;
+	char	*trimmed_str;
+	int		start;
+	int		end;
+	int		i;
 
-	if (!s1 || !set)
+	if (!s1)
+	{
 		return (NULL);
-	s1_len = ft_strlen(s1);
+	}
+	start = 0;
+	while (s1[start] && ft_is_in_set(s1[start], set))
+		start++;
+	end = ft_strlen(s1);
+	while (end > start && ft_is_in_set(s1[end - 1], set))
+		end--;
+	trimmed_str = malloc((end - start + 1) * sizeof(char));
+	if (!trimmed_str)
+		return (NULL);
 	i = 0;
-	while (check_set(s1[i], set) == 1)
-		i++;
-	istart = i;
-	while (check_set(s1[s1_len - 1], set) == 1)
-		s1_len--;
-	result_len = s1_len - istart;
-	result = ft_substr(s1 + istart, 0, result_len);
-	return (result);
+	while (start < end)
+		trimmed_str[i++] = s1[start++];
+	trimmed_str[i] = '\0';
+	return (trimmed_str);
 }

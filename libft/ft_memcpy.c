@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 11:06:46 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/07/31 14:51:32 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/07 12:29:34 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/13 13:50:29 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,28 @@
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	unsigned char	*d;
-	unsigned char	*s;
-	size_t			i;
+	char		*d;
+	const char	*s = src;
 
-	i = 0;
-	d = (unsigned char *) dest;
-	s = (unsigned char *) src;
-	if (!dest && !src)
-		return (NULL);
-	while (i < n)
+	d = dest;
+	while (n > 0)
 	{
-		d[i] = s[i];
-		i++;
+		*d = *s;
+		d++;
+		s++;
+		n--;
 	}
 	return (dest);
 }
+/*
+int	main(void) {
+	char src[50] = "Copiez ce texte!";
+	char dest[50];
+
+	ft_memcpy(dest, src, sizeof(src));
+
+	printf("dest après my_memcpy: %s\n", dest);
+
+	return (0);
+}
+*/

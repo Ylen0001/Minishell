@@ -3,99 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 15:41:06 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/09/12 17:23:32 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/16 14:02:56 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/16 15:45:45 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	free_all(char **split, int words)
+size_t	count_words(char const *s, char c)
 {
-	int	i;
+	size_t	i;
+	size_t	chains;
 
+	chains = 0;
 	i = 0;
-	while (i < words)
+	while (s[i])
 	{
-		free(split[i]);
-		i++;
+		while (s[i] == c)
+			i++;
+		if (s[i])
+			chains++;
+		while (s[i] && s[i] != c)
+			i++;
 	}
-	free(split);
+	return (chains);
 }
 
-static int	count_words(const char *s, char c)
-{
-	int	i;
-	int	trigger;
-
-	i = 0;
-	trigger = 0;
-	while (*s)
-	{
-		if (!trigger && *s != c && ++i)
-			trigger = 1;
-		else if (trigger && *s == c)
-			trigger = 0;
-		s++;
-	}
-	return (i);
-}
-
-static char	*word_dup(const char *s, int start, int finish)
+char	*mettre_mot(const char *s, size_t start, size_t end)
 {
 	char	*word;
-	int		i;
+	size_t	i;
 
-	word = (char *)malloc(sizeof(char) * (finish - start + 1));
+	word = (char *)malloc(sizeof(char) * (end - start + 1));
 	if (!word)
 		return (NULL);
 	i = 0;
-	while (start < finish)
-		word[i++] = s[start++];
-	word[i] = '\0';
-	return (word);
-}
-
-static void	fill_split(char **split, char const *s, char c, int words)
-{
-	size_t	i;
-	size_t	j;
-	int		index;
-
-	i = -1;
-	j = 0;
-	index = -1;
-	while (++i <= ft_strlen(s))
+	while (start < end)
 	{
-		if (s[i] != c && index < 0)
-			index = i;
-		else if ((s[i] == c || i == ft_strlen(s)) && index >= 0)
-		{
-			split[j] = word_dup(s, index, i);
-			if (!split[j++])
-			{
-				free_all(split, words);
-				break ;
-			}
-			index = -1;
-		}
+		word[i] = s[start];
+		i++;
+		start++;
 	}
-	split[words] = NULL;
+	word[i] = 0;
+	return (word);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**split;
-	int		words;
+	size_t	i;
+	size_t	j;
+	size_t	start;
+	size_t	chains;
+	char	**tabchains;
 
-	if (!s)
+	chains = count_words(s, c);
+	tabchains = malloc((chains + 1) * sizeof(char *));
+	if (!tabchains)
 		return (NULL);
-	words = count_words(s, c);
-	split = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!split)
-		return (NULL);
-	fill_split(split, s, c, words);
-	return (split);
+	i = 0;
+	j = 0;
+	start = 0;
+	while (s[i] && j < chains)
+	{
+		while (s[i++] == c)
+			start = i;
+		while (s[i] && s[i] != c)
+			i++;
+		tabchains[j++] = mettre_mot(s, start, i);
+	}
+	tabchains[j] = 0;
+	return (tabchains);
 }

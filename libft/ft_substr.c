@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 15:56:18 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/03/21 15:41:57 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/14 17:25:25 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/16 21:13:40 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,26 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
+	char	*new;
 	size_t	i;
-	char	*str;
 
+	i = 0;
 	if (!s)
 		return (NULL);
-	if (start > ft_strlen(s))
+	if (start >= (unsigned int)ft_strlen(s))
 		return (ft_strdup(""));
-	if (len > ft_strlen(s + start))
+	else if (len > ft_strlen(s + start))
+	{
 		len = ft_strlen(s + start);
-	str = ft_calloc(len + 1, sizeof(char));
-	if (!str)
+	}
+	new = (char *)malloc(sizeof(*s) * (len + 1));
+	if (!new)
 		return (NULL);
-	i = 0;
 	while (i < len)
 	{
-		str[i] = s[start + i];
+		new[i] = s[start + i];
 		i++;
-		str[i] = '\0';
 	}
-	return (str);
+	new[i] = 0;
+	return (new);
 }

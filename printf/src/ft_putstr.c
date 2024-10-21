@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 16:44:03 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/14 17:07:07 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/27 14:49:48 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/27 15:17:14 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-char	*ft_strdup(const char *s)
+int	ft_putstr(char *s)
 {
-	size_t	l;
-	size_t	i;
-	char	*dup;
+	int	i;
 
-	l = ft_strlen(s);
 	i = 0;
-	dup = (char *)malloc(l + 1);
-	if (!dup)
-		return (NULL);
+	if (!s)
+		return (ft_putstr("(null)"));
 	while (s[i])
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[i] = 0;
-	return (dup);
+		ft_putchar(s[i++]);
+	return (i);
 }

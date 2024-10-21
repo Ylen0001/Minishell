@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/08 10:34:07 by ylenoel           #+#    #+#             */
-/*   Updated: 2023/11/08 11:29:12 by ylenoel          ###   ########.fr       */
+/*   Created: 2023/11/08 14:21:46 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/13 13:49:55 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	ft_tolower(int c)
 {
-	if (c >= 65 && c <= 90)
-		return (c += 32);
-	else
-		return (c);
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
 }

@@ -1,65 +1,44 @@
-NAME = minishell
-LIBFT_NAME = libft.a
-
+NAME_SERVER = server
+NAME_CLIENT = client
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
-LDFLAGS	= -lreadline -lncurses
-LIB_DIR = libft
-SRC_DIR = src
-MINISHELL_CORE_DIR = $(SRC_DIR)/minishell_core
-OBJ_DIR = obj
-INCLUDES_DIR = includes
+CFLAGS = -Wall -Wextra -Werror
+SRCS_SERVER = server.c server_utils.c
+SRCS_CLIENT = client.c
+OBJS_SERVER = $(SRCS_SERVER:.c=.o)
+OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
+LIBFT = libft/libft.a
+PRINTF_DIR = printf
+PRINTF_LIB = $(PRINTF_DIR)/libftprintf.a
 
-SRCS = $(addprefix $(SRC_DIR)/, minishell.c / parsing_utils_0.c / minishell_core.c / mc_utils1.c / core_exec.c / builtin_env_ex.c / builtin_unset.c / builtin_ry.c / cd.c / built_in.c / pwd.c / echo.c / path_exec.c / lil_gnl.c / here_doc_handler.c / signal.c / prompt.c / init.c / parsing.c / workinprog_vect.c / garbage_collector.c)
+all: $(NAME_SERVER) $(NAME_CLIENT)
 
-OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(SRCS:.c=.o)))
+$(NAME_SERVER): $(OBJS_SERVER) $(LIBFT) $(PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_SERVER) $(OBJS_SERVER) $(LIBFT) $(PRINTF_LIB)
 
-HEADER = $(INCLUDES_DIR)/minishell.h
+$(NAME_CLIENT): $(OBJS_CLIENT) $(LIBFT) $(PRINTF_LIB)
+	$(CC) $(CFLAGS) -o $(NAME_CLIENT) $(OBJS_CLIENT) $(LIBFT) $(PRINTF_LIB)
 
-all : $(NAME)
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-DEF_COLOR		:= \033[0;39m
-GRAY			:= \033[0;90m
-RED				:= \033[0;91m
-GREEN			:= \033[0;92m
-YELLOW			:= \033[0;93m
-BLUE			:= \033[0;94m
-MAGENTA			:= \033[0;95m
-CYAN			:= \033[0;96m
-WHITE			:= \033[0;97m
-RESET			:= \033[0m
+$(LIBFT):
+	make -C libft
 
-$(NAME) : $(LIB_DIR)/$(LIBFT_NAME) $(OBJS)
-	$(CC) $(OBJS) $(LIB_DIR)/$(LIBFT_NAME) $(CFLAGS) $(LDFLAGS) -o $(NAME) 
-
-$(LIB_DIR)/$(LIBFT_NAME):
-	@if [ ! -e $(LIB_DIR)/$(LIBFT_NAME) ]; then \
-		$(MAKE) -C $(LIB_DIR); \
-		cp $(LIB_DIR)/$(LIBFT_NAME) .; \
-		mv $(LIBFT_NAME) $(NAME); \
-	fi
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I$(INCLUDES_DIR) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(PRINTF_LIB):
+	make -C $(PRINTF_DIR)
 
 clean:
-	$(MAKE) -C $(LIB_DIR) clean 
-	rm -f $(OBJS)
+	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
+	make clean -C libft
+	make clean -C $(PRINTF_DIR)
 
 fclean: clean
-	$(MAKE) -C $(LIB_DIR) fclean
-	rm -f $(NAME)
+	rm -f $(NAME_SERVER) $(NAME_CLIENT)
+	make fclean -C libft
+	make fclean -C $(PRINTF_DIR)
 
 re: fclean all
 
-.PHONY: clean fclean re all bonus
+bonus: all
 
-all : ascii_art
-
-ascii_art:
-	@echo "$(CYAN)"
-	@cat logo.txt
-	@echo "$(RESET)"
+.PHONY: all clean fclean re bonus

@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_print_hex_p.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 16:44:03 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/14 17:07:07 by aberion          ###   ########.fr       */
+/*   Created: 2023/11/27 14:35:31 by aberion           #+#    #+#             */
+/*   Updated: 2023/11/28 15:22:56 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-char	*ft_strdup(const char *s)
+int	ft_print_hex_p(unsigned long nbr)
 {
-	size_t	l;
-	size_t	i;
-	char	*dup;
+	char	*base;
+	char	output[16];
+	int		i;
+	int		len;
 
-	l = ft_strlen(s);
-	i = 0;
-	dup = (char *)malloc(l + 1);
-	if (!dup)
-		return (NULL);
-	while (s[i])
+	base = "0123456789abcdef";
+	i = 15;
+	len = 0;
+	output[i--] = '\0';
+	if (nbr == 0)
+		return (ft_putstr("(nil)"));
+	while (nbr)
 	{
-		dup[i] = s[i];
-		i++;
+		output[i--] = base[nbr % 16];
+		nbr /= 16;
 	}
-	dup[i] = 0;
-	return (dup);
+	len = ft_putstr("0x");
+	len += ft_putstr(&output[i + 1]);
+	return (len);
 }

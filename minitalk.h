@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/14 16:44:03 by aberion           #+#    #+#             */
-/*   Updated: 2023/11/14 17:07:07 by aberion          ###   ########.fr       */
+/*   Created: 2024/06/07 17:40:48 by aberion           #+#    #+#             */
+/*   Updated: 2024/06/25 15:32:49 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef MINITALK_H
+# define MINITALK_H
 
-char	*ft_strdup(const char *s)
-{
-	size_t	l;
-	size_t	i;
-	char	*dup;
+# include "libft/libft.h"
+# include "printf/src/ft_printf.h"
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-	l = ft_strlen(s);
-	i = 0;
-	dup = (char *)malloc(l + 1);
-	if (!dup)
-		return (NULL);
-	while (s[i])
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[i] = 0;
-	return (dup);
-}
+void	*ft_realloc(void *ptr, size_t newsize, size_t oldsize);
+
+# define ACK_RECEIVED 0x01
+# define INTERRUPTED 0x02
+
+#endif
