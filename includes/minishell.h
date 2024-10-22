@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:37:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 14:13:23 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:37:39 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ void		init_exec(t_data *data);
 void		free_charchar(char **s);
 void		free_pipefds(t_data *data);
 int			get_open_flags(int type);
+void		fill_vect_sa(bool *q, int *i, const char *s);
 void		unlink_hd(t_data *data);
 void		sigint_handler_exec(int sig_code);
 void		replace_hd_by_stdin(t_data *data, size_t it, size_t it_2);

@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 13:13:05 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/22 16:22:40 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:37:10 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ static void	fill_vector(t_vectstr *vect, const char *s, int *i, int end)
 	range.e = *i;
 	while (*i < end)
 	{
-		if (s[*i] == '\'')
-			q[0] = !q[0];
-		if (s[*i] == '\"')
-			q[1] = !q[1];
+		fill_vect_sa(q, i, s);
 		if (!q[0] && !q[1] && s[*i] == ' ')
 		{
 			fill_vect_helper(vect, s, range);
