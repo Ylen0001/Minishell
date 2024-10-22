@@ -6,12 +6,36 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:39:36 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:27:46 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/colors.h"
 #include "../includes/minishell.h"
+
+void	built_in_sa(t_data *data, char *cmd, char **splited_cmd)
+{
+	if (ft_strncmp(splited_cmd[0], "echo\0", 5) == 0)
+		b_i_echo(data, cmd);
+	else if (ft_strncmp(splited_cmd[0], "pwd\0", 4) == 0)
+		b_i_pwd(data);
+	else if (ft_strncmp(splited_cmd[0], "cd\0", 3) == 0)
+		b_i_cd(data, cmd);
+	else if (ft_strncmp(splited_cmd[0], "export", 6) == 0)
+		builtin_export(data);
+	else if (ft_strncmp(splited_cmd[0], "unset\0", 6) == 0)
+		builtin_unset(data, cmd);
+	else if (ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
+	{
+		free_pids(data);
+		free_charchar(splited_cmd);
+		builtin_exit(data, cmd);
+	}
+	else if (ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
+		builtin_env(data);
+	else
+		printf("%s : Command not found\n", cmd);
+}
 
 void	built_in_detector(t_data *data, char *cmd)
 {
@@ -37,26 +61,7 @@ void	built_in_manager(t_data *data, char *cmd)
 	char	**splited_cmd;
 
 	splited_cmd = ft_split_sa(cmd);
-	if (ft_strncmp(splited_cmd[0], "echo\0", 5) == 0)
-		b_i_echo(data, cmd);
-	else if (ft_strncmp(splited_cmd[0], "pwd\0", 4) == 0)
-		b_i_pwd(data);
-	else if (ft_strncmp(splited_cmd[0], "cd\0", 3) == 0)
-		b_i_cd(data, cmd);
-	else if (ft_strncmp(splited_cmd[0], "export", 6) == 0)
-		builtin_export(data);
-	else if (ft_strncmp(splited_cmd[0], "unset\0", 6) == 0)
-		builtin_unset(data, cmd);
-	else if (ft_strncmp(splited_cmd[0], "exit\0", 5) == 0)
-	{
-		free_pids(data);
-		free_charchar(splited_cmd);
-		builtin_exit(data, cmd);
-	}
-	else if (ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
-		builtin_env(data);
-	else
-		printf("%s : Command not found\n", cmd);
+	built_in_sa(data, cmd, splited_cmd);
 	if (!data->too_many_args)
 		free_charchar(splited_cmd);
 	return ;

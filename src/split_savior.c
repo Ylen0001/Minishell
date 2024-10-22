@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_savior.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 13:13:05 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/22 15:42:24 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:22:40 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	fill_vector(t_vectstr *vect, const char *s, int *i, int end)
 			eat_whitespace(s, i);
 			range.s = *i;
 			range.e = *i;
-			continue;
+			continue ;
 		}
 		range.e++;
 		(*i)++;
