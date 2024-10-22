@@ -3,43 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 14:53:56 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:17:32 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	b_i_echo(t_data *data, char *cmd)
-{
-	char	**result;
-	char	*splited;
-	int		newline;
+// void	b_i_echo(t_data *data, char *cmd)
+// {
+// 	char	**result;
+// 	char	*splited;
+// 	int		newline;
 
-	newline = 1;
-	if (cmd[4] == '\0')
-		return ;
-	splited = clean_input(data, cmd);
-	result = ft_split(splited, ' ');
-	if(result == NULL)
-		free(result);
-	// newline = check_newline_option(cmd);
-	if (splited == NULL)
-	{
-		free(result);
-		return ;
-	}
-	if (data->flag_echo_trig == 1)
-		newline = 0;
-	printf("%s", splited);
-	if (newline)
-		printf("\n");
-	free(result);
-	free(splited);
-	data->exit_status = 0;
-}
+// 	newline = 1;
+// 	if (cmd[4] == '\0')
+// 		return ;
+// 	splited = clean_input(data, cmd);
+// 	result = ft_split(splited, ' ');
+// 	if(result == NULL)
+// 		free(result);
+// 	// newline = check_newline_option(cmd);
+// 	if (splited == NULL)
+// 	{
+// 		free(result);
+// 		return ;
+// 	}
+// 	if (data->flag_echo_trig == 1)
+// 		newline = 0;
+// 	printf("%s", splited);
+// 	if (newline)
+// 		printf("\n");
+// 	free(result);
+// 	free(splited);
+// 	data->exit_status = 0;
+// }
 
 int	check_newline_option(char *cmd)
 {
@@ -130,3 +130,65 @@ char	*clean_input(t_data *data, char *cmd)
 	free(temp);
 	return (cleaned_cmd);
 }
+
+int check_option(char *str, t_data *data)
+{
+	size_t i;
+	
+	i = 0;
+	if(!str)
+		return 1;
+	if(str[0] == '-' && str[1] == 'n')
+	{
+		i = 1;
+		while(str[i] && str[i] == 'n')
+			i++;
+		if (i == ft_strlen(str))
+		{
+			data->flag_echo_trig = 1;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void print_echo(t_data *data, char **charc, int index)
+{
+	while(charc[index])
+	{
+		printf("%s", charc[index++]);
+		if(charc[index])
+			printf(" ");
+	}
+	if(!data->flag_echo_trig)
+		printf("\n");
+	return;
+}
+
+void	b_i_echo(t_data *data, char *cmd)
+{
+	char	**splitted;
+	int		i;
+	int		index;
+	
+	index = 0;
+	splitted = ft_split_sa(cmd);
+	if (splitted[1])
+	{	
+		i = 1;
+		while(splitted[i])
+		{
+			if(!check_option(splitted[i], data))
+			{
+				print_echo(data, splitted, ++index);
+				break;
+			}
+			i++;
+			index++;	
+		}
+	}
+	free_charchar(splitted);
+	return;
+}
+
+
