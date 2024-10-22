@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:31:20 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 08:53:15 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:39:36 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	built_in_manager(t_data *data, char *cmd)
 	}
 	else if (ft_strncmp(splited_cmd[0], "env\0", 4) == 0)
 		builtin_env(data);
+	else
+		printf("%s : Command not found\n", cmd);
 	if (!data->too_many_args)
 		free_charchar(splited_cmd);
 	return ;

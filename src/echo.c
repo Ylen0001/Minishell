@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:35:43 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 14:53:56 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	b_i_echo(t_data *data, char *cmd)
 {
+	char	**result;
 	char	*splited;
 	int		newline;
 
@@ -21,14 +22,21 @@ void	b_i_echo(t_data *data, char *cmd)
 	if (cmd[4] == '\0')
 		return ;
 	splited = clean_input(data, cmd);
-	newline = check_newline_option(cmd);
+	result = ft_split(splited, ' ');
+	if(result == NULL)
+		free(result);
+	// newline = check_newline_option(cmd);
 	if (splited == NULL)
+	{
+		free(result);
 		return ;
+	}
 	if (data->flag_echo_trig == 1)
 		newline = 0;
 	printf("%s", splited);
 	if (newline)
 		printf("\n");
+	free(result);
 	free(splited);
 	data->exit_status = 0;
 }
@@ -86,10 +94,11 @@ void	option_detector(t_data *data, char *cmd, size_t *i)
 		(*i)++;
 		while (cmd[(*i)] == 'n')
 			(*i)++;
-		if (cmd[(*i)] == ' ' || cmd[(*i)] == '\t')
+		if (cmd[(*i)] == ' ' || cmd[(*i)] == '\t' || cmd[(*i)] == '\0')
 		{
-			(*i)++;
 			data->flag_echo_trig = 1;
+			while (cmd[(*i)] == ' ')
+				(*i)++;
 		}
 		else
 		{
@@ -111,13 +120,11 @@ char	*clean_input(t_data *data, char *cmd)
 	i = 5;
 	if (temp[4] == '\0')
 		return (NULL);
-	while (!data->checkerina)
+	while (!data->checkerina && temp[i])
 	{
 		while (temp[i] && (temp[i] == ' ' || temp[i] == '\t'))
 			i++;
 		option_detector(data, temp, &i);
-		while (temp[i] && (temp[i] == ' ' || temp[i] == '\t'))
-			i++;
 	}
 	cleaned_cmd = ft_strdup(temp + i);
 	free(temp);

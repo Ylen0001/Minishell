@@ -107,7 +107,7 @@ $(NAME) : $(LIB_DIR)/$(LIBFT_NAME) $(OBJS)
 	@echo "$(STEEL_BLUE)Minishell créé avec succès.$(RESET)"
 
 compute_total:
-    $(eval TOTAL_FILES := $(shell var=$$(./progress.sh); if [ $${var} -ne 0 ]; then echo $${var} ; else echo 43; fi))
+    $(eval TOTAL_FILES := $(shell var=$$(./progress.sh); if [ $${var} -ne 0 ]; then echo $${var} ; else echo 44; fi))
 
 $(LIB_DIR)/$(LIBFT_NAME):
 	@if [ ! -e $(LIB_DIR)/$(LIBFT_NAME) ]; then \

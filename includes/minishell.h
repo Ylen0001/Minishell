@@ -6,7 +6,7 @@
 /*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:37:40 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:42:31 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 14:13:23 by ylenoel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,5 +323,6 @@ void		clean_quotes(char **strings);
 void		eat_whitespace(char const *s, int *i);
 int			check_empty_pipes(t_data *s_data);
 int			check_equal(t_data *s_data, char *s);
+char		*ft_strjoin_sa(const char *s1, const char *s2);
 
 #endif
