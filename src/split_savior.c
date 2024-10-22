@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 13:13:05 by aberion           #+#    #+#             */
-/*   Updated: 2024/10/07 16:46:39 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:42:24 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,16 @@ static void	fill_vector(t_vectstr *vect, const char *s, int *i, int end)
 		if (!q[0] && !q[1] && s[*i] == ' ')
 		{
 			fill_vect_helper(vect, s, range);
-			return (fill_vector(vect, s, i, end));
+			(*i)++;
+			eat_whitespace(s, i);
+			range.s = *i;
+			range.e = *i;
+			continue;
 		}
 		range.e++;
 		(*i)++;
 	}
-	if (range.e > range.s && !q[0] && !q[1])
+	if (range.e > range.s)
 		fill_vect_helper(vect, s, range);
 }
 
@@ -57,7 +61,7 @@ char	*remove_quotes_from_string(char *str)
 	int		j;
 	int		k;
 
-	new_str = (char *)malloc(ft_strlen(str) + 1);
+	new_str = (char *)ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (!new_str)
 		return (NULL);
 	in_quotes[0] = false;

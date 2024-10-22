@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 15:17:32 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:29:07 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,8 @@ void	b_i_echo(t_data *data, char *cmd)
 		{
 			if(!check_option(splitted[i], data))
 			{
+				// if (data->flag_echo_trig)
+				// 	index++;
 				print_echo(data, splitted, ++index);
 				break;
 			}
