@@ -6,7 +6,7 @@
 /*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/22 13:26:57 by aberion          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:35:43 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ char	*clean_input(t_data *data, char *cmd)
 {
 	size_t	i;
 	char	*cleaned_cmd;
-	char	*result;
 	char	*temp;
 
 	temp = remove_quotes_from_string_2(cmd);
@@ -121,8 +120,6 @@ char	*clean_input(t_data *data, char *cmd)
 			i++;
 	}
 	cleaned_cmd = ft_strdup(temp + i);
-	result = remove_quotes_from_string_2(cleaned_cmd);
-	free(cleaned_cmd);
 	free(temp);
-	return (result);
+	return (cleaned_cmd);
 }
