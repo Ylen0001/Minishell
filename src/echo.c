@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ylenoel <ylenoel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aberion <aberion@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:24:43 by ylenoel           #+#    #+#             */
-/*   Updated: 2024/10/21 15:46:42 by ylenoel          ###   ########.fr       */
+/*   Updated: 2024/10/22 13:26:57 by aberion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,20 +106,23 @@ char	*clean_input(t_data *data, char *cmd)
 	size_t	i;
 	char	*cleaned_cmd;
 	char	*result;
+	char	*temp;
 
+	temp = remove_quotes_from_string_2(cmd);
 	i = 5;
-	if (cmd[4] == '\0')
+	if (temp[4] == '\0')
 		return (NULL);
 	while (!data->checkerina)
 	{
-		while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
+		while (temp[i] && (temp[i] == ' ' || temp[i] == '\t'))
 			i++;
-		option_detector(data, cmd, &i);
-		while (cmd[i] && (cmd[i] == ' ' || cmd[i] == '\t'))
+		option_detector(data, temp, &i);
+		while (temp[i] && (temp[i] == ' ' || temp[i] == '\t'))
 			i++;
 	}
-	cleaned_cmd = ft_strdup(cmd + i);
+	cleaned_cmd = ft_strdup(temp + i);
 	result = remove_quotes_from_string_2(cleaned_cmd);
 	free(cleaned_cmd);
+	free(temp);
 	return (result);
 }
